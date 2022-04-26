@@ -1,9 +1,11 @@
 using UnityEngine;
-using UnityReusables.Managers.Audio_Manager;
 
-[CreateAssetMenu(menuName = "Scriptable Objects/Managers/Audio Manager")]
-public class AudioManagerSO : ScriptableObject
+namespace Toolbox.Audio
 {
-    public AudioSingletonMono m;
-    public void Play(string sfx) => m.Play(sfx);
+    [CreateAssetMenu(menuName = "Scriptable Objects/Managers/Audio Manager")]
+    public class AudioManagerSO : ScriptableObject
+    {
+        public AudioSingletonMB audioSingleton;
+        public void Play(string sound) => audioSingleton.Play(sound);
+    }
 }

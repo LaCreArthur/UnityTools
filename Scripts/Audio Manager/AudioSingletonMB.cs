@@ -1,34 +1,36 @@
 using System;
 using System.Collections;
+using Toolbox.Singletons;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Serialization;
 using UnityReusables.ScriptableObjects.Variables;
 using Random = UnityEngine.Random;
 
-namespace UnityReusables.Managers.Audio_Manager
+namespace Toolbox.Audio
 {
-    public class AudioSingletonMono : SingletonMono<AudioSingletonMono>
+    public class AudioSingletonMB : SingletonMB<AudioSingletonMB>
     {
-        public AudioMixerGroup mixerGroup;
+        [SerializeField] AudioMixerGroup mixerGroup;
         [Header("Sounds")]
-        [Range(0.0f, 1.0f)] public float soundVolume = 1.0f;
-        public Sound[] sounds = Array.Empty<Sound>();
+        [Range(0.0f, 1.0f)] [SerializeField] float soundVolume = 1.0f;
+        [SerializeField] Sound[] sounds = Array.Empty<Sound>();
         
         [Header("Musics")]
-        [Range(0.0f, 1.0f)] public float musicVolume = 1.0f;
-        public Sound[] musics = Array.Empty<Sound>();
-        public bool musicAutoPlayStart;
-        public bool musicAutoPlayRandomClip;
-        public bool musicAutoPlayNext;
-        public float musicFadeOutDuration;
-        public AudioManagerSO SORef;
+        [Range(0.0f, 1.0f)] [SerializeField] float musicVolume = 1.0f;
+        [SerializeField] Sound[] musics = Array.Empty<Sound>();
+        [SerializeField] bool musicAutoPlayStart;
+        [SerializeField] bool musicAutoPlayRandomClip;
+        [SerializeField] bool musicAutoPlayNext;
+        [SerializeField] float musicFadeOutDuration;
+        [SerializeField] AudioManagerSO audioManagerSO;
+        [SerializeField] BoolVariable isAudio;
 
         AudioSource _currentMusic;
-        [SerializeField] BoolVariable isAudio;
 
         protected override void OnAwake()
         {
-            if (SORef != null) SORef.m = this;
+            if (audioManagerSO != null) audioManagerSO.audioSingleton = this;
             InitSoundArray(sounds);
             InitSoundArray(musics);
             AutoPlayMusic();
@@ -50,19 +52,19 @@ namespace UnityReusables.Managers.Audio_Manager
                 PlayMusic(musics[0].name, musicAutoPlayRandomClip ? Random.Range(0, musics[0].clips.Count) : 0);
         }
 
-        void PlayMusic(string name, int clipId = 0)
+        void PlayMusic(string music, int clipId = 0)
         {
             if (isAudio != null && !isAudio.v) return;
             if (_currentMusic && _currentMusic.isPlaying)
             {
-                StartCoroutine(MusicFadeOut(name));
+                StartCoroutine(FadeOutPlayNextMusic(music));
                 return;
             }
 
-            var m = Array.Find(musics, item => item.name == name);
+            var m = Array.Find(musics, item => item.name == music);
             if (m == null)
             {
-                Debug.LogWarning($"Play music: {name} not found!");
+                Debug.LogWarning($"Play music: {music} not found!");
                 return;
             }
 
@@ -84,7 +86,7 @@ namespace UnityReusables.Managers.Audio_Manager
             PlayMusic(musics[mIndex].name, clipId % musics[mIndex].clips.Count);
         }
 
-        IEnumerator MusicFadeOut(string name)
+        IEnumerator FadeOutPlayNextMusic(string nextMusic)
         {
             float elapsed = 0.0f;
             while (elapsed <= musicFadeOutDuration)
@@ -95,7 +97,7 @@ namespace UnityReusables.Managers.Audio_Manager
             }
 
             _currentMusic.Stop();
-            PlayMusic(name);
+            PlayMusic(nextMusic);
         }
 
         void InitSoundArray(Sound[] soundArray)
@@ -147,7 +149,7 @@ namespace UnityReusables.Managers.Audio_Manager
         {
             if (isAudio.v)
             {
-                AudioSingletonMono.instance.Play("AudioEnabled");
+                Play("AudioEnabled");
                 AutoPlayMusic();
             }
             AudioListener.pause = !isAudio.v;

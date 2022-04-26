@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace UnityReusables.Managers
+namespace Toolbox.Singletons
 {
     /// <summary>
     /// SingletonMB's design intentions:
@@ -13,14 +12,14 @@ namespace UnityReusables.Managers
     /// - "Awake" should not be defined in derived classes.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class SingletonMono<T> : MonoBehaviour where T : SingletonMono<T>
+    public abstract class SingletonMB<T> : MonoBehaviour where T : SingletonMB<T>
     {
         static T _instance;
 
         bool _isAwoken;
         bool _alive;
 
-        public static T instance
+        public static T Instance
         {
             get
             {
@@ -52,7 +51,8 @@ namespace UnityReusables.Managers
         {
             if (_instance != null && _instance != this)
             {
-                Debug.LogWarning($"An instance of \"{typeof(T).Name}\" already exists. Destroying duplicate one.", _instance.gameObject);
+                Debug.LogWarning($"An instance of \"{typeof(T).Name}\" already exists. Destroying duplicate one.",
+                    _instance.gameObject);
                 Destroy(this);
             }
             else
@@ -72,19 +72,11 @@ namespace UnityReusables.Managers
             OnAwake();
         }
 
-        protected virtual void OnAwake()
-        {
-        }
-        
-        public static bool IsAlive {
-            get {
-                if (_instance == null)
-                    return false;
-                return _instance._alive;
-            }
-        }
-        
-        void OnDestroy() { _alive = false; }
-        void OnApplicationQuit() { _alive = false; }
+        protected virtual void OnAwake() {}
+
+        public static bool IsAlive => _instance != null && _instance._alive;
+
+        void OnDestroy() => _alive = false;
+        void OnApplicationQuit() => _alive = false;
     }
 }

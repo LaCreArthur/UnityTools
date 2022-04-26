@@ -2,7 +2,7 @@
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace UnityReusables.Managers.Audio_Manager
+namespace Toolbox.Audio
 {
     [System.Serializable]
     public class Sound
