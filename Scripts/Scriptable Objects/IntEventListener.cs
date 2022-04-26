@@ -1,0 +1,1 @@
+﻿public  class IntEventListener : LoadedEventListener<int> {}
