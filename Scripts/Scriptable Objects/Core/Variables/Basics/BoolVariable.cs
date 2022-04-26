@@ -1,6 +1,6 @@
 ﻿using NaughtyAttributes;
 using UnityEngine;
-using UnityReusables.Extensions;
+using Toolbox.Utils;
 
 namespace UnityReusables.ScriptableObjects.Variables
 {

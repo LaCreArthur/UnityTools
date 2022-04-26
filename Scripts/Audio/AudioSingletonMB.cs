@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
 using Toolbox.Singletons;
+using Toolbox.Utils;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.Serialization;
 using UnityReusables.ScriptableObjects.Variables;
 using Random = UnityEngine.Random;
 

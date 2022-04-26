@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace UnityReusables.Extensions
+namespace Toolbox.Utils
 {
     public static class EncryptedPlayerPrefs
     {

@@ -1,0 +1,19 @@
+{
+    "name": "Toolbox.Audio",
+    "rootNamespace": "",
+    "references": [
+        "GUID:912d7a6c566d4034494955b637d86889",
+        "GUID:776d03a35f1b52c4a9aed9f56d7b4229",
+        "GUID:bbb4e4272c8daa142b1401473a0fd617",
+        "GUID:596123e0a6bcaae468d25abeb428693a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
