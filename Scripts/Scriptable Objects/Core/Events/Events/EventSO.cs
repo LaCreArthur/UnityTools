@@ -13,7 +13,7 @@ namespace Toolbox.ScriptableObjects.Events
             if (logRaise) Debug.Log(
                 $"{GetType().ToString().Replace("Toolbox.ScriptableObjects.Events.", "")} [<color=cyan>{name}</color>] has been raised");
             
-            listeners.ForEach(l =>
+            unityEventListeners.ForEach(l =>
             {
                 if (logListeners) l.LogCallback(this, null);
                 l.callbacks?.Invoke();

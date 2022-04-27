@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UltEvents;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Toolbox.ScriptableObjects.Events
@@ -14,13 +15,13 @@ namespace Toolbox.ScriptableObjects.Events
         protected void AddListener()
         {
             if (eventSO != null)
-                eventSO.AddListener(new ReferencedUnityEvent<TCallbacks>(this, callbacks));
+                eventSO.AddListener(new ReferencedUnityEvent<TCallbacks>(this, callbacks), new ReferencedUltEvent<TCallbacks>(this, callbacks));
         }
 
         protected void RemoveListener()
         {
             if (eventSO != null)
-                eventSO.RemoveListener(new ReferencedUnityEvent<TCallbacks>(this, callbacks));
+                eventSO.RemoveListener(new ReferencedUnityEvent<TCallbacks>(this, callbacks), new ReferencedUltEvent<TCallbacks>(this, callbacks));
         }
     
         protected void OnEnable() => AddListener();

@@ -42,8 +42,7 @@ namespace Toolbox.ScriptableObjects.Events
         }
     }
     
-    public class ReferencedUltEvent<T> 
-        where T : UltEventBase
+    public class ReferencedUltEvent<T>
     {
         [HideLabel]
         public readonly Object listener;
