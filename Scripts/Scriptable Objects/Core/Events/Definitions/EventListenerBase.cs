@@ -11,17 +11,18 @@ namespace Toolbox.ScriptableObjects.Events
     {
         [SerializeField] protected TEvent eventSO;
         [SerializeField] protected TCallbacks callbacks;
+        [SerializeField] protected UltEvent ultCallbacks;
     
         protected void AddListener()
         {
             if (eventSO != null)
-                eventSO.AddListener(new ReferencedUnityEvent<TCallbacks>(this, callbacks), new ReferencedUltEvent<TCallbacks>(this, callbacks));
+                eventSO.AddListener(new ReferencedUnityEvent<TCallbacks>(this, callbacks), new ReferencedUltEvent<UltEvent>(this, ultCallbacks));
         }
 
         protected void RemoveListener()
         {
             if (eventSO != null)
-                eventSO.RemoveListener(new ReferencedUnityEvent<TCallbacks>(this, callbacks), new ReferencedUltEvent<TCallbacks>(this, callbacks));
+                eventSO.RemoveListener(new ReferencedUnityEvent<TCallbacks>(this, callbacks), new ReferencedUltEvent<UltEvent>(this, ultCallbacks));
         }
     
         protected void OnEnable() => AddListener();
