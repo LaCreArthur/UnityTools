@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UnityReusables.ScriptableObjects.Variables
+namespace Toolbox.ScriptableObjects
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Game State")]
     public class GameStateSO : ScriptableObject

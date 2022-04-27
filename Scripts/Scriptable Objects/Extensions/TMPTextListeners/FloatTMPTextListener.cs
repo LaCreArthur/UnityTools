@@ -1,9 +1,9 @@
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
-using UnityReusables.ScriptableObjects.Variables;
+using Toolbox.ScriptableObjects.Variables;
 
-namespace UnityReusables.ScriptableObjects.Utils
+namespace Toolbox.ScriptableObjects.Utils
 {
     [RequireComponent(typeof(TMP_Text))]
     public class FloatTMPTextListener : MonoBehaviour

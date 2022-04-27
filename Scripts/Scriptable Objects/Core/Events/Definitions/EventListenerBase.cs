@@ -1,29 +1,32 @@
 ﻿using UnityEngine;
 
-public interface IEventSO<TCallbacks>
+namespace Toolbox.ScriptableObjects.Events
 {
-    public void AddListener(ReferencedUltEvent<TCallbacks> referencedUltEvent);
-    public void RemoveListener(ReferencedUltEvent<TCallbacks> referencedUltEvent);
-}
-
-[ExecuteAlways]
-public abstract class EventListenerBase<TEvent, TCallbacks> : MonoBehaviour where TEvent : IEventSO<TCallbacks>
-{
-    [SerializeField] protected TEvent eventSO;
-    [SerializeField] protected TCallbacks callbacks;
-    
-    protected void AddListener()
+    public interface IEventSO<TCallbacks>
     {
-        if (eventSO != null)
-            eventSO.AddListener(new ReferencedUltEvent<TCallbacks>(this, callbacks));
+        public void AddListener(ReferencedUltEvent<TCallbacks> referencedUltEvent);
+        public void RemoveListener(ReferencedUltEvent<TCallbacks> referencedUltEvent);
     }
 
-    protected void RemoveListener()
+    [ExecuteAlways]
+    public abstract class EventListenerBase<TEvent, TCallbacks> : MonoBehaviour where TEvent : IEventSO<TCallbacks>
     {
-        if (eventSO != null)
-            eventSO.RemoveListener(new ReferencedUltEvent<TCallbacks>(this, callbacks));
-    }
+        [SerializeField] protected TEvent eventSO;
+        [SerializeField] protected TCallbacks callbacks;
     
-    protected void OnEnable() => AddListener();
-    protected void OnDisable() => RemoveListener();
+        protected void AddListener()
+        {
+            if (eventSO != null)
+                eventSO.AddListener(new ReferencedUltEvent<TCallbacks>(this, callbacks));
+        }
+
+        protected void RemoveListener()
+        {
+            if (eventSO != null)
+                eventSO.RemoveListener(new ReferencedUltEvent<TCallbacks>(this, callbacks));
+        }
+    
+        protected void OnEnable() => AddListener();
+        protected void OnDisable() => RemoveListener();
+    }
 }

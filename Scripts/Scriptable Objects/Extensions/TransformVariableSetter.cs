@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityReusables.ScriptableObjects.Variables;
+using Toolbox.ScriptableObjects.Variables;
 
 public class TransformVariableSetter : MonoBehaviour
 {

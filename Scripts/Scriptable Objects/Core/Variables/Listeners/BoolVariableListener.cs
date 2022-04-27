@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace UnityReusables.ScriptableObjects.Variables
+namespace Toolbox.ScriptableObjects.Variables
 {
     public class BoolVariableListener : MonoBehaviour
     {

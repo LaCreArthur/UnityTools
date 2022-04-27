@@ -1,7 +1,7 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace UnityReusables.ScriptableObjects.Variables
+namespace Toolbox.ScriptableObjects.Variables
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Game State Reference")]
     public class GameStateVariable : BaseVariable<GameStateSO>

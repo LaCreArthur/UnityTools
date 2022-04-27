@@ -1,4 +1,7 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(menuName = "Events/Int Event", fileName = "IntE_")]
-public class IntEventSO : LoadedEventSO<int> {}
+namespace Toolbox.ScriptableObjects.Events
+{
+    [CreateAssetMenu(menuName = "Events/Int Event", fileName = "IntE_")]
+    public class IntEventSO : LoadedEventSO<int> {}
+}

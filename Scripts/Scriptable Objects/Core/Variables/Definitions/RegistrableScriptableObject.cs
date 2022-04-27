@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace UnityReusables.ScriptableObjects.Variables
+namespace Toolbox.ScriptableObjects.Variables
 {
     public class RegistrableScriptableObject : ScriptableObject
     {

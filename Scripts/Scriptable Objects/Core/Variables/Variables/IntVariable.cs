@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Toolbox.Utils;
 
-namespace UnityReusables.ScriptableObjects.Variables
+namespace Toolbox.ScriptableObjects.Variables
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Basic Variable/Int")]
     public class IntVariable : BaseVariable<int>

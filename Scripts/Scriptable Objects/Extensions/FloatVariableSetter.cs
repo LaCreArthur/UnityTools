@@ -1,7 +1,7 @@
 ﻿using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityReusables.ScriptableObjects.Variables;
+using Toolbox.ScriptableObjects.Variables;
 
 public class FloatVariableSetter : MonoBehaviour
 {

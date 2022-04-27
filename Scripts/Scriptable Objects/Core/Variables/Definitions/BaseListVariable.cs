@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace UnityReusables.ScriptableObjects.Variables
+namespace Toolbox.ScriptableObjects.Variables
 {
     public class BaseListVariable<T> : BaseVariable<List<T>>
     {

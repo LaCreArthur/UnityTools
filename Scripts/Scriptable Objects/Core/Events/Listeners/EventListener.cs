@@ -1,3 +1,6 @@
 ﻿using UnityEngine.Events;
 
-public class EventListener : EventListenerBase<EventSO, UnityEvent> {}
+namespace Toolbox.ScriptableObjects.Events
+{
+    public class EventListener : EventListenerBase<EventSO, UnityEvent> {}
+}

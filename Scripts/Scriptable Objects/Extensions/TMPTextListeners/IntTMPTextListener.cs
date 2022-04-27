@@ -1,7 +1,7 @@
 ﻿using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
-using UnityReusables.ScriptableObjects.Variables;
+using Toolbox.ScriptableObjects.Variables;
 
 /*
  * Created by CreArthur - 2019
@@ -9,7 +9,7 @@ using UnityReusables.ScriptableObjects.Variables;
  * Support prefix, suffix and value offset
  */
 
-namespace UnityReusables.ScriptableObjects.Utils
+namespace Toolbox.ScriptableObjects.Utils
 {
     [RequireComponent(typeof(TMP_Text))]
     public class IntTMPTextListener : MonoBehaviour

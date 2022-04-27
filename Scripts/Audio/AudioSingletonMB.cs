@@ -4,7 +4,7 @@ using Toolbox.Singletons;
 using Toolbox.Utils;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityReusables.ScriptableObjects.Variables;
+using Toolbox.ScriptableObjects.Variables;
 using Random = UnityEngine.Random;
 
 namespace Toolbox.Audio

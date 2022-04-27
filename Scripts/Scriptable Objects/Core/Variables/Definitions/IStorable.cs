@@ -1,4 +1,4 @@
-namespace UnityReusables.ScriptableObjects.Variables
+namespace Toolbox.ScriptableObjects.Variables
 {
     public interface IStorable<T>
     {

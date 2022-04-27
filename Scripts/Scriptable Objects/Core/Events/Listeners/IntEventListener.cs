@@ -1,1 +1,4 @@
-﻿public  class IntEventListener : LoadedEventListener<int> {}
+﻿namespace Toolbox.ScriptableObjects.Events
+{
+    public  class IntEventListener : LoadedEventListener<int> {}
+}
