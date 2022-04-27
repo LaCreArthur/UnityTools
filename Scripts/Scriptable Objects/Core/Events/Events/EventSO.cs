@@ -1,5 +1,4 @@
 using Sirenix.OdinInspector;
-using UltEvents;
 using UnityEngine;
 using UnityEngine.Events;
 

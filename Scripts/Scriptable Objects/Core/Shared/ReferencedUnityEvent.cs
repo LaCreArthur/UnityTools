@@ -3,12 +3,47 @@ using System.Text;
 using Sirenix.OdinInspector;
 using UltEvents;
 using UnityEngine;
+using UnityEngine.Events;
 using Object = UnityEngine.Object;
 
 namespace Toolbox.ScriptableObjects.Events
 {
+    public class ReferencedUnityEvent<T> 
+        where T : UnityEventBase
+    {
+        [HideLabel]
+        public readonly Object listener;
+        [HideReferenceObjectPicker, ListDrawerSettings(Expanded = true)]
+        public readonly T callbacks;
+
+        public ReferencedUnityEvent(Object listener, T callbacks)
+        {
+            this.listener = listener;
+            this.callbacks = callbacks;
+        }
+
+        public void LogCallback(ScriptableObject so, object t)
+        {
+            string header = $"[<color=cyan>{so.name}</color>] callback from <b>{listener.name}</b> ";
+
+            for (int i = 0 ; i < callbacks.GetPersistentEventCount(); i++)
+            {
+                
+                var callbackTarget = callbacks.GetPersistentTarget(0);
+                var methodName = callbacks.GetPersistentMethodName(0);
+                LogMethodCall(t, callbackTarget, methodName, header);
+            }
+        }
+
+        void LogMethodCall(object t, Object callbackTarget, string methodName, string header)
+        {
+            StringBuilder methodCall = new StringBuilder($" ~> {callbackTarget.GetType()}.{methodName}");
+            Debug.Log(methodCall.Insert(0, header), callbackTarget);
+        }
+    }
+    
     public class ReferencedUltEvent<T> 
-        //where T : UltEventBase
+        where T : UltEventBase
     {
         [HideLabel]
         public readonly Object listener;

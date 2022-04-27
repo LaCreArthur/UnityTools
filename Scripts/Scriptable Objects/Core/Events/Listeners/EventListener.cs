@@ -1,5 +1,4 @@
-﻿using UltEvents;
-using UnityEngine.Events;
+﻿using UnityEngine.Events;
 
 namespace Toolbox.ScriptableObjects.Events
 {
