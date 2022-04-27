@@ -13,4 +13,10 @@ public class ReferencedUltEvent<T>
         this.listener = listener;
         this.callbacks = callbacks;
     }
+
+    public void LogCallback(ScriptableObject so, object o)
+    {
+        //todo: replace when UltEvent are imported
+        throw new System.NotImplementedException();
+    }
 }

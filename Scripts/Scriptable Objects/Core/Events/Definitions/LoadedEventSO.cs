@@ -4,14 +4,18 @@ using UnityEngine.Events;
 
 public abstract class LoadedEventSO<T> : EventSOBase<UnityEvent<T>>
 {
-    [SerializeField] T testVal;
+    [SerializeField, InlineButton("RaiseWithTestValue")] T testValue;
+    public void RaiseWithTestValue() => Raise(testValue);
 
-    [Button]
-    public void TestRaise() => Raise(testVal);
-    
     public void Raise(T t)
     {
-        if (logRaise) Debug.Log($"{name} raised with value {t}!");
-        listeners.ForEach(l => l.callbacks.Invoke(t));
+        if (logRaise) Debug.Log(
+            $"{GetType().ToString().Replace("ToolBox.ScriptableObjects.Events.", "")} [<color=cyan>{name}</color>] has been raise with <color=yellow>{t}</color>");
+            
+        listeners.ForEach(l =>
+        {
+            if (logListeners) l.LogCallback(this, t);
+            l.callbacks.Invoke(t);
+        });
     }
 }

@@ -8,7 +8,13 @@ public class EventSO : EventSOBase<UnityEvent>
     [Button]
     public void Raise()
     {
-        if (logRaise) Debug.Log($"{name} raised !");
-        listeners.ForEach(l => l.callbacks.Invoke());
+        if (logRaise) Debug.Log(
+            $"{GetType().ToString().Replace("ToolBox.ScriptableObjects.Events.", "")} [<color=cyan>{name}</color>] has been raised");
+            
+        listeners.ForEach(l =>
+        {
+            if (logListeners) l.LogCallback(this, null);
+            l.callbacks?.Invoke();
+        });
     }
 }
