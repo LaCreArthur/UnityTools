@@ -1,5 +1,5 @@
 ﻿using System;
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityReusables.ScriptableObjects.Variables;
 

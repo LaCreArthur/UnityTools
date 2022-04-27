@@ -1,4 +1,4 @@
-﻿using NaughtyAttributes;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace UnityReusables.ScriptableObjects.Variables

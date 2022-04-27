@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Toolbox.Audio
@@ -11,19 +11,19 @@ namespace Toolbox.Audio
 
         public List<AudioClip> clips;
 
-        [Foldout("Options")] [Range(0f, 1f)]
+        [FoldoutGroup("Options")] [Range(0f, 1f)]
         public float volume = 1f;
 
-        [Foldout("Options")] [Range(0f, 1f)]
+        [FoldoutGroup("Options")] [Range(0f, 1f)]
         public float volumeVariance;
 
-        [Foldout("Options")] [Range(.1f, 3f)]
+        [FoldoutGroup("Options")] [Range(.1f, 3f)]
         public float pitch = 1f;
 
-        [Foldout("Options")] [Range(0f, 1f)]
+        [FoldoutGroup("Options")] [Range(0f, 1f)]
         public float pitchVariance;
 
-        [Foldout("Options")] public bool loop;
+        [FoldoutGroup("Options")] public bool loop;
 
         [HideInInspector] public AudioSource source;
     }
