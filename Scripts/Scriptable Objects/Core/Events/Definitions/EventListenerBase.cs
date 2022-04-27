@@ -1,15 +1,12 @@
-﻿using UnityEngine;
+﻿using UltEvents;
+using UnityEngine;
 
 namespace Toolbox.ScriptableObjects.Events
 {
-    public interface IEventSO<TCallbacks>
-    {
-        public void AddListener(ReferencedUltEvent<TCallbacks> referencedUltEvent);
-        public void RemoveListener(ReferencedUltEvent<TCallbacks> referencedUltEvent);
-    }
-
     [ExecuteAlways]
-    public abstract class EventListenerBase<TEvent, TCallbacks> : MonoBehaviour where TEvent : IEventSO<TCallbacks>
+    public abstract class EventListenerBase<TEvent, TCallbacks> : MonoBehaviour 
+        where TEvent : IEventSO<TCallbacks> 
+        //where TCallbacks : UltEventBase
     {
         [SerializeField] protected TEvent eventSO;
         [SerializeField] protected TCallbacks callbacks;

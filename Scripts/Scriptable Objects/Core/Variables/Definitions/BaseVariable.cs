@@ -1,9 +1,10 @@
-﻿using Sirenix.OdinInspector;
+﻿using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Toolbox.ScriptableObjects.Variables
 {
-    public class BaseVariable<T> : RegistrableScriptableObject, IStorable<T>
+    public class BaseVariable<T> : ScriptableObject, IRegistrable, IStorable<T>
     {
         #region Value
         
@@ -23,46 +24,43 @@ namespace Toolbox.ScriptableObjects.Variables
             get => initialValue;
             set => initialValue = value;
         }
+        public T PreviousValue => previousValue;
         
         public T v
         {
             get => value;
             set
             {
-                #if UNITY_EDITOR
-                if (Application.isPlaying)
-                {
-                    if (this.value.Equals(value)) return;
-                }
-                #endif
+#if UNITY_EDITOR // dont reset value for nothing on GUI refresh
+                if (Application.isPlaying && this.value.Equals(value)) return;
+#endif
                 if (isConstant)
                 {
-                    #if UNITY_EDITOR
+#if UNITY_EDITOR // constant value can be set only in editor when not playing
                     if (!Application.isPlaying)
                     {
                         previousValue = this.value;
-                        this.value = value;
+                        this.value = ProcessValue(value);
                     }
-                    #endif
-
-                    if (logOnChange) Debug.Log($"{name} is constant and cannot be modified", this);
+#endif
+                    if (Application.isPlaying && logOnChange)
+                        Debug.Log($"[<color=cyan>{name}</color>] is constant and cannot be modified", this);
                     return;
                 }
 
                 previousValue = this.value;
-                this.value = value;
-                
-                if (Application.isPlaying)
-                {    
-                    if (logOnChange) Debug.Log($"{name} is set to : {value}", this);
-                    if (isStored) Save();
+                this.value = ProcessValue(value);
 
-                    TriggerChange();
+                if (Application.isPlaying)
+                {
+                    if (isStored) Save();
+                    OnChange(this.value);
                 }
             }
         }
 
-        public T PreviousValue => previousValue;
+        protected virtual T ProcessValue(T oldVal) => oldVal;
+        
         #endregion
         
         #region Debug
@@ -73,9 +71,40 @@ namespace Toolbox.ScriptableObjects.Variables
         [TitleGroup("Debug"), HideIf("isConstant"), SerializeField] 
         protected bool logOnChange;
         #endregion
+        
+        #region OnChange
+        [TitleGroup("On Change"), HideIf("isConstant"), SerializeField]
+        bool logListeners;
+        [TitleGroup("On Change"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullElements")]
+        public OnChangeCallbacks<T> onChange = new OnChangeCallbacks<T>();
+        void RemoveNullElements() => onChange?.RemoveAll(c => c.listener == null);
+        
+        void OnChange(T t)
+        {
+            if (logOnChange)
+                Debug.Log(
+                    $"{GetType().ToString().Replace("ToolBox.ScriptableObjects.Definitions.", "")} [<color=cyan>{name}</color>] has changed to <color=yellow>{t}</color>");
 
+            foreach (var referencedUltEvent in onChange.Listeners)
+            {
+                if (logListeners) referencedUltEvent.LogCallback(this, t);
+                referencedUltEvent.callbacks.Invoke(t);
+            }
+        }
+        
+        public void AddOnChangeCallback(Action callback)
+        {
+            onChange.Add(callback, this);
+        }
 
-        protected override void OnEnable() => v = isStored ? Load() : initialValue;
+        public void RemoveOnChangeCallback(Action callback)
+        {
+            onChange.Remove(callback, this);
+        }
+        
+        #endregion
+        
+        protected virtual void OnEnable() => v = isStored ? Load() : initialValue;
 
         void OnValidate() => OnEnable();
 

@@ -1,10 +1,10 @@
 ﻿using Sirenix.OdinInspector;
+using UltEvents;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Toolbox.ScriptableObjects.Events
 {
-    public abstract class LoadedEventSO<T> : EventSOBase<UnityEvent<T>>
+    public abstract class LoadedEventSO<T> : EventSOBase<UltEvent<T>>
     {
         [TitleGroup("Debug"), SerializeField, InlineButton("RaiseWithTestValue")] T testValue;
         public void RaiseWithTestValue() => Raise(testValue);
@@ -12,7 +12,7 @@ namespace Toolbox.ScriptableObjects.Events
         public void Raise(T t)
         {
             if (logRaise) Debug.Log(
-                $"{GetType().ToString().Replace("ToolBox.ScriptableObjects.Events.", "")} [<color=cyan>{name}</color>] has been raise with <color=yellow>{t}</color>");
+                $"{GetType().ToString().Replace("Toolbox.ScriptableObjects.Events.", "")} [<color=cyan>{name}</color>] has been raise with <color=yellow>{t}</color>");
             
             listeners.ForEach(l =>
             {

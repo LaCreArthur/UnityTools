@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using UltEvents;
 using UnityEngine;
 
 namespace Toolbox.ScriptableObjects.Events
 {
     public abstract class EventSOBase<T> : ScriptableObject, IEventSO<T> 
+        //where T : UltEventBase
     {
         [TitleGroup("Debug"), SerializeField] 
         protected bool logRaise;
-        [TitleGroup("Debug"), SerializeField] 
+        
+        [TitleGroup("Listeners"), SerializeField] 
         protected bool logListeners;
     
         [TitleGroup("Listeners"), SerializeField, InlineProperty, HideReferenceObjectPicker, ListDrawerSettings(IsReadOnly = true, Expanded = true), OnInspectorGUI("RemoveNullElements")]  

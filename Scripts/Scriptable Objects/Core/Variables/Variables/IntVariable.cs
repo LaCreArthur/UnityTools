@@ -6,20 +6,12 @@ namespace Toolbox.ScriptableObjects.Variables
     [CreateAssetMenu(menuName = "Scriptable Objects/Basic Variable/Int")]
     public class IntVariable : BaseVariable<int>
     {
-        public override void Save()
-        {
-            EncryptedPlayerPrefs.SetInt(this.name, v);
-        }
+        public override void Save() => EncryptedPlayerPrefs.SetInt(this.name, v);
 
         public override int Load()
         {
             v = EncryptedPlayerPrefs.GetInt(this.name, initialValue);
             return v;
-        }
-        
-        public void Add(int x)
-        {
-            v += x;
         }
 
         public static IntVariable operator ++(IntVariable a)
