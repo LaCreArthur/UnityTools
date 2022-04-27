@@ -12,6 +12,6 @@ public abstract class LoadedEventSO<T> : EventSOBase<UnityEvent<T>>
     public void Raise(T t)
     {
         if (logRaise) Debug.Log($"{name} raised with value {t}!");
-        listeners.ForEach(l => l.unityEvent.Invoke(t));
+        listeners.ForEach(l => l.callbacks.Invoke(t));
     }
 }

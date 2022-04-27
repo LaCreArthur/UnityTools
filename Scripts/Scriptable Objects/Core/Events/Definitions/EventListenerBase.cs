@@ -2,8 +2,8 @@
 
 public interface IEventSO<TCallbacks>
 {
-    public void AddListener(UnityEventAndHolder<TCallbacks> eventAndHolder);
-    public void RemoveListener(UnityEventAndHolder<TCallbacks> eventAndHolder);
+    public void AddListener(ReferencedUltEvent<TCallbacks> referencedUltEvent);
+    public void RemoveListener(ReferencedUltEvent<TCallbacks> referencedUltEvent);
 }
 
 [ExecuteAlways]
@@ -15,13 +15,13 @@ public abstract class EventListenerBase<TEvent, TCallbacks> : MonoBehaviour wher
     protected void AddListener()
     {
         if (eventSO != null)
-            eventSO.AddListener(new UnityEventAndHolder<TCallbacks>(this, callbacks));
+            eventSO.AddListener(new ReferencedUltEvent<TCallbacks>(this, callbacks));
     }
 
     protected void RemoveListener()
     {
         if (eventSO != null)
-            eventSO.RemoveListener(new UnityEventAndHolder<TCallbacks>(this, callbacks));
+            eventSO.RemoveListener(new ReferencedUltEvent<TCallbacks>(this, callbacks));
     }
     
     protected void OnEnable() => AddListener();

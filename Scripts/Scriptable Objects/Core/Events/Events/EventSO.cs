@@ -9,6 +9,6 @@ public class EventSO : EventSOBase<UnityEvent>
     public void Raise()
     {
         if (logRaise) Debug.Log($"{name} raised !");
-        listeners.ForEach(l => l.unityEvent.Invoke());
+        listeners.ForEach(l => l.callbacks.Invoke());
     }
 }

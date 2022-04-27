@@ -1,30 +1,29 @@
 ﻿using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
-[System.Serializable]
-public class UnityEventAndHolder<T>
+public abstract class EventSOBase<T> : ScriptableObject, IEventSO<T> 
 {
-    public Object holder;
-    public T unityEvent;
+    [SerializeField, InlineProperty, HideReferenceObjectPicker, ListDrawerSettings(IsReadOnly = true, Expanded = true), OnInspectorGUI("RemoveNullElements")]  
+    protected List<ReferencedUltEvent<T>> listeners = new List<ReferencedUltEvent<T>>();
 
-    public UnityEventAndHolder(Object holder, T unityEvent)
+    [SerializeField] 
+    protected bool logRaise;
+    [SerializeField] 
+    protected bool logListeners;
+
+    public void AddListener(ReferencedUltEvent<T> ultEvent)
     {
-        this.holder = holder;
-        this.unityEvent = unityEvent;
+        if (listeners == null) listeners = new List<ReferencedUltEvent<T>>();
+        listeners.Add(ultEvent);
     }
-}
 
-public abstract class EventSOBase<T> : ScriptableObject, IEventSO<T>
-{
-    [SerializeField] protected List<UnityEventAndHolder<T>> listeners = new List<UnityEventAndHolder<T>>();
-    [SerializeField] protected bool logRaise;
-
-    public void AddListener(UnityEventAndHolder<T> eventAndHolder) => listeners.Add(eventAndHolder);
-
-    public void RemoveListener(UnityEventAndHolder<T> eventAndHolder)
+    public void RemoveListener(ReferencedUltEvent<T> ultEvent)
     {
-        var listener = listeners.Find(l => l.holder == eventAndHolder.holder && Equals(l.unityEvent, eventAndHolder.unityEvent));
-        if (listener != null)
-            listeners.Remove(listener);
+        if (listeners == null) return;
+        var listener = listeners.Find(l => l.listener == ultEvent.listener && Equals(l.callbacks, ultEvent.callbacks));
+        listeners.Remove(listener);
     }
+    
+    void RemoveNullElements() => listeners.RemoveAll(l => l.listener == null);
 }
