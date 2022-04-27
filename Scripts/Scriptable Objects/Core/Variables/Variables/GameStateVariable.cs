@@ -7,8 +7,8 @@ namespace UnityReusables.ScriptableObjects.Variables
     public class GameStateVariable : BaseVariable<GameStateSO>
     {
         [SerializeField] bool debugStateChange;
-        
-        public override void SetValue(GameStateSO newVal)
+
+        protected override void SetValue(GameStateSO newVal)
         {
             if (v == newVal)
             {

@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 public abstract class LoadedEventSO<T> : EventSOBase<UnityEvent<T>>
 {
-    [SerializeField, InlineButton("RaiseWithTestValue")] T testValue;
+    [TitleGroup("Debug"), SerializeField, InlineButton("RaiseWithTestValue")] T testValue;
     public void RaiseWithTestValue() => Raise(testValue);
 
     public void Raise(T t)

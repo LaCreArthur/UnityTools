@@ -5,16 +5,18 @@ namespace UnityReusables.ScriptableObjects.Variables
 {
     public class BaseVariable<T> : RegistrableScriptableObject, IStorable<T>
     {
-        [Header("Values")]
-        [SerializeField] protected T initialValue;
-        [SerializeField] [ReadOnly] protected T previousValue;
-        [SerializeField] protected T value;
-        [Header("Changes")]
-        [SerializeField] protected bool isConstant;
-        [HideIf("isConstant")]
-        [SerializeField] protected bool debugChange;
-        [HideIf("isConstant")]
-        [SerializeField] private bool isPlayerPref = false;
+        #region Value
+        
+        [TitleGroup("Values"), SerializeField, PropertyOrder(0)]
+        protected T initialValue;
+        [TitleGroup("Values"), SerializeField, ReadOnly, PropertyOrder(0)]
+        protected T previousValue;
+        [TitleGroup("Values"), SerializeField, ReadOnly, PropertyOrder(0)]
+        protected T value;
+        [SerializeField] 
+        protected bool isConstant;
+        [HideIf("isConstant"), SerializeField] 
+        bool isStored;
         
         public T InitialValue
         {
@@ -43,7 +45,7 @@ namespace UnityReusables.ScriptableObjects.Variables
                     }
                     #endif
 
-                    if (debugChange) Debug.Log($"{name} is constant and cannot be modified", this);
+                    if (logOnChange) Debug.Log($"{name} is constant and cannot be modified", this);
                     return;
                 }
 
@@ -52,8 +54,8 @@ namespace UnityReusables.ScriptableObjects.Variables
                 
                 if (Application.isPlaying)
                 {    
-                    if (debugChange) Debug.Log($"{name} is set to : {value}", this);
-                    if (isPlayerPref) Save();
+                    if (logOnChange) Debug.Log($"{name} is set to : {value}", this);
+                    if (isStored) Save();
 
                     TriggerChange();
                 }
@@ -61,18 +63,21 @@ namespace UnityReusables.ScriptableObjects.Variables
         }
 
         public T PreviousValue => previousValue;
+        #endregion
+        
+        #region Debug
+        [TitleGroup("Debug"), SerializeField, InlineButton("SetValue")]
+        private T newValue;
+        protected virtual void SetValue(T newVal) => v = newVal;
+        
+        [TitleGroup("Debug"), HideIf("isConstant"), SerializeField] 
+        protected bool logOnChange;
+        #endregion
 
-        protected override void OnEnable() => v = isPlayerPref ? Load() : initialValue;
+
+        protected override void OnEnable() => v = isStored ? Load() : initialValue;
 
         void OnValidate() => OnEnable();
-        
-        public virtual void SetValue(T newVal)
-        {
-            v = newVal;
-#if UNITY_EDITOR
-            if (Application.isPlaying) TriggerChange();
-#endif
-        }
 
         public virtual void Save() {}
 

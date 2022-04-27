@@ -4,13 +4,14 @@ using UnityEngine;
 
 public abstract class EventSOBase<T> : ScriptableObject, IEventSO<T> 
 {
-    [SerializeField, InlineProperty, HideReferenceObjectPicker, ListDrawerSettings(IsReadOnly = true, Expanded = true), OnInspectorGUI("RemoveNullElements")]  
+    [TitleGroup("Debug"), SerializeField] 
+    protected bool logRaise;
+    [TitleGroup("Debug"), SerializeField] 
+    protected bool logListeners;
+    
+    [TitleGroup("Listeners"), SerializeField, InlineProperty, HideReferenceObjectPicker, ListDrawerSettings(IsReadOnly = true, Expanded = true), OnInspectorGUI("RemoveNullElements")]  
     protected List<ReferencedUltEvent<T>> listeners = new List<ReferencedUltEvent<T>>();
 
-    [SerializeField] 
-    protected bool logRaise;
-    [SerializeField] 
-    protected bool logListeners;
 
     public void AddListener(ReferencedUltEvent<T> ultEvent)
     {

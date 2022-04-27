@@ -5,7 +5,7 @@ using UnityEngine.Events;
 [CreateAssetMenu(menuName = "Events/Event", fileName = "E_")]
 public class EventSO : EventSOBase<UnityEvent>
 {
-    [Button]
+    [TitleGroup("Debug"), Button]
     public void Raise()
     {
         if (logRaise) Debug.Log(
