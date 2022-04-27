@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Toolbox.ScriptableObjects.Variables
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Game State Reference")]
-    public class GameStateVariable : BaseVariable<GameStateSO>
+    public class GameStateVariable : VariableSOBase<GameStateSO>
     {
         [SerializeField] bool debugStateChange;
 

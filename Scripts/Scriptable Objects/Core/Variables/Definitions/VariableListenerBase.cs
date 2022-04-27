@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Toolbox.ScriptableObjects.Variables
 {
     [ExecuteAlways]
-    public abstract class VariableListenerBase<T, TVariable> : MonoBehaviour where TVariable : BaseVariable<T>
+    public abstract class VariableListenerBase<T, TVariable> : MonoBehaviour where TVariable : VariableSOBase<T>
     {
         [SerializeField, AssetSelector, Required("A variable must be assigned for this listener!")] 
         protected TVariable variable;

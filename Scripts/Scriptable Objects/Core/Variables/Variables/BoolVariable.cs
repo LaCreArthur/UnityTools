@@ -5,7 +5,7 @@ using Toolbox.Utils;
 namespace Toolbox.ScriptableObjects.Variables
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Basic Variable/Bool")]
-    public class BoolVariable : BaseVariable<bool>
+    public class BoolVariable : VariableSOBase<bool>
     {
         [Button()]
         public void Toggle() => v = !v;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Toolbox.ScriptableObjects.Variables
 {
-    public class BaseVariable<T> : ScriptableObject, IRegistrable, IStorable<T>
+    public class VariableSOBase<T> : ScriptableObject, IRegistrable, IStorable<T>
     {
         #region Value
         

@@ -4,7 +4,7 @@ using Toolbox.Utils;
 namespace Toolbox.ScriptableObjects.Variables
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Basic Variable/Int")]
-    public class IntVariable : BaseVariable<int>
+    public class IntVariable : VariableSOBase<int>
     {
         public override void Save() => EncryptedPlayerPrefs.SetInt(this.name, v);
 

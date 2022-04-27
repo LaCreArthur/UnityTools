@@ -4,7 +4,7 @@ using Toolbox.Utils;
 namespace Toolbox.ScriptableObjects.Variables
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Basic Variable/Float")]
-    public class FloatVariable : BaseVariable<float>
+    public class FloatVariable : VariableSOBase<float>
     {
         public override void Save()
         {
