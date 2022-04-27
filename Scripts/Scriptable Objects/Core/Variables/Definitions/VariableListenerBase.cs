@@ -1,7 +1,7 @@
 using Sirenix.OdinInspector;
 using Toolbox.ScriptableObjects.Events;
+using UltEvents;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Toolbox.ScriptableObjects.Variables
 {
@@ -10,13 +10,13 @@ namespace Toolbox.ScriptableObjects.Variables
     {
         [SerializeField, AssetSelector, Required("A variable must be assigned for this listener!")] 
         protected TVariable variable;
-        public UnityEvent<T> events;
+        public UltEvent<T> events;
     
         void Subscribe()
         {
             if (variable != null)
             {
-                variable.onChange?.Add(new ReferencedUnityEvent<UnityEvent<T>>(this, events));
+                variable.onChange?.Add(new ReferencedUltEvent<UltEvent<T>>(this, events));
             }
         }
 
@@ -24,7 +24,7 @@ namespace Toolbox.ScriptableObjects.Variables
         {
             if (variable != null)
             {
-                variable.onChange?.Remove(new ReferencedUnityEvent<UnityEvent<T>>(this, events));
+                variable.onChange?.Remove(new ReferencedUltEvent<UltEvent<T>>(this, events));
             }
         }
 

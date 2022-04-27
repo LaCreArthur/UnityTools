@@ -1,6 +1,6 @@
-﻿using UnityEngine.Events;
+﻿using UltEvents;
 
 namespace Toolbox.ScriptableObjects.Events
 {
-    public class EventListener : EventListenerBase<EventSO, UnityEvent> {}
+    public class EventListener : EventListenerBase<EventSO, UltEvent> {}
 }

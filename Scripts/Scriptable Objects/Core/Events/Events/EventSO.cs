@@ -1,11 +1,11 @@
 using Sirenix.OdinInspector;
+using UltEvents;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Toolbox.ScriptableObjects.Events
 {
     [CreateAssetMenu(menuName = "Events/Event", fileName = "E_")]
-    public class EventSO : EventSOBase<UnityEvent>
+    public class EventSO : EventSOBase<UltEvent>
     {
         [TitleGroup("Debug"), Button]
         public void Raise()
@@ -13,7 +13,7 @@ namespace Toolbox.ScriptableObjects.Events
             if (logRaise) Debug.Log(
                 $"{GetType().ToString().Replace("Toolbox.ScriptableObjects.Events.", "")} [<color=cyan>{name}</color>] has been raised");
             
-            unityEventListeners.ForEach(l =>
+            listeners.ForEach(l =>
             {
                 if (logListeners) l.LogCallback(this, null);
                 l.callbacks?.Invoke();
