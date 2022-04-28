@@ -4,7 +4,7 @@ using Toolbox.Utils;
 
 namespace Toolbox.ScriptableObjects.Variables
 {
-    [CreateAssetMenu(menuName = "Scriptable Objects/Basic Variable/Bool")]
+    [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Bool", fileName = "BoolV_")]
     public class BoolVariable : VariableSOBase<bool>
     {
         [Button()]

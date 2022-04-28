@@ -3,7 +3,7 @@ using Toolbox.Utils;
 
 namespace Toolbox.ScriptableObjects.Variables
 {
-    [CreateAssetMenu(menuName = "Scriptable Objects/Basic Variable/Int")]
+    [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Int", fileName = "IntV_")]
     public class IntVariable : VariableSOBase<int>
     {
         public override void Save() => EncryptedPlayerPrefs.SetInt(this.name, v);

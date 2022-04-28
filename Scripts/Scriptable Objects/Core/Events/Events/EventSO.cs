@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Toolbox.ScriptableObjects.Events
 {
-    [CreateAssetMenu(menuName = "Events/Event", fileName = "E_")]
+    [CreateAssetMenu(menuName = "Scriptable Objects/Events/Event", fileName = "E_")]
     public class EventSO : EventSOBase<UltEvent>
     {
         [TitleGroup("Debug"), Button]

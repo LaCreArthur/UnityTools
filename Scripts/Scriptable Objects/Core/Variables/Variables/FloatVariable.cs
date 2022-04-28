@@ -3,7 +3,7 @@ using Toolbox.Utils;
 
 namespace Toolbox.ScriptableObjects.Variables
 {
-    [CreateAssetMenu(menuName = "Scriptable Objects/Basic Variable/Float")]
+    [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Float", fileName = "FloatV_")]
     public class FloatVariable : VariableSOBase<float>
     {
         public override void Save()

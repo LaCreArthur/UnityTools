@@ -3,7 +3,7 @@ using Toolbox.Utils;
 
 namespace Toolbox.ScriptableObjects.Variables
 {
-    [CreateAssetMenu(menuName = "Scriptable Objects/Basic Variable/String")]
+    [CreateAssetMenu(menuName = "Scriptable Objects/Variables/String", fileName = "StringV_")]
     public class StringVariable : VariableSOBase<string>
     {
         public override void Save()

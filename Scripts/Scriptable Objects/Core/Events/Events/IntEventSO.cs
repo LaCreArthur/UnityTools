@@ -2,6 +2,6 @@
 
 namespace Toolbox.ScriptableObjects.Events
 {
-    [CreateAssetMenu(menuName = "Events/Int Event", fileName = "IntE_")]
+    [CreateAssetMenu(menuName = "Scriptable Objects/Events/Int Event", fileName = "IntE_")]
     public class IntEventSO : LoadedEventSO<int> {}
 }
