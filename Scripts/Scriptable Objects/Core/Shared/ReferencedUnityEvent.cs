@@ -7,7 +7,8 @@ using Object = UnityEngine.Object;
 
 namespace Toolbox.ScriptableObjects.Events
 {
-    public class ReferencedUltEvent<T>
+    public class ReferencedUltEvent<T> 
+        where T : UltEventBase
     {
         [HideLabel]
         public readonly Object listener;
@@ -22,23 +23,23 @@ namespace Toolbox.ScriptableObjects.Events
 
         public void LogCallback(ScriptableObject so, object t)
         {
-            // string header = $"[<color=cyan>{so.name}</color>] callback from <b>{listener.name}</b> ";
-            //
-            // if (callbacks.PersistentCallsList != null)
-            // {
-            //     foreach (var callback in callbacks.PersistentCallsList)
-            //     {
-            //         LogMethodCall(t, callback, header);
-            //     }
-            // }
-            //
-            // if (callbacks.DynamicCallInvocationList != null)
-            // {
-            //     foreach (var callback in callbacks.DynamicCallInvocationList)
-            //     {
-            //         LogMethodCall(t, callback, header);
-            //     }
-            // }
+            string header = $"[<color=cyan>{so.name}</color>] callback from <b>{listener.name}</b> ";
+            
+            if (callbacks.PersistentCallsList != null)
+            {
+                foreach (var callback in callbacks.PersistentCallsList)
+                {
+                    LogMethodCall(t, callback, header);
+                }
+            }
+            
+            if (callbacks.DynamicCallInvocationList != null)
+            {
+                foreach (var callback in callbacks.DynamicCallInvocationList)
+                {
+                    LogMethodCall(t, callback, header);
+                }
+            }
         }
 
         void LogMethodCall(object t, PersistentCall callback, string header)

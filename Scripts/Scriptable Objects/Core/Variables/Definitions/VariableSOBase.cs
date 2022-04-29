@@ -1,5 +1,6 @@
 ﻿using System;
 using Sirenix.OdinInspector;
+using UltEvents;
 using UnityEngine;
 
 namespace Toolbox.ScriptableObjects.Variables
@@ -88,6 +89,12 @@ namespace Toolbox.ScriptableObjects.Variables
             foreach (var referencedUltEvent in onChange.Listeners)
             {
                 if (logListeners) referencedUltEvent.LogCallback(this, t);
+                
+                foreach (PersistentCall persistentCall in referencedUltEvent.callbacks.PersistentCallsList)
+                {
+                    if (persistentCall.PersistentArguments != null && persistentCall.PersistentArguments.Length > 0)
+                        persistentCall.SetArguments(t);
+                }
                 referencedUltEvent.callbacks.Invoke(t);
             }
         }
