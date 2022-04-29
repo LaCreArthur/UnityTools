@@ -83,7 +83,7 @@ namespace Toolbox.ScriptableObjects.Variables
         {
             if (logOnChange)
                 Debug.Log(
-                    $"{GetType().ToString().Replace("ToolBox.ScriptableObjects.Definitions.", "")} [<color=cyan>{name}</color>] has changed to <color=yellow>{t}</color>");
+                    $"{GetType().ToString().Replace("Toolbox.ScriptableObjects.Variables.", "")} [<color=cyan>{name}</color>] has changed to <color=yellow>{t}</color>");
 
             foreach (var referencedUltEvent in onChange.Listeners)
             {
