@@ -10,30 +10,31 @@ namespace Toolbox.ScriptableObjects.Variables
     [ExecuteAlways]
     public abstract class VariableListenerBase<T, TVariable> : MonoBehaviour where TVariable : VariableSOBase<T>
     {
-        [SerializeField, AssetSelector, Required("A variable must be assigned for this listener!")]
+        [SerializeField, AssetSelector, Required("A variable must be assigned for this listener!"), InlineButton("New"), HideIf("_isCreating")]
         protected TVariable variable;
-        [SerializeField, ShowIf("@variable==null"), InlineButton("Create")]
-        string soName;
+        [SerializeField, ShowIf("@variable==null"), InlineButton("Cancel"), InlineButton("Create"), LabelText("Create new SO, enter name:"), ShowIf("_isCreating")]
+        string soName = typeof(TVariable).ToString()[(typeof(TVariable).ToString().LastIndexOf(".")+1)..];
         [Searchable]
         public UltEvent<T> events;
 
-        protected virtual void Create(string soName)
-        {
-            CreateSOAsset(soName);
-        }
+        bool _isCreating = false;
+        protected void New() => _isCreating = true;
+        protected void Cancel() => _isCreating = false;
 
-        protected void CreateSOAsset(string path)
+        protected virtual void Create(string soName)
         {
             TVariable newSO = ScriptableObject.CreateInstance<TVariable>();
             // path has to start at "Assets"
-            path = "Assets/" + path;
+            var path = "Assets/_CARFT/Scriptable Objects/" + soName + ".asset";
             AssetDatabase.CreateAsset(newSO, path);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             EditorUtility.FocusProjectWindow();
-            Selection.activeObject = newSO;
+            //Selection.activeObject = newSO;
+            variable = newSO;
+            _isCreating = false;
         }
-    
+        
         void Subscribe()
         {
             if (variable != null)
