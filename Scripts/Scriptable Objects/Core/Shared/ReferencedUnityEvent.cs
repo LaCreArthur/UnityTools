@@ -33,13 +33,13 @@ namespace Toolbox.ScriptableObjects.Events
                 }
             }
             
-            if (callbacks.DynamicCallInvocationList != null)
-            {
-                foreach (var callback in callbacks.DynamicCallInvocationList)
-                {
-                    LogMethodCall(t, callback, header);
-                }
-            }
+            // if (callbacks.DynamicCallInvocationList != null)
+            // {
+            //     foreach (var callback in callbacks.DynamicCallInvocationList)
+            //     {
+            //         LogMethodCall(t, callback, header);
+            //     }
+            // }
         }
 
         void LogMethodCall(object t, PersistentCall callback, string header)

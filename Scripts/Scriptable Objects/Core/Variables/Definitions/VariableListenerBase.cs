@@ -14,9 +14,9 @@ namespace Toolbox.ScriptableObjects.Variables
         protected TVariable variable;
         [SerializeField, ShowIf("@variable==null"), InlineButton("Cancel"), InlineButton("Create"), LabelText("Create new SO, enter name:"), ShowIf("_isCreating")]
         string soName = typeof(TVariable).ToString()[(typeof(TVariable).ToString().LastIndexOf(".")+1)..];
-        [Searchable]
         public UltEvent<T> events;
 
+#if UNITY_EDITOR
         bool _isCreating = false;
         protected void New() => _isCreating = true;
         protected void Cancel() => _isCreating = false;
@@ -34,6 +34,7 @@ namespace Toolbox.ScriptableObjects.Variables
             variable = newSO;
             _isCreating = false;
         }
+#endif
         
         void Subscribe()
         {
