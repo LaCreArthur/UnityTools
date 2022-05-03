@@ -17,7 +17,7 @@ namespace Toolbox.ScriptableObjects.Events
             listeners.ForEach(l =>
             {
                 if (logListeners) l.LogCallback(this, t);
-                l.callbacks.Invoke(t);
+                l.callbacks?.InvokeSafe(t);
             });
         }
     }
