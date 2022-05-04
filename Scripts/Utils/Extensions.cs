@@ -9,5 +9,17 @@ namespace Toolbox.Utils
         public static T GetRandom<T>(this List<T> list) => list[Random.Range(0, list.Count)];
         public static float RandomInside(this Vector2 v) => Random.Range(v.x, v.y);
         public static int RandomInside(this Vector2Int v) => Random.Range(v.x, v.y);
+        public static void Shuffle<T>(this IList<T> lst)
+        {
+            int n = lst.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = Random.Range(0, n + 1);
+                T value = lst[k];
+                lst[k] = lst[n];
+                lst[n] = value;
+            }
+        }
     }
 }

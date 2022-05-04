@@ -33,7 +33,7 @@ namespace Toolbox.ScriptableObjects.Variables
             set
             {
 #if UNITY_EDITOR // dont reset value for nothing on GUI refresh
-                if (Application.isPlaying && this.value.Equals(value)) return;
+                if (Application.isPlaying && this.value != null && this.value.Equals(value)) return;
 #endif
                 if (isConstant)
                 {
