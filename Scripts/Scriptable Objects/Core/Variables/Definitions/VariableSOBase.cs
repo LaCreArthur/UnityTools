@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Toolbox.ScriptableObjects.Variables
 {
-    public class VariableSOBase<T> : ScriptableObject, IRegistrable, IStorable<T>
+    public class VariableSOBase<T> : ScriptableObject, IStorable<T>
     {
         #region Value
         
@@ -66,7 +66,7 @@ namespace Toolbox.ScriptableObjects.Variables
         
         #region Debug
         [TitleGroup("Debug"), SerializeField, InlineButton("SetValue")]
-        private T newValue;
+        T newValue;
         protected virtual void SetValue(T newVal) => v = newVal;
         
         [TitleGroup("Debug"), HideIf("isConstant"), SerializeField] 
@@ -98,17 +98,7 @@ namespace Toolbox.ScriptableObjects.Variables
                 referencedUltEvent.callbacks.Invoke(t);
             }
         }
-        
-        public void AddOnChangeCallback(Action callback)
-        {
-            onChange.Add(callback, this);
-        }
 
-        public void RemoveOnChangeCallback(Action callback)
-        {
-            onChange.Remove(callback, this);
-        }
-        
         #endregion
         
         protected virtual void OnEnable() => v = isStored ? Load() : initialValue;

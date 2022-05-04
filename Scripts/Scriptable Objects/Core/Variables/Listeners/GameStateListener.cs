@@ -6,7 +6,7 @@ using UnityEngine.Events;
 namespace Toolbox.ScriptableObjects.Variables
 {
     [Serializable]
-    class GameStateCallbacks
+    internal class GameStateCallbacks
     {
         public UnityEvent onEnter, onLeave;
     }
@@ -14,14 +14,11 @@ namespace Toolbox.ScriptableObjects.Variables
     public class GameStateListener : MonoBehaviour
     {
         [SerializeField]
-        private Dictionary<GameStateSO, GameStateCallbacks> _callbacks = new Dictionary<GameStateSO, GameStateCallbacks>();
+        Dictionary<GameStateSO, GameStateCallbacks> _callbacks = new Dictionary<GameStateSO, GameStateCallbacks>();
 
         public GameStateVariable gameState;
 
-        private void Start()
-        {
-            gameState.AddOnChangeCallback(OnChange);
-        }
+        void Start() => gameState.onChange.Add(OnChange, this);
 
         void OnChange()
         {
@@ -31,14 +28,8 @@ namespace Toolbox.ScriptableObjects.Variables
             if (_callbacks.ContainsKey(gameState.v)) _callbacks[gameState.v].onEnter.Invoke();
         }
 
-        private void OnDestroy()
-        {
-            gameState.RemoveOnChangeCallback(OnChange);
-        }
+        void OnDestroy() => gameState.onChange.Remove(OnChange, this);
 
-        public GameStateVariable GetCurrentState()
-        {
-            return gameState;
-        }
+        public GameStateVariable GetCurrentState() => gameState;
     }
 }

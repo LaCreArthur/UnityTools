@@ -38,12 +38,12 @@ namespace Toolbox.Audio
 
         void OnEnable()
         {
-            if (isAudio != null) isAudio.AddOnChangeCallback(SetAudio);
+            if (isAudio != null) isAudio.onChange.Add(SetAudio, this);
         }
 
         void OnDisable()
         {
-            if (isAudio != null) isAudio.RemoveOnChangeCallback(SetAudio);
+            if (isAudio != null) isAudio.onChange.Remove(SetAudio, this);
         }
 
         void AutoPlayMusic()
