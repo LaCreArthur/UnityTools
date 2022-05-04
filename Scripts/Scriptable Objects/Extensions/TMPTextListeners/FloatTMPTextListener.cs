@@ -25,7 +25,7 @@ namespace Toolbox.ScriptableObjects.Utils
         private void Start()
         {
             m_text = GetComponent<TMP_Text>();
-            if (autoUpdateOnChange) variable.AddOnChangeCallback(SetText);
+            if (autoUpdateOnChange) variable.onChange.Add(SetText, this);
             SetText();
         }
 
@@ -43,7 +43,7 @@ namespace Toolbox.ScriptableObjects.Utils
 
         private void OnDestroy()
         {
-            if (autoUpdateOnChange) variable.RemoveOnChangeCallback(SetText);
+            if (autoUpdateOnChange) variable.onChange.Remove(SetText, this);
         }
     }
 }
