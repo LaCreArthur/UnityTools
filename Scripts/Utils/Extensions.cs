@@ -16,10 +16,11 @@ namespace Toolbox.Utils
             {
                 n--;
                 int k = Random.Range(0, n + 1);
-                T value = lst[k];
-                lst[k] = lst[n];
-                lst[n] = value;
+                (lst[k], lst[n]) = (lst[n], lst[k]);
             }
         }
+        
+        public static string ToTimeString(this float time) => 
+            $"{Mathf.FloorToInt(time / 60):0}:{Mathf.FloorToInt(time % 60):00}";
     }
 }
