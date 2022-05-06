@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using Toolbox.Utils;
 using UltEvents;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace Toolbox.ScriptableObjects.Events
         public void Raise()
         {
             if (logRaise) Debug.Log(
-                $"{GetType().ToString().Replace("Toolbox.ScriptableObjects.Events.", "")} [<color=cyan>{name}</color>] has been raised");
+                $"{this.TypeAndNameToString()} has been raised");
             
             listeners.ForEach(l =>
             {

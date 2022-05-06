@@ -22,5 +22,7 @@ namespace Toolbox.Utils
         
         public static string ToTimeString(this float time) => 
             $"{Mathf.FloorToInt(time / 60):0}:{Mathf.FloorToInt(time % 60):00}";
+        
+        public static string TypeAndNameToString(this ScriptableObject so) => $"{so.GetType().Name} [<color=cyan>{so.name}</color>]";
     }
 }

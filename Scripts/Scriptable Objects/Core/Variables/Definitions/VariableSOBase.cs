@@ -1,6 +1,8 @@
 ﻿using System;
 using Sirenix.OdinInspector;
+using Toolbox.Utils;
 using UltEvents;
+using UnityEditor;
 using UnityEngine;
 
 namespace Toolbox.ScriptableObjects.Variables
@@ -20,6 +22,8 @@ namespace Toolbox.ScriptableObjects.Variables
         [HideIf("isConstant"), SerializeField] 
         bool isStored;
         
+        bool _isInit;
+        
         public T InitialValue
         {
             get => initialValue;
@@ -33,19 +37,19 @@ namespace Toolbox.ScriptableObjects.Variables
             set
             {
 #if UNITY_EDITOR // dont reset value for nothing on GUI refresh
-                if (Application.isPlaying && this.value != null && this.value.Equals(value)) return;
+                if (EditorApplication.isPlayingOrWillChangePlaymode && this.value != null && this.value.Equals(value)) return;
 #endif
                 if (isConstant)
                 {
 #if UNITY_EDITOR // constant value can be set only in editor when not playing
-                    if (!Application.isPlaying)
+                    if (!EditorApplication.isPlayingOrWillChangePlaymode)
                     {
                         previousValue = this.value;
                         this.value = ProcessValue(value);
                     }
 #endif
                     if (Application.isPlaying && logOnChange)
-                        Debug.Log($"[<color=cyan>{name}</color>] is constant and cannot be modified", this);
+                        Debug.Log($"{this.TypeAndNameToString()} is constant and cannot be modified", this);
                     return;
                 }
 
@@ -84,7 +88,7 @@ namespace Toolbox.ScriptableObjects.Variables
         {
             if (logOnChange)
                 Debug.Log(
-                    $"{GetType().ToString().Replace("Toolbox.ScriptableObjects.Variables.", "")} [<color=cyan>{name}</color>] has changed to <color=yellow>{t}</color>");
+                    $"{this.TypeAndNameToString()} has changed to <color=yellow>{t}</color>");
 
             foreach (var referencedUltEvent in onChange.Listeners)
             {
@@ -101,7 +105,17 @@ namespace Toolbox.ScriptableObjects.Variables
 
         #endregion
         
-        protected virtual void OnEnable() => v = isStored ? Load() : initialValue;
+        protected virtual void OnEnable()
+        {
+#if UNITY_EDITOR // dont load if not on playmode
+            if (!EditorApplication.isPlayingOrWillChangePlaymode) return;
+#endif
+            if (!_isInit)
+            {
+                v = isStored ? Load() : initialValue;
+                _isInit = true;
+            }
+        }
 
         void OnValidate() => OnEnable();
 
