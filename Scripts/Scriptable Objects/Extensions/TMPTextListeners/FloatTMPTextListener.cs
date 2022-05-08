@@ -20,9 +20,9 @@ namespace Toolbox.ScriptableObjects.Utils
         public bool isValueMultiplied;
         [ShowIf("isValueMultiplied")] public float multiple;
 
-        private TMP_Text m_text;
+        TMP_Text m_text;
 
-        private void Start()
+        void Start()
         {
             m_text = GetComponent<TMP_Text>();
             if (autoUpdateOnChange) variable.onChange.Add(SetText, this);
@@ -41,7 +41,7 @@ namespace Toolbox.ScriptableObjects.Utils
             m_text.text = $"{prefix}{val.ToString($"N{decimals}")}{suffix}";
         }
 
-        private void OnDestroy()
+        void OnDestroy()
         {
             if (autoUpdateOnChange) variable.onChange.Remove(SetText, this);
         }
