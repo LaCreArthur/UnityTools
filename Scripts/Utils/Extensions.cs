@@ -24,5 +24,7 @@ namespace Toolbox.Utils
             $"{Mathf.FloorToInt(time / 60):0}:{Mathf.FloorToInt(time % 60):00}";
         
         public static string TypeAndNameToString(this ScriptableObject so) => $"{so.GetType().Name} [<color=cyan>{so.name}</color>]";
+
+        public static float Normalize(this float x, float min, float max) => (x - min) / (max - min);
     }
 }
