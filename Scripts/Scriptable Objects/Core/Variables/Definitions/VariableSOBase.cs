@@ -24,8 +24,6 @@ namespace Toolbox.ScriptableObjects.Variables
         [SerializeField] protected bool isConstant;
         [HideIf("isConstant"), SerializeField] bool isStored;
 
-        bool _isInit;
-
         public T InitialValue
         {
             get => initialValue;
@@ -122,11 +120,7 @@ namespace Toolbox.ScriptableObjects.Variables
 #if UNITY_EDITOR // dont load if not on playmode
             if (!EditorApplication.isPlayingOrWillChangePlaymode) return;
 #endif
-            if (!_isInit)
-            {
-                v = isStored ? Load() : initialValue;
-                _isInit = true;
-            }
+            v = isStored ? Load() : initialValue;
         }
 
         void OnValidate() => OnEnable();
