@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 using UnityEngine;
 
 namespace Toolbox.Utils
@@ -26,5 +28,19 @@ namespace Toolbox.Utils
         public static string TypeAndNameToString(this ScriptableObject so) => $"{so.GetType().Name} [<color=cyan>{so.name}</color>]";
 
         public static float Normalize(this float x, float min, float max) => (x - min) / (max - min);
+        
+        public static string Encrypt(string pass)
+        {
+            var x = new MD5CryptoServiceProvider();
+            byte[] bs = Encoding.UTF8.GetBytes(pass);
+            bs = x.ComputeHash(bs);
+            var s = new StringBuilder();
+            foreach (byte b in bs)
+            {
+                s.Append(b.ToString("x2").ToLower());
+            }
+
+            return s.ToString();
+        }
     }
 }
