@@ -2,5 +2,5 @@
 
 namespace Toolbox.ScriptableObjects.Events
 {
-    public class LoadedEventListener<T> : EventListenerBase<LoadedEventSO<T>, UltEvent<T>> {}
+    public abstract class LoadedEventListener<T> : EventListenerBase<LoadedEventSO<T>, UltEvent<T>> {}
 }

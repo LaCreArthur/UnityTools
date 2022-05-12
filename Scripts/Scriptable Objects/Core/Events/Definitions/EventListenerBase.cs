@@ -1,4 +1,5 @@
-﻿using UltEvents;
+﻿using Sirenix.OdinInspector;
+using UltEvents;
 using UnityEngine;
 
 namespace Toolbox.ScriptableObjects.Events
@@ -8,7 +9,8 @@ namespace Toolbox.ScriptableObjects.Events
         where TEvent : IEventSO<TCallbacks> 
         where TCallbacks : UltEventBase
     {
-        [SerializeField] protected TEvent eventSO;
+        protected const string Filter = ""; 
+        [SerializeField, AssetSelector(Filter = Filter)] protected TEvent eventSO;
         [SerializeField] protected TCallbacks ultCallbacks;
     
         protected void AddListener()
