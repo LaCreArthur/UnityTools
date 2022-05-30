@@ -42,5 +42,16 @@ namespace Toolbox.Utils
 
             return s.ToString();
         }
+
+        public static List<T> Except<T>(this List<T> first, List<T> second)
+        {
+            List<T> exceptList = new List<T>(first);
+            foreach (T t in second)
+            {
+                if (first.Contains(t)) exceptList.Remove(t);
+            }
+        
+            return exceptList;
+        }
     }
 }
