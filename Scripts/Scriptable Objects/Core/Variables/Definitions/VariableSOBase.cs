@@ -103,11 +103,13 @@ namespace Toolbox.ScriptableObjects.Variables
             {
                 if (logListeners) referencedUltEvent.LogCallback(this, value);
 
-                foreach (PersistentCall persistentCall in referencedUltEvent.callbacks.PersistentCallsList)
+                /*
+                 foreach (PersistentCall persistentCall in referencedUltEvent.callbacks.PersistentCallsList)
                 {
                     if (persistentCall.PersistentArguments != null && persistentCall.PersistentArguments.Length > 0)
                         persistentCall.SetArguments(value);
                 }
+                */
 
                 referencedUltEvent.callbacks.Invoke(value);
             }
