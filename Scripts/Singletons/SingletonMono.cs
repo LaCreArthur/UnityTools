@@ -12,7 +12,7 @@ namespace Toolbox.Singletons
     /// - "Awake" should not be defined in derived classes.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class SingletonMB<T> : MonoBehaviour where T : SingletonMB<T>
+    public abstract class SingletonMono<T> : MonoBehaviour where T : SingletonMono<T>
     {
         static T _instance;
 

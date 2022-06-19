@@ -9,7 +9,7 @@ using Random = UnityEngine.Random;
 
 namespace Toolbox.Audio
 {
-    public class AudioSingletonMB : SingletonMB<AudioSingletonMB>
+    public class AudioSingletonMono : SingletonMono<AudioSingletonMono>
     {
         [SerializeField] AudioMixerGroup mixerGroup;
         [Header("Sounds")]
