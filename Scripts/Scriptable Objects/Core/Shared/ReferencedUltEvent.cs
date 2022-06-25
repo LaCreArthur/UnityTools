@@ -21,7 +21,7 @@ namespace Toolbox.ScriptableObjects.Events
             this.callbacks = callbacks;
         }
 
-        public void LogCallback(ScriptableObject so, object t)
+        public void LogCallback(ScriptableObject so, object value)
         {
             string header = $"[<color=cyan>{so.name}</color>] callback from <b>{listener.name}</b> ";
             
@@ -29,7 +29,7 @@ namespace Toolbox.ScriptableObjects.Events
             {
                 foreach (var callback in callbacks.PersistentCallsList)
                 {
-                    LogMethodCall(t, callback, header);
+                    LogMethodCall(callback, value, header);
                 }
             }
             
@@ -42,7 +42,7 @@ namespace Toolbox.ScriptableObjects.Events
             // }
         }
 
-        void LogMethodCall(object t, PersistentCall callback, string header)
+        void LogMethodCall(PersistentCall callback, object value, string header)
         {
             StringBuilder methodCall = new StringBuilder($" ~> {callback.Target.GetType()}.{callback.Method.Name}");
             if (callback.PersistentArguments.Length != 0)
@@ -50,7 +50,7 @@ namespace Toolbox.ScriptableObjects.Events
                 // if the call has an argument but it's not of type t
                 object argVal = callback.PersistentArguments[0].Value;
                 string type = "";
-                if (t == null || t.GetType() != argVal.GetType())
+                if (value == null || value.GetType() != argVal.GetType())
                 {
                     methodCall.Append($"(<color=yellow>{argVal}</color>)");
                     type = argVal.GetType().ToString();
@@ -59,8 +59,8 @@ namespace Toolbox.ScriptableObjects.Events
                 }
                 else
                 {
-                    methodCall.Append($"(<color=yellow>{t}</color>)");
-                    type = t.GetType().ToString();
+                    methodCall.Append($"(<color=yellow>{value}</color>)");
+                    type = value.GetType().ToString();
                     type = type.Substring(0, type.LastIndexOf(".") + 1);
                     methodCall = methodCall.Replace($"({type})", "");
                 }
@@ -70,7 +70,7 @@ namespace Toolbox.ScriptableObjects.Events
             Debug.Log(methodCall.Insert(0, header), callback.Target);
         }
 
-        void LogMethodCall(object t, Delegate callback, string header) =>
-            LogMethodCall(t, new PersistentCall(callback), header);
+        void LogMethodCall(object value, Delegate callback, string header) =>
+            LogMethodCall(new PersistentCall(callback), value, header);
     }
 }

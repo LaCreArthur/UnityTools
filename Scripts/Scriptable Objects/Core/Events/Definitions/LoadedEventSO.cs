@@ -10,15 +10,15 @@ namespace Toolbox.ScriptableObjects.Events
         [TitleGroup("Debug"), SerializeField, InlineButton("RaiseWithTestValue")] T testValue;
         public void RaiseWithTestValue() => Raise(testValue);
 
-        public void Raise(T t)
+        public void Raise(T value)
         {
             if (logRaise) Debug.Log(
-                $"{this.TypeAndNameToString()} has been raise with <color=yellow>{t}</color>");
+                $"{this.TypeAndNameToString()} has been raise with <color=yellow>{value}</color>");
             
             listeners.ForEach(l =>
             {
-                if (logListeners) l.LogCallback(this, t);
-                l.callbacks?.InvokeSafe(t);
+                if (logListeners) l.LogCallback(this, value);
+                l.callbacks?.InvokeSafe(value);
             });
         }
     }
