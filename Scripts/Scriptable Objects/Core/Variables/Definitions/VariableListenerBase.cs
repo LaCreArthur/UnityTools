@@ -1,9 +1,9 @@
-using System.Text;
+using System.IO;
 using Sirenix.OdinInspector;
 using Toolbox.ScriptableObjects.Events;
-using UltEvents;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Toolbox.ScriptableObjects.Variables
 {
@@ -14,7 +14,7 @@ namespace Toolbox.ScriptableObjects.Variables
         protected TVariable variable;
         [SerializeField, ShowIf("@variable==null"), InlineButton("Cancel"), InlineButton("Create"), LabelText("Create new SO, enter name:"), ShowIf("_isCreating")]
         string soName = typeof(TVariable).ToString()[(typeof(TVariable).ToString().LastIndexOf(".")+1)..];
-        public UltEvent<T> events;
+        public UnityEvent<T> events;
 
 #if UNITY_EDITOR
         bool _isCreating = false;
@@ -24,8 +24,9 @@ namespace Toolbox.ScriptableObjects.Variables
         protected virtual void Create(string soName)
         {
             TVariable newSO = ScriptableObject.CreateInstance<TVariable>();
+            Directory.CreateDirectory(Application.dataPath + "/Scriptable Objects");
             // path has to start at "Assets"
-            var path = "Assets/_CARFT/Scriptable Objects/" + soName + ".asset";
+            var path = "Assets/Scriptable Objects/" + soName + ".asset";
             AssetDatabase.CreateAsset(newSO, path);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -40,7 +41,7 @@ namespace Toolbox.ScriptableObjects.Variables
         {
             if (variable != null)
             {
-                variable.onChange?.Add(new ReferencedUltEvent<UltEvent<T>>(this, events));
+                variable.onChange?.Add(new ReferencedEvent<UnityEvent<T>>(this, events));
             }
         }
 
@@ -48,7 +49,7 @@ namespace Toolbox.ScriptableObjects.Variables
         {
             if (variable != null)
             {
-                variable.onChange?.Remove(new ReferencedUltEvent<UltEvent<T>>(this, events));
+                variable.onChange?.Remove(new ReferencedEvent<UnityEvent<T>>(this, events));
             }
         }
 

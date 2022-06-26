@@ -1,7 +1,6 @@
 ﻿using System;
 using Sirenix.OdinInspector;
 using Toolbox.Utils;
-using UltEvents;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -91,7 +90,7 @@ namespace Toolbox.ScriptableObjects.Variables
          OnInspectorGUI("RemoveNullElements")]
         public OnChangeCallbacks<T> onChange = new OnChangeCallbacks<T>();
 
-        void RemoveNullElements() => onChange?.RemoveAll(c => c.listener == null);
+        void RemoveNullElements() => onChange?.RemoveAll(c => c.reference == null);
 
         void OnChange()
         {
@@ -99,19 +98,11 @@ namespace Toolbox.ScriptableObjects.Variables
                 Debug.Log(
                     $"{this.TypeAndNameToString()} has changed to <color=yellow>{value}</color>");
 
-            foreach (var referencedUltEvent in onChange.Listeners)
+            foreach (var referencedEvent in onChange.Listeners)
             {
-                if (logListeners) referencedUltEvent.LogCallback(this, value);
+                if (logListeners) referencedEvent.LogCallback(this, value);
 
-                /*
-                 foreach (PersistentCall persistentCall in referencedUltEvent.callbacks.PersistentCallsList)
-                {
-                    if (persistentCall.PersistentArguments != null && persistentCall.PersistentArguments.Length > 0)
-                        persistentCall.SetArguments(value);
-                }
-                */
-
-                referencedUltEvent.callbacks.Invoke(value);
+                referencedEvent.callbacks.Invoke(value);
             }
         }
 

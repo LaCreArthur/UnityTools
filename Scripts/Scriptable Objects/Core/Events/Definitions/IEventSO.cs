@@ -1,11 +1,11 @@
-using UltEvents;
+using UnityEngine.Events;
 
 namespace Toolbox.ScriptableObjects.Events
 {
     public interface IEventSO<TCallbacks> 
-        where TCallbacks : UltEventBase
+        where TCallbacks : UnityEventBase
     {
-        public void AddListener(ReferencedUltEvent<TCallbacks> ultEvent);
-        public void RemoveListener(ReferencedUltEvent<TCallbacks> ultEvent);
+        public void AddListener(ReferencedEvent<TCallbacks> uEvent);
+        public void RemoveListener(ReferencedEvent<TCallbacks> uEvent);
     }
 }

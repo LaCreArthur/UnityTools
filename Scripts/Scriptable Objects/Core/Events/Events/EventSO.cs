@@ -1,12 +1,12 @@
 using Sirenix.OdinInspector;
 using Toolbox.Utils;
-using UltEvents;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Toolbox.ScriptableObjects.Events
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Events/Event", fileName = "E_")]
-    public class EventSO : EventSOBase<UltEvent>
+    public class EventSO : EventSOBase<UnityEvent>
     {
         [TitleGroup("Debug"), Button]
         public void Raise()
@@ -17,7 +17,7 @@ namespace Toolbox.ScriptableObjects.Events
             listeners.ForEach(l =>
             {
                 if (logListeners) l.LogCallback(this, null);
-                l.callbacks?.InvokeSafe();
+                l.callbacks?.Invoke();
             });
         }
     }

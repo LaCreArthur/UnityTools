@@ -1,11 +1,11 @@
 ﻿using Sirenix.OdinInspector;
 using Toolbox.Utils;
-using UltEvents;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Toolbox.ScriptableObjects.Events
 {
-    public abstract class LoadedEventSO<T> : EventSOBase<UltEvent<T>>
+    public abstract class LoadedEventSO<T> : EventSOBase<UnityEvent<T>>
     {
         [TitleGroup("Debug"), SerializeField, InlineButton("RaiseWithTestValue")] T testValue;
         public void RaiseWithTestValue() => Raise(testValue);
@@ -18,7 +18,7 @@ namespace Toolbox.ScriptableObjects.Events
             listeners.ForEach(l =>
             {
                 if (logListeners) l.LogCallback(this, value);
-                l.callbacks?.InvokeSafe(value);
+                l.callbacks?.Invoke(value);
             });
         }
     }
