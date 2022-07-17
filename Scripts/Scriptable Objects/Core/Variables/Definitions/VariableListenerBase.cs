@@ -17,7 +17,9 @@ namespace Toolbox.ScriptableObjects.Variables
         public UnityEvent<T> events;
 
 #if UNITY_EDITOR
+#pragma warning disable CS0414
         bool _isCreating = false;
+#pragma warning restore CS0414
         protected void New() => _isCreating = true;
         protected void Cancel() => _isCreating = false;
 
