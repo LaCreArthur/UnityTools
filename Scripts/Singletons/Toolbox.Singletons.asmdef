@@ -1,3 +1,19 @@
 {
-	"name": "Toolbox.Singletons"
+    "name": "Toolbox.Singletons",
+    "rootNamespace": "",
+    "references": [
+        "GUID:596123e0a6bcaae468d25abeb428693a",
+        "GUID:912d7a6c566d4034494955b637d86889",
+        "GUID:865b414a121ed594e91db2e09f65d38c",
+        "GUID:041029188fa88c54f9efffc039b6a1c9"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

@@ -1,15 +1,15 @@
 using System;
 using System.Collections;
+using Toolbox.ScriptableObjects.Variables;
 using Toolbox.Singletons;
 using Toolbox.Utils;
 using UnityEngine;
 using UnityEngine.Audio;
-using Toolbox.ScriptableObjects.Variables;
 using Random = UnityEngine.Random;
 
 namespace Toolbox.Audio
 {
-    public class AudioSingletonMono : SingletonMono<AudioSingletonMono>
+    public class AudioSM : SingletonMono<AudioSM>
     {
         [SerializeField] AudioMixerGroup mixerGroup;
         [Header("Sounds")]
