@@ -1,12 +1,12 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
-
 namespace Toolbox.ScriptableObjects.Variables
 {
-    [CreateAssetMenu(menuName = "Scriptable Objects/Game State Reference")]
+    [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Game State Variable")]
     public class GameStateVariable : VariableSOBase<GameStateSO>
     {
-        [SerializeField] bool debugStateChange;
+        [SerializeField]
+        bool debugStateChange;
 
         protected override void SetValue(GameStateSO newVal)
         {
@@ -19,7 +19,8 @@ namespace Toolbox.ScriptableObjects.Variables
             if (v.validNextStates.Contains(newVal))
             {
                 v = newVal;
-                if (debugStateChange) Debug.Log($"Game state switch from {PreviousValue.name} to {newVal.name}");
+                if (debugStateChange)
+                    Debug.Log($"Game state switch from {PreviousValue.name} to {newVal.name}");
             }
             else
             {

@@ -4,11 +4,41 @@ using Toolbox.Utils;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
-
 namespace Toolbox.ScriptableObjects.Variables
 {
     public class VariableSOBase<T> : ScriptableObject, IVariableSO, IStorable<T>
     {
+        protected virtual void OnEnable()
+        {
+#if UNITY_EDITOR // dont load if not on playmode
+            if (!EditorApplication.isPlayingOrWillChangePlaymode)
+                return;
+#endif
+            v = isStored ? Load() : initialValue;
+        }
+
+        void OnValidate() => OnEnable();
+
+        public virtual void Save() { }
+
+        public virtual T Load()
+        {
+            T t = default(T);
+            return t;
+        }
+
+        public void AddOnChangeCallback(Action callback, Object listener)
+        {
+            onChange.Add(callback, listener);
+        }
+
+        public void RemoveOnChangeCallback(Action callback, Object listener)
+        {
+            onChange.Remove(callback, listener);
+        }
+
+        public override string ToString() => value.ToString();
+
         #region Value
 
         [TitleGroup("Values"), SerializeField, PropertyOrder(0)]
@@ -20,8 +50,11 @@ namespace Toolbox.ScriptableObjects.Variables
         [TitleGroup("Values"), SerializeField, ReadOnly, PropertyOrder(0)]
         protected T value;
 
-        [SerializeField] protected bool isConstant;
-        [HideIf("isConstant"), SerializeField] bool isStored;
+        [SerializeField]
+        protected bool isConstant;
+
+        [HideIf("isConstant"), SerializeField]
+        bool isStored;
 
         public T InitialValue
         {
@@ -37,8 +70,8 @@ namespace Toolbox.ScriptableObjects.Variables
             set
             {
 #if UNITY_EDITOR // dont reset value for nothing on GUI refresh
-                if (EditorApplication.isPlayingOrWillChangePlaymode && this.value != null &&
-                    this.value.Equals(value)) return;
+                if (EditorApplication.isPlayingOrWillChangePlaymode && this.value != null && this.value.Equals(value))
+                    return;
 #endif
                 if (isConstant)
                 {
@@ -59,7 +92,8 @@ namespace Toolbox.ScriptableObjects.Variables
 
                 if (Application.isPlaying)
                 {
-                    if (isStored) Save();
+                    if (isStored)
+                        Save();
                     OnChange();
                 }
             }
@@ -86,8 +120,7 @@ namespace Toolbox.ScriptableObjects.Variables
         [TitleGroup("On Change"), HideIf("isConstant"), SerializeField]
         bool logListeners;
 
-        [TitleGroup("On Change"), HideLabel, InlineProperty, HideReferenceObjectPicker,
-         OnInspectorGUI("RemoveNullElements")]
+        [TitleGroup("On Change"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullElements")]
         public OnChangeCallbacks<T> onChange = new OnChangeCallbacks<T>();
 
         void RemoveNullElements() => onChange?.RemoveAll(c => c.reference == null);
@@ -95,49 +128,33 @@ namespace Toolbox.ScriptableObjects.Variables
         void OnChange()
         {
             if (logOnChange)
-                Debug.Log(
-                    $"{this.TypeAndNameToString()} has changed to <color=yellow>{value}</color>");
+                Debug.Log($"{this.TypeAndNameToString()} has changed to <color=yellow>{value}</color>");
 
-            foreach (var referencedEvent in onChange.Listeners)
+            Debug.Log($"listeners : {onChange.PersistentListeners.Count}");
+            foreach (var referencedEvent in onChange.PersistentListeners)
             {
-                if (logListeners) referencedEvent.LogCallback(this, value);
+                if (logListeners)
+                    referencedEvent.LogCallback(this, value);
 
                 referencedEvent.callbacks.Invoke(value);
+            }
+            foreach (var referencedAction in onChange.RuntimeLoadedListeners)
+            {
+                if (logListeners)
+                    referencedAction.LogCallback(this, value);
+
+                referencedAction.callbacks.ForEach(c => c.Invoke(value));
+            }
+
+            foreach (var referencedAction in onChange.RuntimeListeners)
+            {
+                if (logListeners)
+                    referencedAction.LogCallback(this);
+
+                referencedAction.callbacks.ForEach(c => c.Invoke());
             }
         }
 
         #endregion
-
-        protected virtual void OnEnable()
-        {
-#if UNITY_EDITOR // dont load if not on playmode
-            if (!EditorApplication.isPlayingOrWillChangePlaymode) return;
-#endif
-            v = isStored ? Load() : initialValue;
-        }
-
-        void OnValidate() => OnEnable();
-
-        public virtual void Save()
-        {
-        }
-
-        public virtual T Load()
-        {
-            T t = default(T);
-            return t;
-        }
-
-        public void AddOnChangeCallback(Action callback, Object listener)
-        {
-            onChange.Add(callback, listener);
-        }
-
-        public void RemoveOnChangeCallback(Action callback, Object listener)
-        {
-            onChange.Remove(callback, listener);
-        }
-
-        public override string ToString() => value.ToString();
     }
 }

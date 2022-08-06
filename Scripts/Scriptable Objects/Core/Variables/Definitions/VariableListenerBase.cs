@@ -4,7 +4,6 @@ using Toolbox.ScriptableObjects.Events;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
-
 namespace Toolbox.ScriptableObjects.Variables
 {
     [ExecuteAlways]
@@ -12,33 +11,38 @@ namespace Toolbox.ScriptableObjects.Variables
     {
         [SerializeField, AssetSelector, Required("A variable must be assigned for this listener!"), InlineButton("New"), HideIf("_isCreating")]
         protected TVariable variable;
-        [SerializeField, ShowIf("@variable==null"), InlineButton("Cancel"), InlineButton("Create"), LabelText("Create new SO, enter name:"), ShowIf("_isCreating")]
-        string soName = typeof(TVariable).ToString()[(typeof(TVariable).ToString().LastIndexOf(".")+1)..];
+
+        [SerializeField, ShowIf("@variable==null"), InlineButton("Cancel"), InlineButton("Create"), LabelText("Create new SO, enter name:"),
+         ShowIf("_isCreating")]
+        string soName = typeof(TVariable).ToString()[(typeof(TVariable).ToString().LastIndexOf(".") + 1)..];
         public UnityEvent<T> events;
 
 #if UNITY_EDITOR
 #pragma warning disable CS0414
-        bool _isCreating = false;
+        bool _isCreating;
 #pragma warning restore CS0414
         protected void New() => _isCreating = true;
+
         protected void Cancel() => _isCreating = false;
 
         protected virtual void Create(string soName)
         {
             TVariable newSO = ScriptableObject.CreateInstance<TVariable>();
             Directory.CreateDirectory(Application.dataPath + "/Scriptable Objects");
+
             // path has to start at "Assets"
             var path = "Assets/Scriptable Objects/" + soName + ".asset";
             AssetDatabase.CreateAsset(newSO, path);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             EditorUtility.FocusProjectWindow();
+
             //Selection.activeObject = newSO;
             variable = newSO;
             _isCreating = false;
         }
 #endif
-        
+
         void Subscribe()
         {
             if (variable != null)
@@ -56,6 +60,7 @@ namespace Toolbox.ScriptableObjects.Variables
         }
 
         protected virtual void OnEnable() => Subscribe();
+
         protected virtual void OnDisable() => Unsubscribe();
     }
 }

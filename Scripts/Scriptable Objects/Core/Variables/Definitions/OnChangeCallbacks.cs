@@ -5,82 +5,98 @@ using Toolbox.ScriptableObjects.Events;
 using UnityEngine;
 using UnityEngine.Events;
 using Object = UnityEngine.Object;
-
 namespace Toolbox.ScriptableObjects.Variables
 {
     public class OnChangeCallbacks<T>
     {
-        [Space, SerializeField, InlineProperty, HideReferenceObjectPicker, ListDrawerSettings(IsReadOnly = true, Expanded = true), OnInspectorGUI("RemoveNullElements")] 
-        List<ReferencedEvent<UnityEvent<T>>> listeners = new List<ReferencedEvent<UnityEvent<T>>>();
+        [Space, SerializeField, InlineProperty, HideReferenceObjectPicker, ListDrawerSettings(IsReadOnly = true, Expanded = true),
+         OnInspectorGUI("RemoveNullPersistent")]
+        List<ReferencedEvent<UnityEvent<T>>> persistentListeners = new List<ReferencedEvent<UnityEvent<T>>>();
 
-        public List<ReferencedEvent<UnityEvent<T>>> Listeners => listeners;
-        void RemoveNullElements() => listeners?.RemoveAll(l => l.reference == null || l.callbacks.GetPersistentEventCount() == 0);
+        [Space, SerializeField, InlineProperty, HideReferenceObjectPicker, ListDrawerSettings(IsReadOnly = true, Expanded = true),
+         OnInspectorGUI("RemoveNullLoadedRuntime")]
+        List<ReferencedAction<T>> runtimeLoadedListeners = new List<ReferencedAction<T>>();
+
+        [Space, SerializeField, InlineProperty, HideReferenceObjectPicker, ListDrawerSettings(IsReadOnly = true, Expanded = true),
+         OnInspectorGUI("RemoveNullRuntime")]
+        List<ReferencedAction> runtimeListeners = new List<ReferencedAction>();
+
+        public List<ReferencedEvent<UnityEvent<T>>> PersistentListeners => persistentListeners;
+        public List<ReferencedAction<T>> RuntimeLoadedListeners => runtimeLoadedListeners;
+        public List<ReferencedAction> RuntimeListeners => runtimeListeners;
+
+        void RemoveNullPersistent() => persistentListeners?.RemoveAll(l => l.reference == null);
+
+        void RemoveNullLoadedRuntime() =>
+            runtimeLoadedListeners?.RemoveAll(l => l.reference == null);
+
+        void RemoveNullRuntime() => runtimeListeners?.RemoveAll(l => l.reference == null);
 
         public void Add(Action<T> callback, Object listener)
         {
             // look in listeners if the listener already exists
-            var existingListener = listeners.Find(l => l.reference == listener);
-            if (existingListener == null || existingListener.reference == null)
+            var existingListener = runtimeLoadedListeners.Find(l => l.reference == listener);
+            if (existingListener.callbacks == null || existingListener.reference == null)
             {
-                existingListener = new ReferencedEvent<UnityEvent<T>>(listener, new UnityEvent<T>());
+                existingListener = new ReferencedAction<T>(listener, new List<Action<T>> { callback });
+                runtimeLoadedListeners.Add(existingListener);
             }
-            
-            existingListener.callbacks.AddListener(callback as UnityAction<T>);
+            else
+                existingListener.callbacks.Add(callback);
         }
 
         public void Add(Action callback, Object listener)
         {
             // look in listeners if the listener already exists
-            var existingListener = listeners.Find(l => l.reference == listener);
-            if (existingListener == null || existingListener.reference == null)
+            var existingListener = runtimeListeners.Find(l => l.reference == listener);
+            if (existingListener.callbacks == null || existingListener.reference == null)
             {
-                existingListener = new ReferencedEvent<UnityEvent<T>>(listener, new UnityEvent<T>());
+                existingListener = new ReferencedAction(listener, new List<Action> { callback });
+                runtimeListeners.Add(existingListener);
             }
-            
-            existingListener.callbacks.AddListener(callback as UnityAction<T>);
+            else
+                existingListener.callbacks.Add(callback);
         }
 
         public void Remove(Action<T> callback, Object listener)
         {
-            var existingListener = listeners.Find(l => l.reference == listener);
-            if (existingListener != null)
-            {
-                existingListener.callbacks.RemoveListener(callback as UnityAction<T>);
-            }
+            var existingListener = runtimeLoadedListeners.Find(l => l.reference == listener);
+            existingListener.callbacks?.Remove(callback);
         }
 
         public void Remove(Action callback, Object listener)
         {
-            var existingListener = listeners.Find(l => l.reference == listener);
-            if (existingListener != null)
-            {
-                existingListener.callbacks.RemoveListener(callback as UnityAction<T>);
-            }
+            var existingListener = runtimeListeners.Find(l => l.reference == listener);
+            existingListener.callbacks?.Remove(callback);
         }
 
         public void RemoveAll(Func<ReferencedEvent<UnityEvent<T>>, bool> match)
         {
-            if (listeners == null) return;
-            for (int i = listeners.Count - 1; i >= 0 ; i--)
+            if (persistentListeners == null)
+                return;
+
+            for (int i = persistentListeners.Count - 1; i >= 0; i--)
             {
-                if (match(listeners[i]))
+                if (match(persistentListeners[i]))
                 {
-                    listeners.RemoveAt(i);
+                    persistentListeners.RemoveAt(i);
                 }
             }
         }
 
         public void Add(ReferencedEvent<UnityEvent<T>> refAction)
         {
-            if (listeners == null) listeners = new List<ReferencedEvent<UnityEvent<T>>>();
-            listeners.Add(refAction);
+            persistentListeners ??= new List<ReferencedEvent<UnityEvent<T>>>();
+            persistentListeners.Add(refAction);
         }
 
         public void Remove(ReferencedEvent<UnityEvent<T>> refAction)
         {
-            if (listeners == null) return;
-            var listener = listeners.Find(l => l.reference == refAction.reference);
-            listeners.Remove(listener);
+            if (persistentListeners == null)
+                return;
+
+            var listener = persistentListeners.Find(l => l.reference == refAction.reference);
+            persistentListeners.Remove(listener);
         }
     }
 }

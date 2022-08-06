@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.Events;
-using Object = UnityEngine.Object;
-
 namespace Toolbox.ScriptableObjects.Events
 {
     public static class UnityEventHelper
     {
         /// <summary>
-        /// Get all persistent calls for debug purposes. 
+        ///     Get all persistent calls for debug purposes.
         /// </summary>
         /// <param name="srcObj">the Unity Object on which is the UnityEvent</param>
         /// <returns></returns>
@@ -16,12 +15,13 @@ namespace Toolbox.ScriptableObjects.Events
         {
             var src = new SerializedObject(srcObj);
             var srcCalls = src.FindProperty($"{srcEventName}.m_PersistentCalls.m_Calls");
-
             var calls = new List<PersistentCall>();
+            if (srcCalls == null)
+                return calls;
             for (var srcIndex = 0; srcIndex < srcCalls.arraySize; srcIndex++)
             {
                 var srcCallProperty = srcCalls.GetArrayElementAtIndex(srcIndex);
-                var srcCall = new PersistentCall(srcCallProperty, "{srcEventName}"); 
+                var srcCall = new PersistentCall(srcCallProperty, "{srcEventName}");
                 calls.Add(srcCall);
             }
             return calls;
@@ -56,7 +56,7 @@ namespace Toolbox.ScriptableObjects.Events
         }
 
         public override string ToString() =>
-            $"[{(UnityEventCallState) _callState.enumValueIndex}] {_target.objectReferenceValue}.{_methodName.stringValue}({GetParamSignature(_mode.enumValueIndex)})";
+            $"[{(UnityEventCallState)_callState.enumValueIndex}] {_target.objectReferenceValue}.{_methodName.stringValue}({GetParamSignature(_mode.enumValueIndex)})";
 
         string GetParamSignature(in int enumIndex)
         {
@@ -65,7 +65,7 @@ namespace Toolbox.ScriptableObjects.Events
                 case 0: // Event Defined
                     return $"{_objectArg.objectReferenceValue} (dynamic call)";
                 case 1: // void
-                    return "()";
+                    return "";
                 case 2: // Object
                     return $"{_objectArg.objectReferenceValue}";
                 case 3: // int
@@ -82,8 +82,11 @@ namespace Toolbox.ScriptableObjects.Events
         }
 
         public string MethodName() => _methodName.stringValue;
+
         public Object GetTarget() => _target.objectReferenceValue;
+
         public string GetParams() => GetParamSignature(_mode.enumValueIndex);
+
         public bool IsDynamicParams() => _mode.enumValueIndex == 0;
     }
 }
