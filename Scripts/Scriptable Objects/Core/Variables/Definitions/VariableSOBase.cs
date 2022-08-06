@@ -37,7 +37,7 @@ namespace Toolbox.ScriptableObjects.Variables
             onChange.Remove(callback, listener);
         }
 
-        public override string ToString() => value.ToString();
+        public override string ToString() => value.ToString().Replace($"({value.GetType()})", "");
 
         #region Value
 

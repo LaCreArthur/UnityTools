@@ -1,12 +1,8 @@
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using TMPro;
 using Toolbox.ScriptableObjects.Variables;
-using UnityEngine;
-
 namespace Toolbox.ScriptableObjects.Utils
 {
-    [RequireComponent(typeof(TextMeshProUGUI))]
     public class VariableTMPTextListener : SerializedMonoBehaviour
     {
         [ValidateInput("@variable != null", "a variable must be provided"), AssetsOnly, AssetSelector]
@@ -15,12 +11,13 @@ namespace Toolbox.ScriptableObjects.Utils
         public string suffix;
         public bool autoUpdateOnChange = true;
 
-        TextMeshProUGUI _tmp;
+        TMP_Text _tmp;
 
         void Start()
         {
-            _tmp = GetComponent<TextMeshProUGUI>();
-            if (variable != null && autoUpdateOnChange) variable.AddOnChangeCallback(SetText, this);
+            _tmp = GetComponent<TMP_Text>();
+            if (variable != null && autoUpdateOnChange)
+                variable.AddOnChangeCallback(SetText, this);
             SetText();
         }
 
@@ -28,7 +25,8 @@ namespace Toolbox.ScriptableObjects.Utils
 
         void OnDestroy()
         {
-            if (variable != null && autoUpdateOnChange) variable.RemoveOnChangeCallback(SetText, this);
+            if (variable != null && autoUpdateOnChange)
+                variable.RemoveOnChangeCallback(SetText, this);
         }
     }
 }
