@@ -121,7 +121,7 @@ namespace Toolbox.ScriptableObjects.Variables
         bool logListeners;
 
         [TitleGroup("On Change"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullElements")]
-        public OnChangeCallbacks<T> onChange = new OnChangeCallbacks<T>();
+        public ReferencedCallbacks<T> onChange = new ReferencedCallbacks<T>();
 
         void RemoveNullElements() => onChange?.RemoveAll(c => c.reference == null);
 
@@ -130,29 +130,7 @@ namespace Toolbox.ScriptableObjects.Variables
             if (logOnChange)
                 Debug.Log($"{this.TypeAndNameToString()} has changed to <color=yellow>{value}</color>");
 
-            Debug.Log($"listeners : {onChange.PersistentListeners.Count}");
-            foreach (var referencedEvent in onChange.PersistentListeners)
-            {
-                if (logListeners)
-                    referencedEvent.LogCallback(this, value);
-
-                referencedEvent.callbacks.Invoke(value);
-            }
-            foreach (var referencedAction in onChange.RuntimeLoadedListeners)
-            {
-                if (logListeners)
-                    referencedAction.LogCallback(this, value);
-
-                referencedAction.callbacks.ForEach(c => c.Invoke(value));
-            }
-
-            foreach (var referencedAction in onChange.RuntimeListeners)
-            {
-                if (logListeners)
-                    referencedAction.LogCallback(this);
-
-                referencedAction.callbacks.ForEach(c => c.Invoke());
-            }
+            onChange.Invoke(this, value, logListeners);
         }
 
         #endregion
