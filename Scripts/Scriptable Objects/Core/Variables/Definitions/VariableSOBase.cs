@@ -6,6 +6,7 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 namespace Toolbox.ScriptableObjects.Variables
 {
+    [AssetSelector]
     public class VariableSOBase<T> : ScriptableObject, IVariableSO, IStorable<T>
     {
         protected virtual void OnEnable()
@@ -36,6 +37,8 @@ namespace Toolbox.ScriptableObjects.Variables
         {
             onChange.Remove(callback, listener);
         }
+
+        void OnDisable() => onChange.RemoveRuntimeEvents();
 
         public override string ToString() => value.ToString().Replace($"({value.GetType()})", "");
 
@@ -105,10 +108,10 @@ namespace Toolbox.ScriptableObjects.Variables
 
         #region Debug
 
-        [TitleGroup("Debug"), SerializeField, InlineButton("SetValue")]
+        [TitleGroup("Debug"), SerializeField, Delayed, OnValueChanged("SetValue")]
         T newValue;
 
-        protected virtual void SetValue(T newVal) => v = newVal;
+        public virtual void SetValue(T newVal) => v = newVal;
 
         [TitleGroup("Debug"), HideIf("isConstant"), SerializeField]
         protected bool logOnChange;

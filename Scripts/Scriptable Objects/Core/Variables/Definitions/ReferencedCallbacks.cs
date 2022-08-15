@@ -29,6 +29,12 @@ namespace Toolbox.ScriptableObjects.Variables
                 existingListener.callbacks.Add(callback);
         }
 
+        public void RemoveRuntimeEvents()
+        {
+            runtimeLoadedListeners.Clear();
+            runtimeListeners.Clear();
+        }
+
         public void Remove(Action<T> callback, Object listener)
         {
             var existingListener = runtimeLoadedListeners.Find(l => l.reference == listener);
