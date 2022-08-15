@@ -1,13 +1,12 @@
 ﻿using Sirenix.OdinInspector;
-using UnityEngine;
 using Toolbox.Utils;
-
+using UnityEngine;
 namespace Toolbox.ScriptableObjects.Variables
 {
-    [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Bool", fileName = "BoolV_")]
-    public class BoolVariable : VariableSOBase<bool>
+    [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Bool", fileName = "bool_")]
+    public class BoolVar : VariableSOBase<bool>
     {
-        [Button()]
+        [Button]
         public void Toggle() => v = !v;
 
         public override void Save() => EncryptedPlayerPrefs.SetBool(this.name, v);
@@ -17,7 +16,7 @@ namespace Toolbox.ScriptableObjects.Variables
             v = EncryptedPlayerPrefs.GetBool(this.name, initialValue);
             return v;
         }
-        
-        public static implicit operator bool(BoolVariable b) => b.v;
+
+        public static implicit operator bool(BoolVar b) => b.v;
     }
 }

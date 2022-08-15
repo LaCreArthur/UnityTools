@@ -1,10 +1,9 @@
-﻿using UnityEngine;
-using Toolbox.Utils;
-
+﻿using Toolbox.Utils;
+using UnityEngine;
 namespace Toolbox.ScriptableObjects.Variables
 {
-    [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Float", fileName = "FloatV_")]
-    public class FloatVariable : VariableSOBase<float>
+    [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Float", fileName = "float_")]
+    public class FloatVar : VariableSOBase<float>
     {
         public override void Save()
         {
@@ -16,45 +15,45 @@ namespace Toolbox.ScriptableObjects.Variables
             v = EncryptedPlayerPrefs.GetFloat(this.name, initialValue);
             return v;
         }
-        
+
         public void Add(float x)
         {
             v += x;
         }
-        
-        public static FloatVariable operator ++(FloatVariable a)
+
+        public static FloatVar operator ++(FloatVar a)
         {
             a.v++;
             return a;
         }
 
-        public static FloatVariable operator --(FloatVariable a)
+        public static FloatVar operator --(FloatVar a)
         {
             a.v--;
             return a;
         }
 
-        public static FloatVariable operator +(FloatVariable a)
+        public static FloatVar operator +(FloatVar a)
         {
             return a;
         }
 
-        public static FloatVariable operator +(FloatVariable a, FloatVariable b)
+        public static FloatVar operator +(FloatVar a, FloatVar b)
         {
-            var res = CreateInstance<FloatVariable>();
+            var res = CreateInstance<FloatVar>();
             res.v = a.v + b.v;
             return res;
         }
 
-        public static FloatVariable operator -(FloatVariable a)
+        public static FloatVar operator -(FloatVar a)
         {
             a.v = -a.v;
             return a;
         }
 
-        public static FloatVariable operator -(FloatVariable a, FloatVariable b)
+        public static FloatVar operator -(FloatVar a, FloatVar b)
         {
-            var res = CreateInstance<FloatVariable>();
+            var res = CreateInstance<FloatVar>();
             res.v = a.v - b.v;
             return res;
         }

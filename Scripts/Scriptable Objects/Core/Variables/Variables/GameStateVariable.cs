@@ -8,7 +8,7 @@ namespace Toolbox.ScriptableObjects.Variables
         [SerializeField]
         bool debugStateChange;
 
-        protected override void SetValue(GameStateSO newVal)
+        public override void SetValue(GameStateSO newVal)
         {
             if (v == newVal)
             {

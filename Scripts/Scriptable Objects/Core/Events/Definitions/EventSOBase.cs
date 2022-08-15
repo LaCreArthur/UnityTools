@@ -2,6 +2,7 @@
 using UnityEngine;
 namespace Toolbox.ScriptableObjects.Events
 {
+    [AssetSelector]
     public abstract class EventSOBase : ScriptableObject
     {
         [TitleGroup("Debug"), SerializeField]

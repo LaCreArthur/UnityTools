@@ -34,14 +34,6 @@ namespace Toolbox.ScriptableObjects.Variables
             }
         }
 
-        void OnDisable()
-        {
-            if (gameState != null)
-            {
-                gameState.onChange?.Remove(OnChange, this);
-            }
-        }
-
         void OnChange()
         {
             if (callbacks.ContainsKey(gameState.PreviousValue))

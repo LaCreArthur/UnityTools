@@ -1,4 +1,6 @@
 namespace Toolbox.ScriptableObjects.Variables
 {
-    public class FloatVariableListener : VariableListenerBase<float, FloatVariable> {}
+    public class FloatVariableListener : VariableListenerBase<float, FloatVar>
+    {
+    }
 }

@@ -1,4 +1,6 @@
 namespace Toolbox.ScriptableObjects.Variables
 {
-    public class BoolVariableListener : VariableListenerBase<bool, BoolVariable> {}
+    public class BoolVariableListener : VariableListenerBase<bool, BoolVar>
+    {
+    }
 }
