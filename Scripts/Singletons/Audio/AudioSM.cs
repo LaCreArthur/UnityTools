@@ -6,44 +6,71 @@ using Toolbox.Utils;
 using UnityEngine;
 using UnityEngine.Audio;
 using Random = UnityEngine.Random;
-
 namespace Toolbox.Audio
 {
     public class AudioSM : SingletonMono<AudioSM>
     {
-        [SerializeField] AudioMixerGroup mixerGroup;
+        [SerializeField]
+        AudioMixerGroup musicMixerGroup;
+
+        [SerializeField]
+        AudioMixerGroup sfxMixerGroup;
+
         [Header("Sounds")]
-        [Range(0.0f, 1.0f)] [SerializeField] float soundVolume = 1.0f;
-        [SerializeField] Sound[] sounds = Array.Empty<Sound>();
-        
+        [Range(0.0f, 1.0f)]
+        [SerializeField]
+        float soundVolume = 1.0f;
+
+        [SerializeField]
+        Sound[] sounds = Array.Empty<Sound>();
+
         [Header("Musics")]
-        [Range(0.0f, 1.0f)] [SerializeField] float musicVolume = 1.0f;
-        [SerializeField] Sound[] musics = Array.Empty<Sound>();
-        [SerializeField] bool musicAutoPlayStart;
-        [SerializeField] bool musicAutoPlayRandomClip;
-        [SerializeField] bool musicAutoPlayNext;
-        [SerializeField] float musicFadeOutDuration;
-        [SerializeField] AudioManagerSO audioManagerSO;
-        [SerializeField] BoolVariable isAudio;
+        [Range(0.0f, 1.0f)]
+        [SerializeField]
+        float musicVolume = 1.0f;
+
+        [SerializeField]
+        Sound[] musics = Array.Empty<Sound>();
+
+        [SerializeField]
+        bool musicAutoPlayStart;
+
+        [SerializeField]
+        bool musicAutoPlayRandomClip;
+
+        [SerializeField]
+        bool musicAutoPlayNext;
+
+        [SerializeField]
+        float musicFadeOutDuration;
+
+        [SerializeField]
+        AudioManagerSO audioManagerSO;
+
+        [SerializeField]
+        BoolVar isAudio;
 
         AudioSource _currentMusic;
 
         protected override void OnAwake()
         {
-            if (audioManagerSO != null) audioManagerSO.audioSingleton = this;
-            InitSoundArray(sounds);
-            InitSoundArray(musics);
+            if (audioManagerSO != null)
+                audioManagerSO.audioSingleton = this;
+            InitSoundArray(sounds, false);
+            InitSoundArray(musics, true);
             AutoPlayMusic();
         }
 
         void OnEnable()
         {
-            if (isAudio != null) isAudio.onChange.Add(SetAudio, this);
+            if (isAudio != null)
+                isAudio.onChange.Add(SetAudio, this);
         }
 
         void OnDisable()
         {
-            if (isAudio != null) isAudio.onChange.Remove(SetAudio, this);
+            if (isAudio != null)
+                isAudio.onChange.Remove(SetAudio, this);
         }
 
         void AutoPlayMusic()
@@ -54,7 +81,8 @@ namespace Toolbox.Audio
 
         void PlayMusic(string music, int clipId = 0)
         {
-            if (isAudio != null && !isAudio.v) return;
+            if (isAudio != null && !isAudio.v)
+                return;
             if (_currentMusic && _currentMusic.isPlaying)
             {
                 StartCoroutine(FadeOutPlayNextMusic(music));
@@ -74,6 +102,7 @@ namespace Toolbox.Audio
             _currentMusic.volume = m.volume * musicVolume;
             _currentMusic.pitch = 1;
             _currentMusic.Play();
+
             //Debug.Log($"Music {name} starts");
             if (musicAutoPlayNext)
                 StartCoroutine(MusicAutoPlayNext(clip.length, Array.IndexOf(musics, m), clipId));
@@ -100,21 +129,23 @@ namespace Toolbox.Audio
             PlayMusic(nextMusic);
         }
 
-        void InitSoundArray(Sound[] soundArray)
+        void InitSoundArray(Sound[] soundArray, bool isMusic)
         {
-            if (soundArray == null) return; // scenes without audio manager are creating empty one
+            if (soundArray == null)
+                return; // scenes without audio manager are creating empty one
             foreach (Sound s in soundArray)
             {
                 s.source = gameObject.AddComponent<AudioSource>();
                 s.source.clip = s.clips.Count > 0 ? s.clips.GetRandom() : s.clips[0];
                 s.source.loop = s.loop;
-                s.source.outputAudioMixerGroup = mixerGroup;
+                s.source.outputAudioMixerGroup = isMusic ? musicMixerGroup : sfxMixerGroup;
             }
         }
-        
+
         public void Play(string sound)
         {
-            if (isAudio != null && !isAudio.v) return;
+            if (isAudio != null && !isAudio.v)
+                return;
             Sound s = Array.Find(sounds, item => item.name == sound);
             if (s == null)
             {
@@ -123,14 +154,12 @@ namespace Toolbox.Audio
             }
 
             s.source.clip = s.clips.Count > 0 ? s.clips.GetRandom() : s.clips[0];
-            s.source.volume = s.volume * (1f + Random.Range(-s.volumeVariance / 2f, s.volumeVariance / 2f)) *
-                              soundVolume;
+            s.source.volume = s.volume * (1f + Random.Range(-s.volumeVariance / 2f, s.volumeVariance / 2f)) * soundVolume;
             s.source.pitch = s.pitch * (1f + Random.Range(-s.pitchVariance / 2f, s.pitchVariance / 2f));
             if (s.loop)
                 s.source.Play();
             else
                 s.source.PlayOneShot(s.source.clip);
-            
         }
 
         public void Stop(string sound)
@@ -149,7 +178,7 @@ namespace Toolbox.Audio
         {
             if (isAudio.v)
             {
-                Play("AudioEnabled");
+                Play("audio");
                 AutoPlayMusic();
             }
             AudioListener.pause = !isAudio.v;

@@ -1,7 +1,7 @@
 ﻿using Sirenix.OdinInspector;
 using TMPro;
-using UnityEngine;
 using Toolbox.ScriptableObjects.Variables;
+using UnityEngine;
 
 /*
  * Created by CreArthur - 2019
@@ -14,7 +14,7 @@ namespace Toolbox.ScriptableObjects.Utils
     [RequireComponent(typeof(TMP_Text))]
     public class IntTMPTextListener : MonoBehaviour
     {
-        public IntVariable variable;
+        public IntVar var;
 
         public string prefix;
         public string suffix;
@@ -22,7 +22,7 @@ namespace Toolbox.ScriptableObjects.Utils
 
         public bool isValueOffset;
         [ShowIf("isValueOffset")] public int valueOffset;
-        
+
         public bool isValueMultiplied;
         [ShowIf("isValueMultiplied")] public int multiple;
 
@@ -31,25 +31,16 @@ namespace Toolbox.ScriptableObjects.Utils
         void Start()
         {
             m_text = GetComponent<TMP_Text>();
-            if (autoUpdateOnChange) variable.onChange.Add(SetText, this);
+            if (autoUpdateOnChange) var.onChange.Add(SetText, this);
             SetText();
         }
 
         public void SetText()
         {
-            int val = 
-                isValueOffset ? 
-                    variable.v + valueOffset : 
-                isValueMultiplied ? 
-                    variable.v * multiple : 
-                variable.v;
-            
-            m_text.text = $"{prefix}{val}{suffix}";
-        }
+            int val = isValueOffset ? var.v + valueOffset :
+                isValueMultiplied ? var.v * multiple : var.v;
 
-        void OnDestroy()
-        {
-            if (autoUpdateOnChange) variable.onChange.Remove(SetText, this);
+            m_text.text = $"{prefix}{val}{suffix}";
         }
     }
 }

@@ -22,11 +22,5 @@ namespace Toolbox.ScriptableObjects.Utils
         }
 
         public void SetText() => _tmp.text = $"{prefix}{variable.ToString()}{suffix}";
-
-        void OnDestroy()
-        {
-            if (variable != null && autoUpdateOnChange)
-                variable.RemoveOnChangeCallback(SetText, this);
-        }
     }
 }
