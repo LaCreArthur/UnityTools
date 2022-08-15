@@ -9,12 +9,14 @@ namespace Toolbox.ScriptableObjects.Variables
     [ExecuteAlways]
     public abstract class VariableListenerBase<T, TVariable> : MonoBehaviour where TVariable : VariableSOBase<T>
     {
-        [SerializeField, AssetSelector, Required("A variable must be assigned for this listener!"), InlineButton("New"), HideIf("_isCreating")]
+        [SerializeField, Required("A variable must be assigned for this listener!"), InlineButton("New"), HideIf("_isCreating")]
         protected TVariable variable;
 
         [SerializeField, ShowIf("@variable==null"), InlineButton("Cancel"), InlineButton("Create"), LabelText("Create new SO, enter name:"),
          ShowIf("_isCreating")]
         string soName = typeof(TVariable).ToString()[(typeof(TVariable).ToString().LastIndexOf(".") + 1)..];
+
+        public bool callEventsOnStart;
         public UnityEvent<T> events;
 
 #if UNITY_EDITOR
@@ -62,5 +64,11 @@ namespace Toolbox.ScriptableObjects.Variables
         protected virtual void OnEnable() => Subscribe();
 
         protected virtual void OnDisable() => Unsubscribe();
+
+        void Start()
+        {
+            if (callEventsOnStart)
+                events.Invoke(variable.v);
+        }
     }
 }
