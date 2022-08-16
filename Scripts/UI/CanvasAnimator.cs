@@ -63,9 +63,13 @@ public class CanvasAnimator : MonoBehaviour
             _canvasGroup.blocksRaycasts = false;
             _canvas.enabled = false;
         }
+    }
+
+    void OnEnable()
+    {
         if (associatedState != null)
         {
-            GameStateSM.Instance.v.onChange.Add(OnGameStateChange, this);
+            GameStateSM.Instance.state.onChange.Add(OnGameStateChange, this);
             OnGameStateChange();
         }
     }
@@ -149,10 +153,10 @@ public class CanvasAnimator : MonoBehaviour
 
     void OnGameStateChange()
     {
-        if (GameStateSM.Instance.v.PreviousValue == associatedState)
+        if (GameStateSM.Instance.state.PreviousValue == associatedState)
             Hide();
 
-        if (GameStateSM.Instance.v.v == associatedState)
+        if (GameStateSM.Instance.state.v == associatedState)
             Show();
     }
 }
