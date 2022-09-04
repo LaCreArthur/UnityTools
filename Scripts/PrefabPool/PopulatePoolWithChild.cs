@@ -15,4 +15,10 @@ public class PopulatePoolWithChild : MonoBehaviour
         else
             Debug.Log("Application must be playing to spawn prefab");
     }
+
+    [Button]
+    public void DebugPools()
+    {
+        PrefabPoolingSystem.DebugPools();
+    }
 }

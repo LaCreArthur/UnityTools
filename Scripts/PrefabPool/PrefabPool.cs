@@ -32,8 +32,8 @@ public class PrefabPool
             // instantiate a new go and add it to the list
             GameObject newGO = Object.Instantiate(prefab, parent);
             data = new PoolableInstances
-            {
-                instance = newGO, poolableComponents = newGO.GetComponents<IPoolableComponent>()
+            { instance = newGO,
+              poolableComponents = newGO.GetComponents<IPoolableComponent>()
             };
         }
 
@@ -43,7 +43,8 @@ public class PrefabPool
         {
             spawnedGO.GetComponent<RectTransform>().anchoredPosition = position;
         }
-        else spawnedGO.transform.position = position;
+        else
+            spawnedGO.transform.position = position;
         spawnedGO.transform.rotation = rotation;
 
         foreach (var pc in data.poolableComponents)
@@ -75,19 +76,21 @@ public class PrefabPool
         return true;
     }
 
-    public void AddInstances(List<GameObject> instances)
+    public void AddInstances(Component[] components)
     {
-        foreach (var instance in instances)
+        foreach (var co in components)
         {
+            var go = co.gameObject;
             var data = new PoolableInstances
-            {
-                instance = instance, poolableComponents = instance.GetComponents<IPoolableComponent>()
+            { instance = go,
+              poolableComponents = new[]
+              { co as IPoolableComponent, }
             };
-            instance.SetActive(false);
-            _activeList.Remove(instance);
+            go.SetActive(false);
+            _activeList.Remove(go);
             _inactiveList.Enqueue(data);
         }
 
-        //Debug.Log($"added {instances.Count} instances to the inactive list");
+        Debug.Log($"added {components.Length} instances to the inactive list");
     }
 }
