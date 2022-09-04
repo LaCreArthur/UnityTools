@@ -1,5 +1,6 @@
 ﻿using Toolbox.Utils;
 using UnityEngine;
+
 namespace Toolbox.ScriptableObjects.Variables
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Float", fileName = "float_")]
