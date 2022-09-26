@@ -9,4 +9,15 @@ namespace Toolbox.ScriptableObjects.Variables
             SetValue(t.position);
         }
     }
+    
+    [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Vector2", fileName = "vector2_")]
+    public class MyVariable : VariableSOBase<MyClass>
+    {
+    }
+}
+
+
+public class MyClass
+{
+    
 }

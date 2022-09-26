@@ -1,11 +1,11 @@
-﻿using UnityEngine;
-using Toolbox.ScriptableObjects.Variables;
+﻿using Toolbox.ScriptableObjects.Variables;
+using UnityEngine;
 
 public class TransformVariableSetter : MonoBehaviour
 {
-    public TransformVariable transformVariable;
+    public TransformVar transformVar;
     public bool onAwake;
-    
+
     void Awake()
     {
         if (onAwake) Set();
@@ -13,6 +13,6 @@ public class TransformVariableSetter : MonoBehaviour
 
     public void Set()
     {
-        transformVariable.v = this.transform;
+        transformVar.v = transform;
     }
 }

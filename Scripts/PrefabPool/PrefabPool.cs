@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+
 public struct PoolableInstances
 {
     public GameObject instance;
@@ -91,6 +92,6 @@ public class PrefabPool
             _inactiveList.Enqueue(data);
         }
 
-        Debug.Log($"added {components.Length} instances to the inactive list");
+        // Debug.Log($"added {components.Length} instances to the inactive list");
     }
 }

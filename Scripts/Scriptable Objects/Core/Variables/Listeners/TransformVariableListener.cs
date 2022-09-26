@@ -2,5 +2,7 @@
 
 namespace Toolbox.ScriptableObjects.Variables
 {
-    public class TransformVariableListener : VariableListenerBase<Transform, TransformVariable> {}
+    public class TransformVariableListener : VariableListenerBase<Transform, TransformVar>
+    {
+    }
 }
