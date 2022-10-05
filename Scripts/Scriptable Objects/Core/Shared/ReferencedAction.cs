@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Object = UnityEngine.Object;
+
 namespace Toolbox.ScriptableObjects.Events
 {
     public abstract class ReferencedActionBase<T>
@@ -13,7 +14,7 @@ namespace Toolbox.ScriptableObjects.Events
         [HideReferenceObjectPicker, ListDrawerSettings(Expanded = true)]
         public readonly T callbacks;
 
-        protected ReferencedActionBase(Object reference, T callbacks)
+        protected ReferencedActionBase(T callbacks, Object reference)
         {
             this.reference = reference;
             this.callbacks = callbacks;
@@ -22,7 +23,7 @@ namespace Toolbox.ScriptableObjects.Events
 
     public class ReferencedAction : ReferencedActionBase<List<Action>>
     {
-        public ReferencedAction(Object reference, List<Action> callbacks) : base(reference, callbacks) { }
+        public ReferencedAction(List<Action> callbacks, Object reference) : base(callbacks, reference) { }
 
         public void LogCallback(ScriptableObject so)
         {
@@ -33,7 +34,7 @@ namespace Toolbox.ScriptableObjects.Events
 
     public class ReferencedAction<T> : ReferencedActionBase<List<Action<T>>>
     {
-        public ReferencedAction(Object reference, List<Action<T>> callbacks) : base(reference, callbacks) { }
+        public ReferencedAction(List<Action<T>> callbacks, Object reference) : base(callbacks, reference) { }
 
         public void LogCallback(ScriptableObject so, object t)
         {

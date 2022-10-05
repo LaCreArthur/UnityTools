@@ -5,6 +5,7 @@ using Toolbox.ScriptableObjects.Events;
 using UnityEngine;
 using UnityEngine.Events;
 using Object = UnityEngine.Object;
+
 namespace Toolbox.ScriptableObjects.Variables
 {
     public class ReferencedCallbacks<T> : ReferencedCallbacksBase<UnityEvent<T>>
@@ -13,8 +14,7 @@ namespace Toolbox.ScriptableObjects.Variables
          OnInspectorGUI("RemoveNullLoadedRuntime")]
         List<ReferencedAction<T>> runtimeLoadedListeners = new List<ReferencedAction<T>>();
 
-        void RemoveNullLoadedRuntime() =>
-            runtimeLoadedListeners?.RemoveAll(l => l.reference == null);
+        void RemoveNullLoadedRuntime() => runtimeLoadedListeners?.RemoveAll(l => l.reference == null);
 
         public void Add(Action<T> callback, Object listener)
         {
@@ -22,7 +22,9 @@ namespace Toolbox.ScriptableObjects.Variables
             var existingListener = runtimeLoadedListeners.Find(l => l.reference == listener);
             if (existingListener?.callbacks == null || existingListener.reference == null)
             {
-                existingListener = new ReferencedAction<T>(listener, new List<Action<T>> { callback });
+                existingListener = new ReferencedAction<T>(new List<Action<T>>
+                    { callback },
+                    listener);
                 runtimeLoadedListeners.Add(existingListener);
             }
             else
@@ -96,7 +98,9 @@ namespace Toolbox.ScriptableObjects.Variables
             var existingListener = runtimeListeners.Find(l => l.reference == listener);
             if (existingListener?.callbacks == null || existingListener.reference == null)
             {
-                existingListener = new ReferencedAction(listener, new List<Action> { callback });
+                existingListener = new ReferencedAction(new List<Action>
+                    { callback },
+                    listener);
                 runtimeListeners.Add(existingListener);
             }
             else

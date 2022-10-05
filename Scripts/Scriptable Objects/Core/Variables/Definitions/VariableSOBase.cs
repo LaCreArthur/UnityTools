@@ -4,6 +4,7 @@ using Toolbox.Utils;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
+
 namespace Toolbox.ScriptableObjects.Variables
 {
     [AssetSelector]
@@ -11,7 +12,7 @@ namespace Toolbox.ScriptableObjects.Variables
     {
         protected virtual void OnEnable()
         {
-#if UNITY_EDITOR // dont load if not on playmode
+#if UNITY_EDITOR// dont load if not on playmode
             if (!EditorApplication.isPlayingOrWillChangePlaymode)
                 return;
 #endif
@@ -28,15 +29,9 @@ namespace Toolbox.ScriptableObjects.Variables
             return t;
         }
 
-        public void AddOnChangeCallback(Action callback, Object listener)
-        {
-            onChange.Add(callback, listener);
-        }
+        public void AddOnChangeCallback(Action callback, Object listener) => onChange.Add(callback, listener);
 
-        public void RemoveOnChangeCallback(Action callback, Object listener)
-        {
-            onChange.Remove(callback, listener);
-        }
+        public void RemoveOnChangeCallback(Action callback, Object listener) => onChange.Remove(callback, listener);
 
         void OnDisable() => onChange.RemoveRuntimeEvents();
 
@@ -72,13 +67,13 @@ namespace Toolbox.ScriptableObjects.Variables
             get => value;
             set
             {
-#if UNITY_EDITOR // dont reset value for nothing on GUI refresh
+#if UNITY_EDITOR// dont reset value for nothing on GUI refresh
                 if (EditorApplication.isPlayingOrWillChangePlaymode && this.value != null && this.value.Equals(value))
                     return;
 #endif
                 if (isConstant)
                 {
-#if UNITY_EDITOR // constant value can be set only in editor when not playing
+#if UNITY_EDITOR// constant value can be set only in editor when not playing
                     if (!EditorApplication.isPlayingOrWillChangePlaymode)
                     {
                         previousValue = this.value;

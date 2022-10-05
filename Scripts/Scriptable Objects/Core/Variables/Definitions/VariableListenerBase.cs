@@ -4,6 +4,7 @@ using Toolbox.ScriptableObjects.Events;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+
 namespace Toolbox.ScriptableObjects.Variables
 {
     [ExecuteAlways]
@@ -49,7 +50,7 @@ namespace Toolbox.ScriptableObjects.Variables
         {
             if (variable != null)
             {
-                variable.onChange?.Add(new ReferencedEvent<UnityEvent<T>>(this, events));
+                variable.onChange?.Add(new ReferencedEvent<UnityEvent<T>>(events, this));
             }
         }
 
@@ -57,7 +58,7 @@ namespace Toolbox.ScriptableObjects.Variables
         {
             if (variable != null)
             {
-                variable.onChange?.Remove(new ReferencedEvent<UnityEvent<T>>(this, events));
+                variable.onChange?.Remove(new ReferencedEvent<UnityEvent<T>>(events, this));
             }
         }
 

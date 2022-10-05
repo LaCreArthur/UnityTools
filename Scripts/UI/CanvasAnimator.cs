@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 using Toolbox.ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Events;
+
 [RequireComponent(typeof(Canvas))]
 [RequireComponent(typeof(CanvasGroup))]
 public class CanvasAnimator : MonoBehaviour
@@ -55,6 +56,7 @@ public class CanvasAnimator : MonoBehaviour
             GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
 
         InitChildTweens();
+
         if (startVisible)
             Show();
         else
@@ -63,14 +65,11 @@ public class CanvasAnimator : MonoBehaviour
             _canvasGroup.blocksRaycasts = false;
             _canvas.enabled = false;
         }
-    }
 
-    void OnEnable()
-    {
         if (associatedState != null)
         {
-            GameStateSM.Instance.state.onChange.Add(OnGameStateChange, this);
-            OnGameStateChange();
+            associatedState.AddOnEnter(Show, this);
+            associatedState.AddOnExit(Hide, this);
         }
     }
 
@@ -95,7 +94,7 @@ public class CanvasAnimator : MonoBehaviour
                 continue;
 
             // add the tweens of this animation to the list
-            _childTweens.AddRange((anim.GetTweens()));
+            _childTweens.AddRange(anim.GetTweens());
 
             // keep track of previous GO to avoid duplicates
             previousChild = anim.gameObject;
@@ -149,14 +148,5 @@ public class CanvasAnimator : MonoBehaviour
         }
         else
             _canvas.enabled = false;
-    }
-
-    void OnGameStateChange()
-    {
-        if (GameStateSM.Instance.state.PreviousValue == associatedState)
-            Hide();
-
-        if (GameStateSM.Instance.state.v == associatedState)
-            Show();
     }
 }

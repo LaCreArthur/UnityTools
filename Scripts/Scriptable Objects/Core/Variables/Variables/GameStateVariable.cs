@@ -1,5 +1,6 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
+
 namespace Toolbox.ScriptableObjects.Variables
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Game State Variable")]
@@ -18,7 +19,9 @@ namespace Toolbox.ScriptableObjects.Variables
 
             if (v.validNextStates.Contains(newVal))
             {
+                if (v != null) v.RaiseOnExit();
                 v = newVal;
+                v.RaiseOnEnter();
                 if (debugStateChange)
                     Debug.Log($"Game state switch from {PreviousValue.name} to {newVal.name}");
             }

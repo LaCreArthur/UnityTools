@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.Events;
+
 namespace Toolbox.ScriptableObjects.Events
 {
     public class ReferencedEvent<T> : ReferencedActionBase<T> where T : UnityEventBase
     {
-        public ReferencedEvent(Object reference, T callbacks) : base(reference, callbacks) { }
+        public ReferencedEvent(T callbacks, Object reference) : base(callbacks, reference) { }
 
         public void LogCallback(ScriptableObject so, object t)
         {
