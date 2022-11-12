@@ -18,22 +18,22 @@ namespace Toolbox.ScriptableObjects
         EventSO onEnter;
         [SerializeField, InlineButton("NewOnExit"), HideIf("_onExitCreating")]
         EventSO onExit;
-        public void AddOnEnter(Action callback, Object listener)
+        public void OnEnter(Action callback, Object listener)
         {
             if (onEnter != null) onEnter.Add(callback, listener);
             else Debug.Log($"{name} onEnter is null", this);
         }
-        public void AddOnExit(Action callback, Object listener)
+        public void OnExit(Action callback, Object listener)
         {
             if (onExit != null) onExit.Add(callback, listener);
             else Debug.Log($"{name} onExit is null", this);
         }
-        public void AddOnEnter(UnityEvent uEvent, Object listener)
+        public void OnEnter(UnityEvent uEvent, Object listener)
         {
             if (onEnter != null) onEnter.Add(uEvent, listener);
             else Debug.Log($"{name} onEnter is null", this);
         }
-        public void AddOnExit(UnityEvent uEvent, Object listener)
+        public void OnExit(UnityEvent uEvent, Object listener)
         {
             if (onExit != null) onExit.Add(uEvent, listener);
             else Debug.Log($"{name} onExit is null", this);

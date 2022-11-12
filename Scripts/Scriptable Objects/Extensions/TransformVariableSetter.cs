@@ -4,7 +4,7 @@ using UnityEngine;
 public class TransformVariableSetter : MonoBehaviour
 {
     public TransformVar transformVar;
-    public bool onAwake;
+    public bool onAwake = true;
 
     void Awake()
     {
