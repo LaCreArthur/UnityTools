@@ -3,6 +3,10 @@ using UnityEngine;
 
 namespace Toolbox.ScriptableObjects.Variables
 {
+
+    public enum GameStateEnum { Init, Home, Settings, InGame, GameOver }
+    public enum GameStateEventEnum { OnEnter, OnExit } 
+    
     [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Game State Variable")]
     public class GameStateVariable : VariableSOBase<GameStateSO>
     {

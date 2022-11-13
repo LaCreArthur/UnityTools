@@ -28,8 +28,8 @@ namespace Toolbox.ScriptableObjects.Variables
         {
             foreach (var callback in callbacks)
             {
-                callback.Key.OnEnter(callback.Value.onEnter, this);
-                callback.Key.OnExit(callback.Value.onLeave, this);
+                callback.Key.AddOnEnter(callback.Value.onEnter, this);
+                callback.Key.AddOnExit(callback.Value.onLeave, this);
             }
         }
     }

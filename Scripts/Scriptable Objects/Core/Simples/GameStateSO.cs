@@ -14,29 +14,49 @@ namespace Toolbox.ScriptableObjects
     public class GameStateSO : ScriptableObject
     {
         public List<GameStateSO> validNextStates = new List<GameStateSO>();
-        [SerializeField, InlineButton("NewOnEnter"), HideIf("_onEnterCreating")]
+        [SerializeField, InlineButton("NewOnEnter"), HideIf("_onEnterCreating"), Required]
         EventSO onEnter;
-        [SerializeField, InlineButton("NewOnExit"), HideIf("_onExitCreating")]
+        [SerializeField, InlineButton("NewOnExit"), HideIf("_onExitCreating"), Required]
         EventSO onExit;
-        public void OnEnter(Action callback, Object listener)
+        public void AddOnEnter(Action callback, Object listener)
         {
             if (onEnter != null) onEnter.Add(callback, listener);
-            else Debug.Log($"{name} onEnter is null", this);
+            else Debug.Log($"{name} onEnter is null, cannot add callback", this);
         }
-        public void OnExit(Action callback, Object listener)
+        public void AddOnExit(Action callback, Object listener)
         {
             if (onExit != null) onExit.Add(callback, listener);
-            else Debug.Log($"{name} onExit is null", this);
+            else Debug.Log($"{name} onExit is null, cannot add callback", this);
         }
-        public void OnEnter(UnityEvent uEvent, Object listener)
+        public void AddOnEnter(UnityEvent uEvent, Object listener)
         {
             if (onEnter != null) onEnter.Add(uEvent, listener);
-            else Debug.Log($"{name} onEnter is null", this);
+            else Debug.Log($"{name} onEnter is null, cannot add callback", this);
         }
-        public void OnExit(UnityEvent uEvent, Object listener)
+        public void AddOnExit(UnityEvent uEvent, Object listener)
         {
             if (onExit != null) onExit.Add(uEvent, listener);
-            else Debug.Log($"{name} onExit is null", this);
+            else Debug.Log($"{name} onExit is null, cannot add callback", this);
+        }
+        public void RemoveOnEnter(Action callback, Object listener)
+        {
+            if (onEnter != null) onEnter.Remove(callback, listener);
+            else Debug.Log($"{name} onEnter is null, cannot remove callback", this);
+        }
+        public void RemoveOnExit(Action callback, Object listener)
+        {
+            if (onExit != null) onExit.Remove(callback, listener);
+            else Debug.Log($"{name} onExit is null, cannot remove callback", this);
+        }
+        public void RemoveOnEnter(UnityEvent uEvent, Object listener)
+        {
+            if (onEnter != null) onEnter.Remove(uEvent, listener);
+            else Debug.Log($"{name} onEnter is null, cannot remove callback", this);
+        }
+        public void RemoveOnExit(UnityEvent uEvent, Object listener)
+        {
+            if (onExit != null) onExit.Remove(uEvent, listener);
+            else Debug.Log($"{name} onExit is null, cannot remove callback", this);
         }
         public void RaiseOnEnter()
         {
@@ -53,6 +73,7 @@ namespace Toolbox.ScriptableObjects
          #region Create new SO
 
 #if UNITY_EDITOR
+#pragma warning disable CS0414
         [SerializeField, ShowIf("@onEnter==null"), InlineButton("CancelOnEnter"), InlineButton("CreateOnEnter"),
          LabelText("Create new SO, enter name:"),
          ShowIf("_onEnterCreating")]
@@ -62,7 +83,6 @@ namespace Toolbox.ScriptableObjects
          ShowIf("_onExitCreating")]
         string onExitName = "E_onExit";
 
-#pragma warning disable CS0414
         bool _onEnterCreating;
         bool _onExitCreating;
 #pragma warning restore CS0414
