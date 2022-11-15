@@ -10,18 +10,18 @@ namespace UnityReusables.Utils.UI
         public string[] queries;
         public Color[] colors;
 
-        TMP_Text text;
+        TMP_Text _text;
 
         void Awake()
         {
-            text = GetComponent<TMP_Text>();
+            _text = GetComponent<TMP_Text>();
             SetRandomTextAndColor();
         }
 
         public void SetRandomTextAndColor()
         {
-            text.text = queries.GetRandom();
-            text.color = colors.GetRandom();
+            _text.text = queries.GetRandom();
+            _text.color = colors.GetRandom();
         }
     }
 }

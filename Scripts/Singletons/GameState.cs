@@ -2,6 +2,7 @@ using System;
 using Toolbox.ScriptableObjects;
 using Toolbox.ScriptableObjects.Variables;
 using Toolbox.Singletons;
+using Toolbox.Utils;
 using UnityEngine.Serialization;
 
 [Serializable]

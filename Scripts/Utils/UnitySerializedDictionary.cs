@@ -1,32 +1,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
+namespace Toolbox.Utils
 {
-    [SerializeField, HideInInspector]
-    private List<TKey> keyData = new List<TKey>();
-
-    [SerializeField, HideInInspector]
-    private List<TValue> valueData = new List<TValue>();
-
-    void ISerializationCallbackReceiver.OnAfterDeserialize()
+    public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
     {
-        Clear();
-        for (int i = 0; i < keyData.Count && i < valueData.Count; i++)
+        [SerializeField, HideInInspector]
+        private List<TKey> keyData = new List<TKey>();
+
+        [SerializeField, HideInInspector]
+        private List<TValue> valueData =
+            new List<TValue>();
+
+        void ISerializationCallbackReceiver.OnAfterDeserialize()
         {
-            this[keyData[i]] = valueData[i];
+            Clear();
+            for (int i = 0; i < keyData.Count && i < valueData.Count; i++)
+            {
+                this[keyData[i]] = valueData[i];
+            }
         }
-    }
 
-    void ISerializationCallbackReceiver.OnBeforeSerialize()
-    {
-        keyData.Clear();
-        valueData.Clear();
-
-        foreach (var item in this)
+        void ISerializationCallbackReceiver.OnBeforeSerialize()
         {
-            keyData.Add(item.Key);
-            valueData.Add(item.Value);
+            keyData.Clear();
+            valueData.Clear();
+
+            foreach (var item in this)
+            {
+                keyData.Add(item.Key);
+                valueData.Add(item.Value);
+            }
         }
     }
 }
