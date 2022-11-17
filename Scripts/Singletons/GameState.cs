@@ -6,24 +6,24 @@ using Toolbox.Utils;
 using UnityEngine.Serialization;
 
 [Serializable]
-public class GameStateDictionary : UnitySerializedDictionary<GameStateEnum, GameStateSO>
+public class GameStateDictionary : UnitySerializedDictionary<State, GameStateSO>
 {
 }
 
 public class GameState : SingletonMono<GameState>
 {
-    public GameStateEnum entryState = GameStateEnum.Home;
+    public State entryState = State.Home;
     [FormerlySerializedAs("currentState")] public GameStateVariable variable;
     public GameStateDictionary gameStateDict;
 
     public static GameStateSO CurrentState => Instance.variable.v;
-    public static GameStateSO InGame => GetState(GameStateEnum.InGame);
-    public static GameStateSO Home => GetState(GameStateEnum.Home);
-    public static GameStateSO GameOver => GetState(GameStateEnum.GameOver);
-    public static GameStateSO Settings => GetState(GameStateEnum.Settings);
+    public static GameStateSO InGame => GetState(State.InGame);
+    public static GameStateSO Home => GetState(State.Home);
+    public static GameStateSO GameOver => GetState(State.GameOver);
+    public static GameStateSO Settings => GetState(State.Settings);
 
     protected override void OnAwake() => SetState(entryState);
     public static void SetState(GameStateSO newGS) => Instance.variable.SetValue(newGS);
-    public static void SetState(GameStateEnum newGS) => Instance.variable.SetValue(GetState(newGS));
-    public static GameStateSO GetState(GameStateEnum gs) => Instance.gameStateDict[gs];
+    public static void SetState(State newGS) => Instance.variable.SetValue(GetState(newGS));
+    public static GameStateSO GetState(State gs) => Instance.gameStateDict[gs];
 }

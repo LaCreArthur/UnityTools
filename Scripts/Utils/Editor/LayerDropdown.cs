@@ -5,13 +5,12 @@ using UnityEngine;
 using Sirenix.OdinInspector.Editor;
 #endif
 
+#if UNITY_EDITOR
+
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class LayerDropdownAttribute : Attribute
 {
 }
-
-#if UNITY_EDITOR
-
 public sealed class LayerDropdownAttributeDrawer : OdinAttributeDrawer<LayerDropdownAttribute, int>
 {
     protected override void DrawPropertyLayout(GUIContent label)

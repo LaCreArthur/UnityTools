@@ -1,16 +1,18 @@
-using UnityEngine;
+#if UNITY_EDITOR
+
 using UnityEditor;
+using UnityEngine;
 
 public class ReplaceWithPrefab : EditorWindow
 {
     [SerializeField] private GameObject prefab;
     [SerializeField] private bool usePrefabScale;
     [SerializeField] private bool usePrefabRot;
-    
+
     [MenuItem("Tools/My Utilities/Replace With Prefab")]
     static void CreateReplaceWithPrefab()
     {
-        EditorWindow.GetWindow<ReplaceWithPrefab>();
+        GetWindow<ReplaceWithPrefab>();
     }
 
     private void OnGUI()
@@ -47,7 +49,8 @@ public class ReplaceWithPrefab : EditorWindow
                 }
 
                 Undo.RegisterCreatedObjectUndo(newObject, "Replace With Prefabs");
-                newObject.transform.SetParent(selected.transform.parent, (newObject.GetComponent<RectTransform>() == null)); //worldPositionStays to be false if newObject has a rectTransform (UI)
+                newObject.transform.SetParent(selected.transform.parent,
+                    newObject.GetComponent<RectTransform>() == null);//worldPositionStays to be false if newObject has a rectTransform (UI)
                 newObject.transform.localPosition = selected.transform.localPosition;
                 newObject.transform.localRotation = usePrefabRot ? prefab.transform.localRotation : selected.transform.localRotation;
                 newObject.transform.localScale = usePrefabScale ? prefab.transform.localScale : selected.transform.localScale;
@@ -60,3 +63,4 @@ public class ReplaceWithPrefab : EditorWindow
         EditorGUILayout.LabelField("Selection count: " + Selection.objects.Length);
     }
 }
+#endif

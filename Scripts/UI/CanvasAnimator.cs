@@ -68,6 +68,7 @@ public class CanvasAnimator : MonoBehaviour
 
         if (associatedState != null)
         {
+            Debug.Log($"{name} adding events");
             associatedState.AddOnEnter(Show, this);
             associatedState.AddOnExit(Hide, this);
         }

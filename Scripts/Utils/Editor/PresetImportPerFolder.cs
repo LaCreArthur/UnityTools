@@ -1,12 +1,13 @@
-﻿using System.IO;
+﻿#if UNITY_EDITOR
+using System.IO;
 using UnityEditor;
 using UnityEditor.Presets;
 
 /// <summary>
-/// The following script applies a Preset based on the folder that you add an asset to.
-/// This script chooses the Preset that is in the same folder as the asset.
-/// If there is no Preset in the folder, this script searches parent folders.
-/// If there are no Presets in parent folders, Unity uses the default Preset that the Preset window specifies.
+///     The following script applies a Preset based on the folder that you add an asset to.
+///     This script chooses the Preset that is in the same folder as the asset.
+///     If there is no Preset in the folder, this script searches parent folders.
+///     If there are no Presets in parent folders, Unity uses the default Preset that the Preset window specifies.
 /// </summary>
 public class PresetImportPerFolder : AssetPostprocessor
 {
@@ -22,7 +23,9 @@ public class PresetImportPerFolder : AssetPostprocessor
                 // break the while loop if at root folder
                 if (path == "Assets" || path == "ProjectSettings" || path == "Library") break;
                 // Find all Preset assets in this folder.
-                var presetGuids = AssetDatabase.FindAssets("t:Preset", new[] { path });
+                var presetGuids = AssetDatabase.FindAssets("t:Preset",
+                    new[]
+                    { path });
                 foreach (var presetGuid in presetGuids)
                 {
                     // Make sure we are not testing Presets in a subfolder.
@@ -42,3 +45,4 @@ public class PresetImportPerFolder : AssetPostprocessor
         }
     }
 }
+#endif

@@ -1,8 +1,9 @@
-﻿using UnityEngine;
-using UnityEditor;
+﻿#if UNITY_EDITOR
 using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.SceneManagement;
- 
+
 public class SelectGameObjectsWithMissingScripts : Editor
 {
     private static List<Object> s_objectsWithDeadLinks;
@@ -24,7 +25,7 @@ public class SelectGameObjectsWithMissingScripts : Editor
         //Get the current scene and all top-level GameObjects in the scene hierarchy
         Scene currentScene = SceneManager.GetActiveScene();
         s_objectsWithDeadLinks = new List<Object>();
- 
+
         GameObject[] currentObjects = currentScene.GetRootGameObjects();
         foreach (var currentObject in currentObjects)
         {
@@ -44,7 +45,7 @@ public class SelectGameObjectsWithMissingScripts : Editor
     private static void CheckNullComponent(GameObject g)
     {
         //Get all components on the GameObject, then loop through them 
-        Transform[] transforms = g.GetComponentsInChildren<Transform>(includeInactive:true);
+        Transform[] transforms = g.GetComponentsInChildren<Transform>(includeInactive: true);
         for (int i = 0; i < transforms.Length; i++)
         {
             GameObject currentGameObject = transforms[i].gameObject;
@@ -62,3 +63,4 @@ public class SelectGameObjectsWithMissingScripts : Editor
         }
     }
 }
+#endif

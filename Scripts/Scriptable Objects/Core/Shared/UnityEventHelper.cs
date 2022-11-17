@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿#if UNITY_EDITOR
+
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+
 namespace Toolbox.ScriptableObjects.Events
 {
     public static class UnityEventHelper
@@ -62,19 +65,19 @@ namespace Toolbox.ScriptableObjects.Events
         {
             switch (enumIndex)
             {
-                case 0: // Event Defined
+                case 0:// Event Defined
                     return $"{_objectArg.objectReferenceValue} (dynamic call)";
-                case 1: // void
+                case 1:// void
                     return "";
-                case 2: // Object
+                case 2:// Object
                     return $"{_objectArg.objectReferenceValue}";
-                case 3: // int
+                case 3:// int
                     return $"{_intArg.intValue}";
-                case 4: // float
+                case 4:// float
                     return $"{_floatArg.floatValue}";
-                case 5: // string
+                case 5:// string
                     return $"{_stringArg.stringValue}";
-                case 6: // bool
+                case 6:// bool
                     return $"{_boolArg.boolValue}";
                 default:
                     return string.Empty;
@@ -90,3 +93,4 @@ namespace Toolbox.ScriptableObjects.Events
         public bool IsDynamicParams() => _mode.enumValueIndex == 0;
     }
 }
+#endif
