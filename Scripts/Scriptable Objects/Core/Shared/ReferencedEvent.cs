@@ -11,9 +11,8 @@ namespace Toolbox.ScriptableObjects.Events
         {
             string header = LogHelper.HeaderStr(so.name, reference.name);
             #if UNITY_EDITOR
-
             UnityEventHelper.GetPersistentCalls("events", reference).ForEach(c => LogHelper.LogMethodCall(c, header, t));
-  #endif
+            #endif
         }
     }
 }
