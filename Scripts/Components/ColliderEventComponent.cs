@@ -1,12 +1,16 @@
 using System;
 using Sirenix.OdinInspector;
+using Toolbox.ScriptableObjects.Variables;
 using Toolbox.Utils;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Collider))]
 public class ColliderEventComponent : MonoBehaviour
 {
+    public enum GameStateEvent { OnEnter, OnExit };
+    
     public ColliderEventType type;
     public bool useTag;
     [ShowIf("useTag")]
@@ -20,8 +24,11 @@ public class ColliderEventComponent : MonoBehaviour
     [ShowIf("destroyGO")]
     public float delay;
 
-    public bool resetTriggerOnEnterInGame;
-    public bool resetTriggerOnExitInGame;
+    public bool resetTriggerOnStateEvent;
+    [ShowIf("resetTriggerOnStateEvent")]
+    public StateEnum resetTriggerState;
+    [ShowIf("resetTriggerOnStateEvent")]
+    public EventEnum resetTriggerEvent;
     [SerializeField, ReadOnly]
     bool triggered;
 
@@ -32,8 +39,21 @@ public class ColliderEventComponent : MonoBehaviour
 
     void Start()
     {
-        if (resetTriggerOnEnterInGame) GameState.InGame.AddOnEnter(DisableTrigger, this);
-        if (resetTriggerOnExitInGame) GameState.InGame.AddOnExit(DisableTrigger, this);
+        if (!resetTriggerOnStateEvent)
+            return;
+
+        if (resetTriggerEvent == EventEnum.OnEnter)
+        {
+            GameState.GetState(resetTriggerState).AddOnEnter(DisableTrigger, this);
+        }
+        else if (resetTriggerEvent == EventEnum.OnExit)
+        {
+            GameState.GetState(resetTriggerState).AddOnExit(DisableTrigger, this);
+        }
+        else
+        {
+            throw new ArgumentOutOfRangeException();
+        }
     }
 
     void DisableTrigger() => triggered = false;
