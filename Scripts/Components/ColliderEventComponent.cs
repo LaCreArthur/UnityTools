@@ -1,0 +1,92 @@
+using System;
+using Sirenix.OdinInspector;
+using Toolbox.Utils;
+using UnityEngine;
+using UnityEngine.Events;
+
+[RequireComponent(typeof(Collider))]
+public class ColliderEventComponent : MonoBehaviour
+{
+    public ColliderEventType type;
+    public bool useTag;
+    [ShowIf("useTag")]
+    [TagDropdown] public string otherTag = "";
+    [HideIf("useTag")]
+    public LayerMask otherLayer;
+
+    public bool onlyOnce;
+    [ShowIf("onlyOnce")]
+    public bool destroyGO;
+    [ShowIf("destroyGO")]
+    public float delay;
+
+    public bool resetTriggerOnEnterInGame;
+    public bool resetTriggerOnExitInGame;
+    [SerializeField, ReadOnly]
+    bool triggered;
+
+    [ShowIf("@type==ColliderEventType.CollisionEnter||type==ColliderEventType.CollisionStay||type==ColliderEventType.CollisionExit")]
+    public CollisionEvent collisionEvent;
+    [HideIf("@type==ColliderEventType.CollisionEnter||type==ColliderEventType.CollisionStay||type==ColliderEventType.CollisionExit")]
+    public TriggerEvent triggerEvent;
+
+    void Start()
+    {
+        if (resetTriggerOnEnterInGame) GameState.InGame.AddOnEnter(DisableTrigger, this);
+        if (resetTriggerOnExitInGame) GameState.InGame.AddOnExit(DisableTrigger, this);
+    }
+
+    void DisableTrigger() => triggered = false;
+    void OnCollisionEnter(Collision other) => CheckCollisions(other, ColliderEventType.CollisionEnter);
+    void OnCollisionStay(Collision other) => CheckCollisions(other, ColliderEventType.CollisionStay);
+    void OnCollisionExit(Collision other) => CheckCollisions(other, ColliderEventType.CollisionExit);
+    void OnTriggerEnter(Collider other) => CheckTrigger(other, ColliderEventType.TriggerEnter);
+    void OnTriggerStay(Collider other) => CheckTrigger(other, ColliderEventType.TriggerStay);
+    void OnTriggerExit(Collider other) => CheckTrigger(other, ColliderEventType.TriggerExit);
+
+    void CheckCollisions(Collision other, ColliderEventType t)
+    {
+        if (ShouldEventsBeInvoked(other.collider, t))
+        {
+            collisionEvent.Invoke(other);
+            AfterInvoke();
+        }
+    }
+
+    void CheckTrigger(Collider other, ColliderEventType t)
+    {
+        if (ShouldEventsBeInvoked(other, t))
+        {
+            triggerEvent.Invoke(other);
+            AfterInvoke();
+        }
+    }
+
+    bool ShouldEventsBeInvoked(Collider other, ColliderEventType t)
+    {
+        if (type != t) return false;
+        if (onlyOnce && triggered) return false;
+        if (useTag && !other.gameObject.CompareTag(otherTag)) return false;
+        if (!useTag && !otherLayer.CollidesWith(other.gameObject.layer)) return false;
+        return true;
+    }
+
+    void AfterInvoke()
+    {
+        triggered = true;
+        if (destroyGO)
+            Destroy(gameObject, delay);
+    }
+}
+
+public enum ColliderEventType { CollisionEnter, CollisionStay, CollisionExit, TriggerEnter, TriggerStay, TriggerExit }
+
+[Serializable]
+public class CollisionEvent : UnityEvent<Collision>
+{
+}
+
+[Serializable]
+public class TriggerEvent : UnityEvent<Collider>
+{
+}
