@@ -4,13 +4,10 @@ using Toolbox.ScriptableObjects.Variables;
 using Toolbox.Utils;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Collider))]
 public class ColliderEventComponent : MonoBehaviour
 {
-    public enum GameStateEvent { OnEnter, OnExit };
-    
     public ColliderEventType type;
     public bool useTag;
     [ShowIf("useTag")]
@@ -42,18 +39,7 @@ public class ColliderEventComponent : MonoBehaviour
         if (!resetTriggerOnStateEvent)
             return;
 
-        if (resetTriggerEvent == EventEnum.OnEnter)
-        {
-            GameState.GetState(resetTriggerState).AddOnEnter(DisableTrigger, this);
-        }
-        else if (resetTriggerEvent == EventEnum.OnExit)
-        {
-            GameState.GetState(resetTriggerState).AddOnExit(DisableTrigger, this);
-        }
-        else
-        {
-            throw new ArgumentOutOfRangeException();
-        }
+        GameState.GetState(resetTriggerState).Add(resetTriggerEvent, DisableTrigger, this);
     }
 
     void DisableTrigger() => triggered = false;

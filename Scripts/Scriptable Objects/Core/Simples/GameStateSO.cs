@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Sirenix.OdinInspector;
 using Toolbox.ScriptableObjects.Events;
+using Toolbox.ScriptableObjects.Variables;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
@@ -18,6 +19,22 @@ namespace Toolbox.ScriptableObjects
         EventSO onEnter;
         [SerializeField, InlineButton("NewOnExit"), HideIf("_onExitCreating"), Required]
         EventSO onExit;
+
+        public void Add(EventEnum @event, Action callback, Object listener)
+        {
+            switch (@event)
+            {
+                case EventEnum.OnEnter:
+                    AddOnEnter(callback, listener);
+                    break;
+                case EventEnum.OnExit:
+                    AddOnExit(callback, listener);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
         public void AddOnEnter(Action callback, Object listener)
         {
             if (onEnter != null) onEnter.Add(callback, listener);
