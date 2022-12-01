@@ -6,6 +6,7 @@ using Toolbox.Utils;
 using UnityEngine;
 using UnityEngine.Audio;
 using Random = UnityEngine.Random;
+
 namespace Toolbox.Audio
 {
     public class AudioSM : SingletonMono<AudioSM>
@@ -132,7 +133,7 @@ namespace Toolbox.Audio
         void InitSoundArray(Sound[] soundArray, bool isMusic)
         {
             if (soundArray == null)
-                return; // scenes without audio manager are creating empty one
+                return;// scenes without audio manager are creating empty one
             foreach (Sound s in soundArray)
             {
                 s.source = gameObject.AddComponent<AudioSource>();

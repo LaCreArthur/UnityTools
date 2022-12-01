@@ -1,15 +1,16 @@
 ﻿using Toolbox.Utils;
 using UnityEngine;
+
 namespace Toolbox.ScriptableObjects.Variables
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Int", fileName = "int_")]
     public class IntVar : VariableSOBase<int>
     {
-        public override void Save() => EncryptedPlayerPrefs.SetInt(this.name, v);
+        public override void Save() => EncryptedPlayerPrefs.SetInt(name, v);
 
         public override int Load()
         {
-            v = EncryptedPlayerPrefs.GetInt(this.name, initialValue);
+            v = EncryptedPlayerPrefs.GetInt(name, initialValue);
             return v;
         }
 
@@ -25,10 +26,7 @@ namespace Toolbox.ScriptableObjects.Variables
             return a;
         }
 
-        public static IntVar operator +(IntVar a)
-        {
-            return a;
-        }
+        public static IntVar operator +(IntVar a) => a;
 
         public static IntVar operator +(IntVar a, IntVar b)
         {

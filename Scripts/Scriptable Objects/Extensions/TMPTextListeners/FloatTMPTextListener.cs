@@ -1,6 +1,7 @@
 using TMPro;
 using Toolbox.ScriptableObjects.Variables;
 using UnityEngine;
+
 namespace Toolbox.ScriptableObjects.Utils
 {
 

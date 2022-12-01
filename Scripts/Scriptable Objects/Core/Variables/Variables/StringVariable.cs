@@ -1,5 +1,6 @@
 using Toolbox.Utils;
 using UnityEngine;
+
 namespace Toolbox.ScriptableObjects.Variables
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Variables/String", fileName = "string_")]
@@ -7,12 +8,12 @@ namespace Toolbox.ScriptableObjects.Variables
     {
         public override void Save()
         {
-            EncryptedPlayerPrefs.SetString(this.name, v);
+            EncryptedPlayerPrefs.SetString(name, v);
         }
 
         public override string Load()
         {
-            v = EncryptedPlayerPrefs.GetString(this.name, initialValue);
+            v = EncryptedPlayerPrefs.GetString(name, initialValue);
             return v;
         }
     }

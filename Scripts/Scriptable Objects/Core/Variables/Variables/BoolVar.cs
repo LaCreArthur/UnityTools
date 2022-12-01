@@ -1,6 +1,7 @@
 ﻿using Sirenix.OdinInspector;
 using Toolbox.Utils;
 using UnityEngine;
+
 namespace Toolbox.ScriptableObjects.Variables
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Bool", fileName = "bool_")]
@@ -9,11 +10,11 @@ namespace Toolbox.ScriptableObjects.Variables
         [Button]
         public void Toggle() => v = !v;
 
-        public override void Save() => EncryptedPlayerPrefs.SetBool(this.name, v);
+        public override void Save() => EncryptedPlayerPrefs.SetBool(name, v);
 
         public override bool Load()
         {
-            v = EncryptedPlayerPrefs.GetBool(this.name, initialValue);
+            v = EncryptedPlayerPrefs.GetBool(name, initialValue);
             return v;
         }
 

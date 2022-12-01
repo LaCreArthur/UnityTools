@@ -1,4 +1,5 @@
 using UnityEngine;
+
 [RequireComponent(typeof(Rigidbody))]
 public class ResetRBPoolable : MonoBehaviour, IPoolableComponent
 {
@@ -9,9 +10,9 @@ public class ResetRBPoolable : MonoBehaviour, IPoolableComponent
     public void OnDespawn()
     {
         if (_rb == null)
-            _rb = GetComponent<Rigidbody>(); // lazy init
+            _rb = GetComponent<Rigidbody>();// lazy init
         if (_rb == null)
-            return; // no rb
+            return;// no rb
         _rb.velocity = _rb.angularVelocity = Vector3.zero;
     }
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+
 public class SimplePoolable : MonoBehaviour, IPoolableComponent
 {
     public bool resetScaleOnSpawn;

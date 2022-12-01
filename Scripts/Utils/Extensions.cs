@@ -12,7 +12,8 @@ namespace Toolbox.Utils
 
         public static T GetRandom<T>(this List<T> list) => list[Random.Range(0, list.Count)];
 
-        public static KeyValuePair<TKey, Tvalue> GetRandom<TKey, Tvalue>(this Dictionary<TKey, Tvalue> dict) => dict.ElementAt(Random.Range(0, dict.Count));
+        public static KeyValuePair<TKey, Tvalue> GetRandom<TKey, Tvalue>(this Dictionary<TKey, Tvalue> dict) =>
+            dict.ElementAt(Random.Range(0, dict.Count));
 
         public static float RandomInside(this Vector2 v) => Random.Range(v.x, v.y);
 
@@ -40,8 +41,7 @@ namespace Toolbox.Utils
             return false;
         }
 
-        public static bool CollidesWith(this LayerMask layerMask, int layer) =>
-            ((1 << layer) & layerMask) != 0;
+        public static bool CollidesWith(this LayerMask layerMask, int layer) => (1 << layer & layerMask) != 0;
 
         public static void MoveIndex(this ref int index, bool left, int maxIndex)
         {
@@ -80,14 +80,11 @@ namespace Toolbox.Utils
             return array[index];
         }
 
-        public static string ToTimeString(this float time) =>
-            $"{Mathf.FloorToInt(time / 60):0}:{Mathf.FloorToInt(time % 60):00}";
+        public static string ToTimeString(this float time) => $"{Mathf.FloorToInt(time / 60):0}:{Mathf.FloorToInt(time % 60):00}";
 
-        public static string TypeAndNameToString(this ScriptableObject so) =>
-            $"{so.GetType().Name} [<color=cyan>{so.name}</color>]";
+        public static string TypeAndNameToString(this ScriptableObject so) => $"{so.GetType().Name} [<color=cyan>{so.name}</color>]";
 
-        public static float Normalize(this float x, float min, float max) =>
-            (x - min) / (max - min);
+        public static float Normalize(this float x, float min, float max) => (x - min) / (max - min);
 
         public static string Encrypt(string pass)
         {

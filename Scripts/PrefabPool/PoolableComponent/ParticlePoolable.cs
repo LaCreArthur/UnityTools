@@ -1,4 +1,5 @@
 using UnityEngine;
+
 [RequireComponent(typeof(ParticleSystem))]
 public class ParticlePoolable : MonoBehaviour, IPoolableComponent
 {

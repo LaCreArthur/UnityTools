@@ -1,6 +1,7 @@
 using Sirenix.OdinInspector;
 using TMPro;
 using Toolbox.ScriptableObjects.Variables;
+
 namespace Toolbox.ScriptableObjects.Utils
 {
     public class VariableTMPTextListener : SerializedMonoBehaviour

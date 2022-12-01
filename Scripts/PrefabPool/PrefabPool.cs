@@ -34,8 +34,7 @@ public class PrefabPool
             GameObject newGO = Object.Instantiate(prefab, parent);
             data = new PoolableInstances
             { instance = newGO,
-              poolableComponents = newGO.GetComponents<IPoolableComponent>()
-            };
+              poolableComponents = newGO.GetComponents<IPoolableComponent>() };
         }
 
         var spawnedGO = data.instance;
@@ -85,8 +84,7 @@ public class PrefabPool
             var data = new PoolableInstances
             { instance = go,
               poolableComponents = new[]
-              { co as IPoolableComponent, }
-            };
+              { co as IPoolableComponent } };
             go.SetActive(false);
             _activeList.Remove(go);
             _inactiveList.Enqueue(data);

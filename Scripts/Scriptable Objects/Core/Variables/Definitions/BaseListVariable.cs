@@ -5,7 +5,7 @@ namespace Toolbox.ScriptableObjects.Variables
     public class BaseListVariable<T> : VariableSOBase<List<T>>
     {
         public bool clearOnEnable;
-        
+
         protected override void OnEnable()
         {
             base.OnEnable();

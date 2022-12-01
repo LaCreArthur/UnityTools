@@ -1,5 +1,6 @@
 using Toolbox.Utils;
 using UnityEngine;
+
 namespace Toolbox.ScriptableObjects.Variables
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Double", fileName = "double_")]
@@ -7,12 +8,12 @@ namespace Toolbox.ScriptableObjects.Variables
     {
         public override void Save()
         {
-            EncryptedPlayerPrefs.SetDouble(this.name, v);
+            EncryptedPlayerPrefs.SetDouble(name, v);
         }
 
         public override double Load()
         {
-            v = EncryptedPlayerPrefs.GetDouble(this.name, initialValue);
+            v = EncryptedPlayerPrefs.GetDouble(name, initialValue);
             return v;
         }
 
@@ -33,10 +34,7 @@ namespace Toolbox.ScriptableObjects.Variables
             return a;
         }
 
-        public static DoubleVar operator +(DoubleVar a)
-        {
-            return a;
-        }
+        public static DoubleVar operator +(DoubleVar a) => a;
 
         public static DoubleVar operator +(DoubleVar a, DoubleVar b)
         {

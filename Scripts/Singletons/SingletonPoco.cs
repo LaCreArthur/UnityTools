@@ -2,14 +2,16 @@
 {
     public class SingletonPoco<T> where T : new()
     {
-        static T _instance;
-        protected SingletonPoco() {}
+        static T s_instance;
+        protected SingletonPoco() { }
 
         public static T Instance
         {
-            get { if (_instance == null)
-                    _instance = new T();
-                return _instance; 
+            get
+            {
+                if (s_instance == null)
+                    s_instance = new T();
+                return s_instance;
             }
         }
     }

@@ -1,5 +1,6 @@
 using Toolbox.ScriptableObjects.Variables;
 using UnityEngine;
+
 #if MOREMOUNTAINS_NICEVIBRATIONS
 using MoreMountains.NiceVibrations;
 #else
@@ -101,17 +102,17 @@ public class VibrationHandler : MonoBehaviour
 #endif
     }
 
-    public static void ContinuousHaptic(float intensity, float sharpness, float duration, HapticTypes fallbackOldiOS, MonoBehaviour mono, bool alsoRumble,
-        int controllerID, bool threaded, bool fullIntensity)
+    public static void ContinuousHaptic(float intensity, float sharpness, float duration, HapticTypes fallbackOldiOS, MonoBehaviour mono,
+        bool alsoRumble, int controllerID, bool threaded, bool fullIntensity)
     {
 #if MOREMOUNTAINS_NICEVIBRATIONS
         MMVibrationManager.ContinuousHaptic(intensity, sharpness, duration, fallbackOldiOS, mono, alsoRumble, controllerID, threaded, fullIntensity);
 #endif
     }
 
-    public static void ContinuousHaptic(bool vibrateiOS, float iOSIntensity, float iOSSharpness, HapticTypes fallbackOldiOS, bool vibrateAndroid,
-        float androidIntensity, float androidSharpness, bool vibrateAndroidIfNoSupport, bool rumble, float rumbleIntensity, float rumbleSharpness,
-        int controllerID, float duration, MonoBehaviour mono, bool threaded, bool fullIntensity)
+    public static void ContinuousHaptic(bool vibrateiOS, float iOSIntensity, float iOSSharpness, HapticTypes fallbackOldiOS,
+        bool vibrateAndroid, float androidIntensity, float androidSharpness, bool vibrateAndroidIfNoSupport, bool rumble, float rumbleIntensity,
+        float rumbleSharpness, int controllerID, float duration, MonoBehaviour mono, bool threaded, bool fullIntensity)
     {
 #if MOREMOUNTAINS_NICEVIBRATIONS
         MMVibrationManager.ContinuousHaptic(vibrateiOS, iOSIntensity, iOSSharpness, fallbackOldiOS, vibrateAndroid, androidIntensity, androidSharpness,
@@ -126,8 +127,8 @@ public class VibrationHandler : MonoBehaviour
 #endif
     }
 
-    public static void UpdateContinuousHaptic(bool ios, float iosIntensity, float iosSharpness, bool android, float androidIntensity, float androidSharpness,
-        bool rumble, float rumbleIntensity, float rumbleSharpness, int controllerID, bool threaded)
+    public static void UpdateContinuousHaptic(bool ios, float iosIntensity, float iosSharpness, bool android, float androidIntensity,
+        float androidSharpness, bool rumble, float rumbleIntensity, float rumbleSharpness, int controllerID, bool threaded)
     {
 #if MOREMOUNTAINS_NICEVIBRATIONS
         MMVibrationManager.UpdateContinuousHaptic(ios, iosIntensity, iosSharpness, android, androidIntensity, androidSharpness, rumble, rumbleIntensity,

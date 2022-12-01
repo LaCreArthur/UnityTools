@@ -8,12 +8,12 @@ namespace Toolbox.ScriptableObjects.Variables
     {
         public override void Save()
         {
-            EncryptedPlayerPrefs.SetFloat(this.name, v);
+            EncryptedPlayerPrefs.SetFloat(name, v);
         }
 
         public override float Load()
         {
-            v = EncryptedPlayerPrefs.GetFloat(this.name, initialValue);
+            v = EncryptedPlayerPrefs.GetFloat(name, initialValue);
             return v;
         }
 
@@ -34,10 +34,7 @@ namespace Toolbox.ScriptableObjects.Variables
             return a;
         }
 
-        public static FloatVar operator +(FloatVar a)
-        {
-            return a;
-        }
+        public static FloatVar operator +(FloatVar a) => a;
 
         public static FloatVar operator +(FloatVar a, FloatVar b)
         {
