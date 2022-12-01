@@ -28,6 +28,7 @@ public class GameState : SingletonMono<GameState>
     public static void SetState(StateEnum newGS) => Instance.variable.SetValue(GetState(newGS));
     public static GameStateSO GetState(StateEnum gs) => Instance.gameStateDict[gs];
 
+    // we must delay setting the entry state so the state listeners are properly registered in the initial frame 
     IEnumerator DelayedEntryState()
     {
         yield return new WaitForEndOfFrame();

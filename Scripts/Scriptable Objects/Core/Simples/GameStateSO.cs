@@ -14,6 +14,7 @@ namespace Toolbox.ScriptableObjects
     [CreateAssetMenu(menuName = "Scriptable Objects/Game State")]
     public class GameStateSO : ScriptableObject
     {
+        public StateEnum stateEnum;
         public List<GameStateSO> validNextStates = new List<GameStateSO>();
         [SerializeField, InlineButton("NewOnEnter"), HideIf("_onEnterCreating"), Required]
         EventSO onEnter;

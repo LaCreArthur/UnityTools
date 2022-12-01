@@ -13,6 +13,9 @@ namespace Toolbox.ScriptableObjects.Variables
         [SerializeField]
         bool debugStateChange;
 
+        // todo: this would be nice, but it will require to import GameState & Singleton, which is tricky, what can be simplified here ?
+        // public void SetValue(StateEnum state) => SetValue(GameState.GetState(state));
+        
         public override void SetValue(GameStateSO newVal)
         {
             if (v == newVal)
