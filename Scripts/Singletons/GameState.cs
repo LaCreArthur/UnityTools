@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using Toolbox.ScriptableObjects;
 using Toolbox.ScriptableObjects.Variables;
 using Toolbox.Singletons;
 using Toolbox.Utils;
+using UnityEngine;
 
 [Serializable]
 public class GameStateDictionary : UnitySerializedDictionary<StateEnum, GameStateSO>
@@ -21,8 +23,14 @@ public class GameState : SingletonMono<GameState>
     public static GameStateSO GameOver => GetState(StateEnum.GameOver);
     public static GameStateSO Settings => GetState(StateEnum.Settings);
 
-    protected override void OnAwake() => SetState(entryState);
+    protected override void OnAwake() => StartCoroutine(DelayedEntryState());
     public static void SetState(GameStateSO newGS) => Instance.variable.SetValue(newGS);
     public static void SetState(StateEnum newGS) => Instance.variable.SetValue(GetState(newGS));
     public static GameStateSO GetState(StateEnum gs) => Instance.gameStateDict[gs];
+
+    IEnumerator DelayedEntryState()
+    {
+        yield return new WaitForEndOfFrame();
+        SetState(entryState);
+    }
 }
