@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Events;
 using Object = UnityEngine.Object;
 
 namespace Toolbox.ScriptableObjects.Events
@@ -40,6 +41,19 @@ namespace Toolbox.ScriptableObjects.Events
         {
             string header = LogHelper.HeaderStr(so.name, reference.name);
             callbacks.ForEach(c => LogHelper.LogMethodCall(c.Target, header, c.Method.Name, t));
+        }
+    }
+
+    public class ReferencedEvent<T> : ReferencedActionBase<T> where T : UnityEventBase
+    {
+        public ReferencedEvent(T callbacks, Object reference) : base(callbacks, reference) { }
+
+        public void LogCallback(ScriptableObject so, object t)
+        {
+            string header = LogHelper.HeaderStr(so.name, reference.name);
+            #if UNITY_EDITOR
+            UnityEventHelper.GetPersistentCalls("events", reference).ForEach(c => LogHelper.LogMethodCall(c, header, t));
+            #endif
         }
     }
 }
