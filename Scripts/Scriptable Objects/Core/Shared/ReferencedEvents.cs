@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 
 namespace Toolbox.ScriptableObjects.Events
 {
-    public abstract class ReferencedActionBase<T>
+    public abstract class ReferencedEventBase<T>
     {
         [HideLabel]
         public readonly Object reference;
@@ -15,14 +15,14 @@ namespace Toolbox.ScriptableObjects.Events
         [HideReferenceObjectPicker, ListDrawerSettings(Expanded = true)]
         public readonly T callbacks;
 
-        protected ReferencedActionBase(T callbacks, Object reference)
+        protected ReferencedEventBase(T callbacks, Object reference)
         {
             this.reference = reference;
             this.callbacks = callbacks;
         }
     }
 
-    public class ReferencedAction : ReferencedActionBase<List<Action>>
+    public class ReferencedAction : ReferencedEventBase<List<Action>>
     {
         public ReferencedAction(List<Action> callbacks, Object reference) : base(callbacks, reference) { }
 
@@ -33,7 +33,7 @@ namespace Toolbox.ScriptableObjects.Events
         }
     }
 
-    public class ReferencedAction<T> : ReferencedActionBase<List<Action<T>>>
+    public class ReferencedAction<T> : ReferencedEventBase<List<Action<T>>>
     {
         public ReferencedAction(List<Action<T>> callbacks, Object reference) : base(callbacks, reference) { }
 
@@ -44,7 +44,7 @@ namespace Toolbox.ScriptableObjects.Events
         }
     }
 
-    public class ReferencedEvent<T> : ReferencedActionBase<T> where T : UnityEventBase
+    public class ReferencedEvent<T> : ReferencedEventBase<T> where T : UnityEventBase
     {
         public ReferencedEvent(T callbacks, Object reference) : base(callbacks, reference) { }
 

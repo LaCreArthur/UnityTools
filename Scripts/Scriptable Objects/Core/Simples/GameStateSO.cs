@@ -21,9 +21,9 @@ namespace Toolbox.ScriptableObjects
         [SerializeField, InlineButton("NewOnExit"), HideIf("_onExitCreating"), Required]
         EventSO onExit;
 
-        public void Add(EventEnum @event, Action callback, Object listener)
+        public void Add(EventEnum eventEnum, Action callback, Object listener)
         {
-            switch (@event)
+            switch (eventEnum)
             {
                 case EventEnum.OnEnter:
                     AddOnEnter(callback, listener);
