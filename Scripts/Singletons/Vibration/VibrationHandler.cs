@@ -36,7 +36,8 @@ public class VibrationHandler : MonoBehaviour
 #endif
     }
 
-    public static void Haptic(HapticTypes type, bool defaultToRegularVibrate, bool alsoRumble, MonoBehaviour coroutineSupport, int controllerID)
+    public static void Haptic(HapticTypes type, bool defaultToRegularVibrate, bool alsoRumble, MonoBehaviour coroutineSupport,
+        int controllerID)
     {
 #if MOREMOUNTAINS_NICEVIBRATIONS
         MMVibrationManager.Haptic(type, defaultToRegularVibrate, alsoRumble, coroutineSupport, controllerID);
@@ -111,7 +112,8 @@ public class VibrationHandler : MonoBehaviour
     }
 
     public static void ContinuousHaptic(bool vibrateiOS, float iOSIntensity, float iOSSharpness, HapticTypes fallbackOldiOS,
-        bool vibrateAndroid, float androidIntensity, float androidSharpness, bool vibrateAndroidIfNoSupport, bool rumble, float rumbleIntensity,
+        bool vibrateAndroid, float androidIntensity, float androidSharpness, bool vibrateAndroidIfNoSupport, bool rumble,
+        float rumbleIntensity,
         float rumbleSharpness, int controllerID, float duration, MonoBehaviour mono, bool threaded, bool fullIntensity)
     {
 #if MOREMOUNTAINS_NICEVIBRATIONS

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using DG.Tweening;
 using Sirenix.OdinInspector;
-using Toolbox.ScriptableObjects;
+using Toolbox.ScriptableObjects.Variables;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,7 +12,7 @@ public class CanvasAnimator : MonoBehaviour
     [Header("Start behaviours")]
     public bool startVisible = true;
     public bool resetPosOnStart = true;
-    public GameStateSO associatedState;
+    public StateEnum associatedState;
 
     [FoldoutGroup("On Show")]
     public UnityEvent onShowEvents;
@@ -66,10 +66,11 @@ public class CanvasAnimator : MonoBehaviour
             _canvas.enabled = false;
         }
 
-        if (associatedState != null)
+        if (associatedState != StateEnum.None)
         {
-            associatedState.AddOnEnter(Show, this);
-            associatedState.AddOnExit(Hide, this);
+            var state = GameState.GetState(associatedState);
+            state.AddOnEnter(Show, this);
+            state.AddOnExit(Hide, this);
         }
     }
 
