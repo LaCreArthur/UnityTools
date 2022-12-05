@@ -22,8 +22,7 @@ namespace Toolbox.ScriptableObjects.Variables
             var existingListener = runtimeLoadedListeners.Find(l => l.reference == listener);
             if (existingListener?.callbacks == null || existingListener.reference == null)
             {
-                existingListener = new ReferencedAction<T>(new List<Action<T>>
-                    { callback },
+                existingListener = new ReferencedAction<T>(new List<Action<T>> { callback },
                     listener);
                 runtimeLoadedListeners.Add(existingListener);
             }
@@ -80,10 +79,12 @@ namespace Toolbox.ScriptableObjects.Variables
 
     public class ReferencedCallbacksBase<T> where T : UnityEventBase
     {
+        // persistent listeners is a list of UnityEvent 
         [Space, SerializeField, InlineProperty, HideReferenceObjectPicker, ListDrawerSettings(IsReadOnly = true, Expanded = true),
          OnInspectorGUI("RemoveNullPersistent")]
         protected List<ReferencedEvent<T>> persistentListeners = new List<ReferencedEvent<T>>();
 
+        // runtime listeners is a list of 
         [Space, SerializeField, InlineProperty, HideReferenceObjectPicker, ListDrawerSettings(IsReadOnly = true, Expanded = true),
          OnInspectorGUI("RemoveNullRuntime")]
         protected List<ReferencedAction> runtimeListeners = new List<ReferencedAction>();
@@ -98,8 +99,7 @@ namespace Toolbox.ScriptableObjects.Variables
             var existingListener = runtimeListeners.Find(l => l.reference == listener);
             if (existingListener?.callbacks == null || existingListener.reference == null)
             {
-                existingListener = new ReferencedAction(new List<Action>
-                    { callback },
+                existingListener = new ReferencedAction(new List<Action> { callback },
                     listener);
                 runtimeListeners.Add(existingListener);
             }
