@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using Toolbox.ScriptableObjects.Variables;
@@ -10,8 +9,6 @@ using UnityEngine.Events;
 [RequireComponent(typeof(CanvasGroup))]
 public class CanvasAnimator : MonoBehaviour
 {
-    [Flags]
-    public enum AnimType { None, In, Out, InOut }
     public enum SlideDirection { Left, Right, Up, Down }
 
     [Header("Start behaviours")]
@@ -30,11 +27,11 @@ public class CanvasAnimator : MonoBehaviour
     public float fadeInDuration = 0.25f;
     [FoldoutGroup("On Show")]
     public bool slideIn;
-    [ShowIf("slideIn"), Indent]
+    [FoldoutGroup("On Show"), ShowIf("slideIn"), Indent]
     public SlideDirection slideInDirection;
-    [ShowIf("slideIn"), Indent]
+    [FoldoutGroup("On Show"), ShowIf("slideIn"), Indent]
     public Ease slideInEase = Ease.InOutSine;
-    [ShowIf("slideIn"), Indent]
+    [FoldoutGroup("On Show"), ShowIf("slideIn"), Indent]
     public float slideInDuration = 0.25f;
     [FoldoutGroup("On Show")]
     public UnityEvent onShowEvents;
@@ -153,6 +150,14 @@ public class CanvasAnimator : MonoBehaviour
         }
     }
 
+    //todo: maybe not it responsability
+    // in case of multiple tab panels
+    public void Show(int lastIndex, int newIndex)
+    {
+        slideOutDirection = newIndex > lastIndex ? SlideDirection.Right : SlideDirection.Left;
+        Show();
+    }
+
     [Button]
     public void Hide()
     {
@@ -184,6 +189,14 @@ public class CanvasAnimator : MonoBehaviour
             _canvas.enabled = false;
         }
     }
+
+    // in case of multiple tab panels
+    public void Hide(int lastIndex, int newIndex)
+    {
+        slideOutDirection = newIndex > lastIndex ? SlideDirection.Left : SlideDirection.Right;
+        Hide();
+    }
+
     Vector3 GetSlideDirection()
     {
         return slideOutDirection switch
