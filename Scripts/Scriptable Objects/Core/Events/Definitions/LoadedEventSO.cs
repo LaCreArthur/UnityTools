@@ -1,8 +1,10 @@
-﻿using Sirenix.OdinInspector;
+﻿using System;
+using Sirenix.OdinInspector;
 using Toolbox.ScriptableObjects.Variables;
 using Toolbox.Utils;
 using UnityEngine;
 using UnityEngine.Events;
+using Object = UnityEngine.Object;
 
 namespace Toolbox.ScriptableObjects.Events
 {
@@ -19,8 +21,10 @@ namespace Toolbox.ScriptableObjects.Events
         void RemoveNullElements() => listeners.RemoveAll(l => l.reference == null);
 
         public void Add(ReferencedEvent<UnityEvent<T>> rEvent) => listeners.Add(rEvent);
+        public void Add(Action<T> action, Object listener) => listeners.Add(action, listener);
 
         public void Remove(ReferencedEvent<UnityEvent<T>> rEvent) => listeners.Remove(rEvent);
+        public void Remove(Action<T> action, Object listener) => listeners.Remove(action, listener);
 
         public void Raise(T value)
         {
