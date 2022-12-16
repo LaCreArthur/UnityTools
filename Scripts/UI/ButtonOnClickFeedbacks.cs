@@ -8,6 +8,8 @@ using UnityEngine.UI;
 public class ButtonOnClickFeedbacks : MonoBehaviour
 {
     public bool punchScale, haptic, sfx, spine;
+    [ShowIf("punchScale")] public float punchScaleAmount = 0.2f;
+
     Button _button;
 
     void Awake()
@@ -26,7 +28,7 @@ public class ButtonOnClickFeedbacks : MonoBehaviour
         if (punchScale)
         {
             transform.localScale = Vector3.one;
-            transform.DOPunchScale(Vector3.one * 0.2f, 0.5f, 6, 0.6f)
+            transform.DOPunchScale(Vector3.one * punchScaleAmount, 0.5f, 6, 0.6f)
                 .SetEase(Ease.OutQuad).OnComplete(() => transform.localScale = Vector3.one);
         }
         if (spine)
