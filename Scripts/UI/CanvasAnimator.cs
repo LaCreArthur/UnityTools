@@ -20,10 +20,10 @@ public class CanvasAnimator : MonoBehaviour
     public bool blockRaycastWhenVisible = true;
     public bool fadeIn;
 
-    [ShowIf("fadeIn")]
+    [ShowIf("fadeIn"), Indent]
     public Ease fadeInEase = Ease.InOutSine;
 
-    [ShowIf("fadeIn")]
+    [ShowIf("fadeIn"), Indent]
     public float fadeInDuration;
 
     [FoldoutGroup("On Hide Event")]
@@ -31,17 +31,14 @@ public class CanvasAnimator : MonoBehaviour
     public bool rewindChildTweensOnHide;
     public bool fadeOut;
 
-    [ShowIf("fadeOut")]
+    [ShowIf("fadeOut"), Indent]
     public Ease fadeOutEase = Ease.InOutSine;
 
-    [ShowIf("fadeOut")]
+    [ShowIf("fadeOut"), Indent]
     public float fadeOutDuration;
 
-    [Header("Infos")]
-    [SerializeField]
-    [ReadOnly]
-    bool isHidden;
-    public bool IsHidden => isHidden;
+    [Header("State"), SerializeField, ReadOnly]
+    public bool isHidden;
 
     List<Tween> _childTweens;
     CanvasGroup _canvasGroup;
@@ -53,7 +50,7 @@ public class CanvasAnimator : MonoBehaviour
         _canvasGroup = GetComponent<CanvasGroup>();
 
         if (resetPosOnStart)
-            GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+            transform.localPosition = Vector3.zero;
 
         InitChildTweens();
 
@@ -115,10 +112,7 @@ public class CanvasAnimator : MonoBehaviour
         DOTween.Kill(_canvasGroup);
         if (playChildTweensOnShow)
         {
-            foreach (var tween in _childTweens)
-            {
-                tween.Play();
-            }
+            _childTweens.ForEach(tween => tween.Play());
         }
 
         if (fadeIn)
@@ -137,10 +131,7 @@ public class CanvasAnimator : MonoBehaviour
         DOTween.Kill(_canvasGroup);
         if (rewindChildTweensOnHide)
         {
-            foreach (var tween in _childTweens)
-            {
-                tween.Rewind();
-            }
+            _childTweens.ForEach(tween => tween.Rewind());
         }
 
         if (fadeOut)
