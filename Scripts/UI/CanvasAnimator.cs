@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using Toolbox.ScriptableObjects.Variables;
@@ -9,33 +10,54 @@ using UnityEngine.Events;
 [RequireComponent(typeof(CanvasGroup))]
 public class CanvasAnimator : MonoBehaviour
 {
+    [Flags]
+    public enum AnimType { None, In, Out, InOut }
+    public enum SlideDirection { Left, Right, Up, Down }
+
     [Header("Start behaviours")]
     public bool startVisible = true;
     public bool resetPosOnStart = true;
+    public bool blockRaycastWhenVisible = true;
     public StateEnum associatedState;
 
     [FoldoutGroup("On Show")]
-    public UnityEvent onShowEvents;
     public bool playChildTweensOnShow;
-    public bool blockRaycastWhenVisible = true;
+    [FoldoutGroup("On Show")]
     public bool fadeIn;
-
-    [ShowIf("fadeIn"), Indent]
+    [FoldoutGroup("On Show"), ShowIf("fadeIn"), Indent]
     public Ease fadeInEase = Ease.InOutSine;
+    [FoldoutGroup("On Show"), ShowIf("fadeIn"), Indent]
+    public float fadeInDuration = 0.25f;
+    [FoldoutGroup("On Show")]
+    public bool slideIn;
+    [ShowIf("slideIn"), Indent]
+    public SlideDirection slideInDirection;
+    [ShowIf("slideIn"), Indent]
+    public Ease slideInEase = Ease.InOutSine;
+    [ShowIf("slideIn"), Indent]
+    public float slideInDuration = 0.25f;
+    [FoldoutGroup("On Show")]
+    public UnityEvent onShowEvents;
 
-    [ShowIf("fadeIn"), Indent]
-    public float fadeInDuration;
-
-    [FoldoutGroup("On Hide Event")]
-    public UnityEvent onHideEvents;
+    [FoldoutGroup("On Hide")]
     public bool rewindChildTweensOnHide;
+    [FoldoutGroup("On Hide")]
     public bool fadeOut;
-
-    [ShowIf("fadeOut"), Indent]
+    [FoldoutGroup("On Hide"), ShowIf("fadeOut"), Indent]
+    public float fadeOutDuration = 0.25f;
+    [FoldoutGroup("On Hide"), ShowIf("fadeOut"), Indent]
     public Ease fadeOutEase = Ease.InOutSine;
 
-    [ShowIf("fadeOut"), Indent]
-    public float fadeOutDuration;
+    [FoldoutGroup("On Hide")]
+    public bool slideOut;
+    [FoldoutGroup("On Hide"), ShowIf("slideOut"), Indent]
+    public SlideDirection slideOutDirection;
+    [FoldoutGroup("On Hide"), ShowIf("slideOut"), Indent]
+    public Ease slideOutEase = Ease.InOutSine;
+    [FoldoutGroup("On Hide"), ShowIf("slideOut"), Indent]
+    public float slideOutDuration = 0.25f;
+    [FoldoutGroup("On Hide")]
+    public UnityEvent onHideEvents;
 
     [Header("State"), SerializeField, ReadOnly]
     public bool isHidden;
@@ -43,6 +65,9 @@ public class CanvasAnimator : MonoBehaviour
     List<Tween> _childTweens;
     CanvasGroup _canvasGroup;
     Canvas _canvas;
+
+    float _outOfScreenWidth => Screen.width * 1.5f;
+    float _outOfScreenHeight => Screen.height * 1.5f;
 
     void Awake()
     {
@@ -110,15 +135,22 @@ public class CanvasAnimator : MonoBehaviour
         isHidden = false;
 
         DOTween.Kill(_canvasGroup);
-        if (playChildTweensOnShow)
-        {
-            _childTweens.ForEach(tween => tween.Play());
-        }
+        if (playChildTweensOnShow) _childTweens.ForEach(tween => tween.Play());
+
 
         if (fadeIn)
-            _canvasGroup.DOFade(1f, fadeInDuration).SetEase(fadeInEase).SetUpdate(true);
+            _canvasGroup.DOFade(1f, slideInDuration).SetEase(slideInEase).SetUpdate(true);
         else
+        {
             _canvasGroup.alpha = 1;
+        }
+
+        if (slideIn)
+        {
+            Debug.Log("Slide In " + slideInDirection);
+            transform.localPosition = GetSlideDirection();
+            transform.DOLocalMove(Vector3.zero, slideInDuration).SetEase(slideInEase).SetUpdate(true);
+        }
     }
 
     [Button]
@@ -129,16 +161,36 @@ public class CanvasAnimator : MonoBehaviour
         isHidden = true;
 
         DOTween.Kill(_canvasGroup);
-        if (rewindChildTweensOnHide)
-        {
-            _childTweens.ForEach(tween => tween.Rewind());
-        }
+        if (rewindChildTweensOnHide) _childTweens.ForEach(tween => tween.Rewind());
+
 
         if (fadeOut)
         {
             _canvasGroup.DOFade(0f, fadeOutDuration).SetEase(fadeOutEase).SetUpdate(true).OnComplete(() => _canvas.enabled = false);
         }
-        else
+        if (slideOut)
+        {
+            transform.DOLocalMove(GetSlideDirection(), slideOutDuration).SetEase(slideOutEase).SetUpdate(true)
+                .OnComplete(() =>
+                    {
+                        _canvasGroup.alpha = 0;
+                        _canvas.enabled = false;
+                    }
+                );
+        }
+        if (!slideOut && !fadeOut)
+        {
+            _canvasGroup.alpha = 0;
             _canvas.enabled = false;
+        }
+    }
+    Vector3 GetSlideDirection()
+    {
+        return slideOutDirection switch
+        { SlideDirection.Left => new Vector3(-_outOfScreenWidth, 0, 0),
+          SlideDirection.Right => new Vector3(_outOfScreenWidth, 0, 0),
+          SlideDirection.Up => new Vector3(0, _outOfScreenHeight, 0),
+          SlideDirection.Down => new Vector3(0, -_outOfScreenHeight, 0),
+          _ => Vector3.zero };
     }
 }

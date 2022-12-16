@@ -1,0 +1,23 @@
+{
+    "name": "Toolbox",
+    "rootNamespace": "",
+    "references": [
+        "GUID:596123e0a6bcaae468d25abeb428693a",
+        "GUID:4309559c679007d48a2c82dbf98a13d4",
+        "GUID:bbb4e4272c8daa142b1401473a0fd617",
+        "GUID:912d7a6c566d4034494955b637d86889",
+        "GUID:27c4968d008b74ac594562b4046feda6",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:bba7697a54f1843e290b0db2c41eb1a7",
+        "GUID:43b0f9b21e2414b98acbd729d80bf942"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
