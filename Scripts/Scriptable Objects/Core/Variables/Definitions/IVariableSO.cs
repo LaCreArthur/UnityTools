@@ -1,7 +1,7 @@
 using System;
 using Object = UnityEngine.Object;
 
-namespace Toolbox.ScriptableObjects.Variables
+namespace AS.Toolbox.ScriptableObjects
 {
     public interface IVariableSO
     {

@@ -1,6 +1,5 @@
 ﻿using Sirenix.OdinInspector;
 using TMPro;
-using Toolbox.ScriptableObjects.Variables;
 using UnityEngine;
 
 /*
@@ -9,7 +8,7 @@ using UnityEngine;
  * Support prefix, suffix and value offset
  */
 
-namespace Toolbox.ScriptableObjects.Utils
+namespace AS.Toolbox.ScriptableObjects
 {
     [RequireComponent(typeof(TMP_Text))]
     public class IntTMPTextListener : MonoBehaviour

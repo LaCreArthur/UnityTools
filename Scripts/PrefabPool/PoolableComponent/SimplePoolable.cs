@@ -1,22 +1,25 @@
 using UnityEngine;
 
-public class SimplePoolable : MonoBehaviour, IPoolableComponent
+namespace AS.Toolbox.PrefabPool.PoolableComponent
 {
-    public bool resetScaleOnSpawn;
-    Vector3 _initialScale;
-    Transform _transform;
-
-    void Awake()
+    public class SimplePoolable : MonoBehaviour, IPoolableComponent
     {
-        _transform = transform;
-        _initialScale = _transform.localScale;
-    }
+        public bool resetScaleOnSpawn;
+        Vector3 _initialScale;
+        Transform _transform;
 
-    public void OnSpawn()
-    {
-        if (resetScaleOnSpawn)
-            _transform.localScale = _initialScale;
-    }
+        void Awake()
+        {
+            _transform = transform;
+            _initialScale = _transform.localScale;
+        }
 
-    public void OnDespawn() { }
+        public void OnSpawn()
+        {
+            if (resetScaleOnSpawn)
+                _transform.localScale = _initialScale;
+        }
+
+        public void OnDespawn() {}
+    }
 }

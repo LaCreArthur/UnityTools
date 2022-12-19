@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Toolbox.ScriptableObjects.Events
+namespace AS.Toolbox.ScriptableObjects
 {
     public static class UnityEventHelper
     {

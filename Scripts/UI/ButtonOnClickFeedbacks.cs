@@ -1,41 +1,45 @@
+using AS.Toolbox.Singletons.Audio;
+using AS.Toolbox.Singletons.Vibration;
 using DG.Tweening;
 using Sirenix.OdinInspector;
-using Toolbox.Audio;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Button))]
-public class ButtonOnClickFeedbacks : MonoBehaviour
+namespace AS.Toolbox.UI
 {
-    public bool punchScale, haptic, sfx, spine;
-    [ShowIf("punchScale")] public float punchScaleAmount = 0.2f;
-
-    Button _button;
-
-    void Awake()
+    [RequireComponent(typeof(Button))]
+    public class ButtonOnClickFeedbacks : MonoBehaviour
     {
-        _button = GetComponent<Button>();
-        _button.onClick.AddListener(Play);
-    }
+        public bool punchScale, haptic, sfx, spine;
+        [ShowIf("punchScale")] public float punchScaleAmount = 0.2f;
 
-    [Button]
-    public void Play()
-    {
-        if (sfx)
-            AudioSM.Instance.Play("click");
-        if (haptic)
-            VibrationHandler.HapticSelection();
-        if (punchScale)
+        Button _button;
+
+        void Awake()
         {
-            transform.localScale = Vector3.one;
-            transform.DOPunchScale(Vector3.one * punchScaleAmount, 0.5f, 6, 0.6f)
-                .SetEase(Ease.OutQuad).OnComplete(() => transform.localScale = Vector3.one);
+            _button = GetComponent<Button>();
+            _button.onClick.AddListener(Play);
         }
-        if (spine)
+
+        [Button]
+        public void Play()
         {
-            transform.localScale = Vector3.one;
-            transform.DOPunchRotation(Vector3.forward * 45f, 0.5f, 6, 0.6f)
-                .SetEase(Ease.OutQuad).OnComplete(() => transform.localRotation = Quaternion.identity);
+            if (sfx)
+                AudioSM.Instance.Play("click");
+            if (haptic)
+                VibrationHandler.HapticSelection();
+            if (punchScale)
+            {
+                transform.localScale = Vector3.one;
+                transform.DOPunchScale(Vector3.one * punchScaleAmount, 0.5f, 6, 0.6f)
+                    .SetEase(Ease.OutQuad).OnComplete(() => transform.localScale = Vector3.one);
+            }
+            if (spine)
+            {
+                transform.localScale = Vector3.one;
+                transform.DOPunchRotation(Vector3.forward * 45f, 0.5f, 6, 0.6f)
+                    .SetEase(Ease.OutQuad).OnComplete(() => transform.localRotation = Quaternion.identity);
+            }
         }
     }
 }

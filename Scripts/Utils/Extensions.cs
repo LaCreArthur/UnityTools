@@ -4,10 +4,12 @@ using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
 
-namespace Toolbox.Utils
+namespace AS.Toolbox.Utils
 {
     public static class Extensions
     {
+        #region Random
+
         public static T GetRandom<T>(this T[] array) => array[Random.Range(0, array.Length)];
 
         public static T GetRandom<T>(this List<T> list) => list[Random.Range(0, list.Count)];
@@ -29,6 +31,9 @@ namespace Toolbox.Utils
                 (lst[k], lst[n]) = (lst[n], lst[k]);
             }
         }
+
+        #endregion
+
 
         public static bool LazyGetComponent<T, C>(this C c, ref T component) where C : Component
         {
@@ -110,6 +115,13 @@ namespace Toolbox.Utils
             }
 
             return firstCopy;
+        }
+
+        public static void SetSizeWithCurrentAnchors(this RectTransform rectTransform, RectTransform otherRectTransform)
+        {
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, otherRectTransform.rect.size.x);
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, otherRectTransform.rect.size.y);
+            rectTransform.anchoredPosition = otherRectTransform.anchoredPosition;
         }
     }
 }

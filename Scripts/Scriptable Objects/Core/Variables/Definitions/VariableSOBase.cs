@@ -1,11 +1,11 @@
 ﻿using System;
+using AS.Toolbox.Utils;
 using Sirenix.OdinInspector;
-using Toolbox.Utils;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Toolbox.ScriptableObjects.Variables
+namespace AS.Toolbox.ScriptableObjects
 {
     [AssetSelector]
     public class VariableSOBase<T> : ScriptableObject, IVariableSO, IStorable<T>
@@ -21,7 +21,7 @@ namespace Toolbox.ScriptableObjects.Variables
 
         void OnValidate() => OnEnable();
 
-        public virtual void Save() { }
+        public virtual void Save() {}
 
         public virtual T Load()
         {

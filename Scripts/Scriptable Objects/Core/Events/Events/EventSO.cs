@@ -1,12 +1,11 @@
 using System;
+using AS.Toolbox.Utils;
 using Sirenix.OdinInspector;
-using Toolbox.ScriptableObjects.Variables;
-using Toolbox.Utils;
 using UnityEngine;
 using UnityEngine.Events;
 using Object = UnityEngine.Object;
 
-namespace Toolbox.ScriptableObjects.Events
+namespace AS.Toolbox.ScriptableObjects
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Events/Event", fileName = "E_")]
     public class EventSO : EventSOBase, IEventSO<UnityEvent>

@@ -1,9 +1,7 @@
 using UnityEngine;
 
-namespace Toolbox.ScriptableObjects.Variables
+namespace AS.Toolbox.ScriptableObjects
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Vector3", fileName = "vector3_")]
-    public class Vector3Variable : VariableSOBase<Vector3>
-    {
-    }
+    public class Vector3Variable : VariableSOBase<Vector3> {}
 }

@@ -1,7 +1,7 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Toolbox.Utils
+namespace AS.Toolbox.Utils
 {
     /// <summary>
     ///     Safe area implementation for notched mobile devices. Usage:

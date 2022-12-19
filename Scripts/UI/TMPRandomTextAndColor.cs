@@ -1,8 +1,8 @@
-﻿using TMPro;
-using Toolbox.Utils;
+﻿using AS.Toolbox.Utils;
+using TMPro;
 using UnityEngine;
 
-namespace UnityReusables.Utils.UI
+namespace AS.Toolbox.UI
 {
     [RequireComponent(typeof(TMP_Text))]
     public class TMPRandomTextAndColor : MonoBehaviour

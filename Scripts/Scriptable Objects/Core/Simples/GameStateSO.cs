@@ -1,25 +1,31 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using Sirenix.OdinInspector;
-using Toolbox.ScriptableObjects.Events;
-using Toolbox.ScriptableObjects.Variables;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using Object = UnityEngine.Object;
 
-namespace Toolbox.ScriptableObjects
+namespace AS.Toolbox.ScriptableObjects
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Game State")]
     public class GameStateSO : ScriptableObject
     {
         public StateEnum stateEnum;
         public List<GameStateSO> validNextStates = new List<GameStateSO>();
-        [SerializeField, InlineButton("NewOnEnter"), HideIf("_onEnterCreating"), Required]
-        EventSO onEnter;
-        [SerializeField, InlineButton("NewOnExit"), HideIf("_onExitCreating"), Required]
-        EventSO onExit;
+
+        [TitleGroup("On Enter Listener")]
+        public bool logOnEnterCallbacks;
+        [HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullOnEnter")]
+        ReferencedCallbacks onEnter = new ReferencedCallbacks();
+
+        [TitleGroup("On Exit Listener")]
+        public bool logOnExitCallbacks;
+        [HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullOnExit")]
+        ReferencedCallbacks onExit = new ReferencedCallbacks();
+
+        void RemoveNullOnEnter() => onEnter.RemoveAll(l => l.reference == null);
+        void RemoveNullOnExit() => onExit.RemoveAll(l => l.reference == null);
+
 
         public void Add(EventEnum eventEnum, Action callback, Object listener)
         {
@@ -78,65 +84,13 @@ namespace Toolbox.ScriptableObjects
         }
         public void RaiseOnEnter()
         {
-            if (onEnter != null) onEnter.Raise();
+            if (onEnter != null) onEnter.Invoke(this, logOnEnterCallbacks);
             else Debug.Log($"{name} onEnter is null", this);
         }
         public void RaiseOnExit()
         {
-            if (onExit != null) onExit.Raise();
+            if (onExit != null) onExit.Invoke(this, logOnEnterCallbacks);
             else Debug.Log($"{name} onExit is null", this);
         }
-
-
-         #region Create new SO
-
-#if UNITY_EDITOR
-#pragma warning disable CS0414
-        [SerializeField, ShowIf("@onEnter==null"), InlineButton("CancelOnEnter"), InlineButton("CreateOnEnter"),
-         LabelText("Create new SO, enter name:"),
-         ShowIf("_onEnterCreating")]
-        string onEnterName = "E_onEnter";
-        [SerializeField, ShowIf("@onExit==null"), InlineButton("CancelOnExit"), InlineButton("CreateOnExit"),
-         LabelText("Create new SO, enter name:"),
-         ShowIf("_onExitCreating")]
-        string onExitName = "E_onExit";
-
-        bool _onEnterCreating;
-        bool _onExitCreating;
-#pragma warning restore CS0414
-        void NewOnEnter() => _onEnterCreating = true;
-        void NewOnExit() => _onExitCreating = true;
-
-        void CancelOnEnter() => _onEnterCreating = false;
-        void CancelOnExit() => _onExitCreating = false;
-
-        void CreateOnEnter(string soName)
-        {
-            onEnter = CreateSO(soName);
-            _onEnterCreating = false;
-        }
-        void CreateOnExit(string soName)
-        {
-            onExit = CreateSO(soName);
-            _onExitCreating = false;
-        }
-
-        EventSO CreateSO(string soName)
-        {
-            EventSO newSO = CreateInstance<EventSO>();
-            Directory.CreateDirectory(Application.dataPath + "/Scriptable Objects");
-
-            // path has to start at "Assets"
-            var path = "Assets/Scriptable Objects/" + soName + ".asset";
-            AssetDatabase.CreateAsset(newSO, path);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-            EditorUtility.FocusProjectWindow();
-            //Selection.activeObject = newSO;
-            return newSO;
-        }
-#endif
-
-        #endregion
     }
 }

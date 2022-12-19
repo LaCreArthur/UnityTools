@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using Object = UnityEngine.Object;
 
-namespace Toolbox.ScriptableObjects.Events
+namespace AS.Toolbox.ScriptableObjects
 {
     public abstract class ReferencedEventBase<T>
     {
@@ -24,7 +24,7 @@ namespace Toolbox.ScriptableObjects.Events
 
     public class ReferencedAction : ReferencedEventBase<List<Action>>
     {
-        public ReferencedAction(List<Action> callbacks, Object reference) : base(callbacks, reference) { }
+        public ReferencedAction(List<Action> callbacks, Object reference) : base(callbacks, reference) {}
 
         public void LogCallback(ScriptableObject so)
         {
@@ -35,7 +35,7 @@ namespace Toolbox.ScriptableObjects.Events
 
     public class ReferencedAction<T> : ReferencedEventBase<List<Action<T>>>
     {
-        public ReferencedAction(List<Action<T>> callbacks, Object reference) : base(callbacks, reference) { }
+        public ReferencedAction(List<Action<T>> callbacks, Object reference) : base(callbacks, reference) {}
 
         public void LogCallback(ScriptableObject so, object t)
         {
@@ -46,7 +46,7 @@ namespace Toolbox.ScriptableObjects.Events
 
     public class ReferencedEvent<T> : ReferencedEventBase<T> where T : UnityEventBase
     {
-        public ReferencedEvent(T callbacks, Object reference) : base(callbacks, reference) { }
+        public ReferencedEvent(T callbacks, Object reference) : base(callbacks, reference) {}
 
         public void LogCallback(ScriptableObject so, object t)
         {

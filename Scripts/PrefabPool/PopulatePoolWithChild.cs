@@ -1,25 +1,28 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class PopulatePoolWithChild : MonoBehaviour
+namespace AS.Toolbox.PrefabPool
 {
-    [SerializeField]
-    GameObject prefab;
-
-    void Awake() => PrefabPoolingSystem.PopulateWithInstances(prefab, gameObject);
-
-    [Button]
-    public void TestSpawn()
+    public class PopulatePoolWithChild : MonoBehaviour
     {
-        if (Application.isPlaying)
-            PrefabPoolingSystem.Spawn(prefab);
-        else
-            Debug.Log("Application must be playing to spawn prefab");
-    }
+        [SerializeField]
+        GameObject prefab;
 
-    [Button]
-    public void DebugPools()
-    {
-        PrefabPoolingSystem.DebugPools();
+        void Awake() => PrefabPoolingSystem.PopulateWithInstances(prefab, gameObject);
+
+        [Button]
+        public void TestSpawn()
+        {
+            if (Application.isPlaying)
+                PrefabPoolingSystem.Spawn(prefab);
+            else
+                Debug.Log("Application must be playing to spawn prefab");
+        }
+
+        [Button]
+        public void DebugPools()
+        {
+            PrefabPoolingSystem.DebugPools();
+        }
     }
 }

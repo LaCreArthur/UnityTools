@@ -1,6 +1,6 @@
 using UnityEngine.Events;
 
-namespace Toolbox.ScriptableObjects.Events
+namespace AS.Toolbox.ScriptableObjects
 {
     public interface IEventSO<TCallbacks> where TCallbacks : UnityEventBase
     {

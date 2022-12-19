@@ -1,23 +1,25 @@
 using System;
-using UnityEditor;
+using Sirenix.OdinInspector.Editor;
 using UnityEngine;
 #if UNITY_EDITOR
-using Sirenix.OdinInspector.Editor;
+using UnityEditor;
 #endif
 
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-public class TagDropdownAttribute : Attribute
+namespace AS.Toolbox.Utils.Editor
 {
-}
+
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+    public class TagDropdownAttribute : Attribute {}
+
 
 #if UNITY_EDITOR
-
-public sealed class TagDropdownAttributeDrawer : OdinAttributeDrawer<TagDropdownAttribute, string>
-{
-    protected override void DrawPropertyLayout(GUIContent label)
+    public sealed class TagDropdownAttributeDrawer : OdinAttributeDrawer<TagDropdownAttribute, string>
     {
-        ValueEntry.SmartValue = EditorGUILayout.TagField(label ?? new GUIContent(""), ValueEntry.SmartValue);
+        protected override void DrawPropertyLayout(GUIContent label)
+        {
+            ValueEntry.SmartValue = EditorGUILayout.TagField(label ?? new GUIContent(""), ValueEntry.SmartValue);
+        }
     }
-}
 
 #endif
+}

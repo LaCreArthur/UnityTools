@@ -1,7 +1,5 @@
 #pragma warning disable CS0108, CS0114
-namespace Toolbox.ScriptableObjects.Events
+namespace AS.Toolbox.ScriptableObjects
 {
-    public class StringEventListener : LoadedEventListener<string>
-    {
-    }
+    public class StringEventListener : LoadedEventListener<string> {}
 }

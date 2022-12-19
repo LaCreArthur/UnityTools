@@ -1,7 +1,10 @@
 ﻿#pragma warning disable CS0108, CS0114
-using Toolbox.ScriptableObjects.Events;
+using AS.Toolbox.ScriptableObjects;
 
-public class ModalWindowEventListener : LoadedEventListener<ModalWindowTemplate>
+namespace AS.Toolbox.Modal_Window
 {
-    protected const string Filter = "t:ModalWindowEvent";
+    public class ModalWindowEventListener : LoadedEventListener<ModalWindowTemplate>
+    {
+        protected const string Filter = "t:ModalWindowEvent";
+    }
 }

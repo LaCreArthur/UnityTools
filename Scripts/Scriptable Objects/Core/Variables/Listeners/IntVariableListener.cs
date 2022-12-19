@@ -1,6 +1,4 @@
-namespace Toolbox.ScriptableObjects.Variables
+namespace AS.Toolbox.ScriptableObjects
 {
-    public class IntVariableListener : VariableListenerBase<int, IntVar>
-    {
-    }
+    public class IntVariableListener : VariableListenerBase<int, IntVar> {}
 }

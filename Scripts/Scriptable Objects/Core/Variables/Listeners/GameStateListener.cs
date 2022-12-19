@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 #endregion
-namespace Toolbox.ScriptableObjects.Variables
+namespace AS.Toolbox.ScriptableObjects
 {
     [Serializable, InlineProperty, HideReferenceObjectPicker, HideLabel]
     internal class GameStateCallbacks

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Toolbox.Singletons
+namespace AS.Toolbox.Singletons
 {
     /// <summary>
     ///     SingletonMB's design intentions:
@@ -54,7 +54,8 @@ namespace Toolbox.Singletons
             if (s_instance != null && s_instance != this)
             {
                 Debug.LogWarning($"An instance of \"{typeof(T).Name}\" already exists. Destroying duplicate one.",
-                    s_instance.gameObject);
+                    s_instance.gameObject
+                );
                 Destroy(this);
             }
             else
@@ -75,7 +76,7 @@ namespace Toolbox.Singletons
             OnAwake();
         }
 
-        protected virtual void OnAwake() { }
+        protected virtual void OnAwake() {}
 
         public static bool IsAlive => s_instance != null && s_instance._alive;
 

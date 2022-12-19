@@ -1,6 +1,4 @@
-namespace Toolbox.ScriptableObjects.Variables
+namespace AS.Toolbox.ScriptableObjects
 {
-    public class FloatVariableListener : VariableListenerBase<float, FloatVar>
-    {
-    }
+    public class FloatVariableListener : VariableListenerBase<float, FloatVar> {}
 }

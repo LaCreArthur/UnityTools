@@ -1,7 +1,7 @@
-using Toolbox.Utils;
+using AS.Toolbox.Utils;
 using UnityEngine;
 
-namespace Toolbox.ScriptableObjects.Variables
+namespace AS.Toolbox.ScriptableObjects
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Variables/String", fileName = "string_")]
     public class StringVariable : VariableSOBase<string>

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using Toolbox.ScriptableObjects.Events;
 using UnityEngine;
 using UnityEngine.Events;
 using Object = UnityEngine.Object;
 
-namespace Toolbox.ScriptableObjects.Variables
+namespace AS.Toolbox.ScriptableObjects
 {
     public class ReferencedCallbacks<T> : ReferencedCallbacksBase<UnityEvent<T>>
     {
@@ -23,7 +22,8 @@ namespace Toolbox.ScriptableObjects.Variables
             if (existingListener?.callbacks == null || existingListener.reference == null)
             {
                 existingListener = new ReferencedAction<T>(new List<Action<T>> { callback },
-                    listener);
+                    listener
+                );
                 runtimeLoadedListeners.Add(existingListener);
             }
             else
@@ -75,6 +75,9 @@ namespace Toolbox.ScriptableObjects.Variables
             }
             base.Invoke(caller, logListeners);
         }
+
+        public void Add(UnityEvent uEvent, Object listener) => Add(new ReferencedEvent<UnityEvent>(uEvent, listener));
+        public void Remove(UnityEvent uEvent, Object listener) => Remove(new ReferencedEvent<UnityEvent>(uEvent, listener));
     }
 
     public class ReferencedCallbacksBase<T> where T : UnityEventBase
@@ -100,7 +103,8 @@ namespace Toolbox.ScriptableObjects.Variables
             if (existingListener?.callbacks == null || existingListener.reference == null)
             {
                 existingListener = new ReferencedAction(new List<Action> { callback },
-                    listener);
+                    listener
+                );
                 runtimeListeners.Add(existingListener);
             }
             else

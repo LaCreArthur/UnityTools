@@ -1,4 +1,4 @@
-namespace Toolbox.ScriptableObjects.Variables
+namespace AS.Toolbox.ScriptableObjects
 {
     public interface IStorable<T>
     {

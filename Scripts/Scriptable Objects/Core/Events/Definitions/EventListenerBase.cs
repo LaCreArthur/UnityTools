@@ -2,7 +2,7 @@
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 
-namespace Toolbox.ScriptableObjects.Events
+namespace AS.Toolbox.ScriptableObjects
 {
     [ExecuteAlways]
     public abstract class EventListenerBase<TEvent, TCallbacks> : MonoBehaviour

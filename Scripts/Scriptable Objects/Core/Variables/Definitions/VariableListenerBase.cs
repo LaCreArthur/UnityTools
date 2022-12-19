@@ -1,11 +1,10 @@
 using System.IO;
 using Sirenix.OdinInspector;
-using Toolbox.ScriptableObjects.Events;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Toolbox.ScriptableObjects.Variables
+namespace AS.Toolbox.ScriptableObjects
 {
     [ExecuteAlways]
     public abstract class VariableListenerBase<T, TVariable> : MonoBehaviour where TVariable : VariableSOBase<T>

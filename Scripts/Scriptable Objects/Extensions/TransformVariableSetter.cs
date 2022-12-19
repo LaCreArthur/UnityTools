@@ -1,18 +1,20 @@
-﻿using Toolbox.ScriptableObjects.Variables;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class TransformVariableSetter : MonoBehaviour
+namespace AS.Toolbox.ScriptableObjects
 {
-    public TransformVar transformVar;
-    public bool onAwake = true;
-
-    void Awake()
+    public class TransformVariableSetter : MonoBehaviour
     {
-        if (onAwake) Set();
-    }
+        public TransformVar transformVar;
+        public bool onAwake = true;
 
-    public void Set()
-    {
-        transformVar.v = transform;
+        void Awake()
+        {
+            if (onAwake) Set();
+        }
+
+        public void Set()
+        {
+            transformVar.v = transform;
+        }
     }
 }

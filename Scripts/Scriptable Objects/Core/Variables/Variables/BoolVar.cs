@@ -1,8 +1,8 @@
-﻿using Sirenix.OdinInspector;
-using Toolbox.Utils;
+﻿using AS.Toolbox.Utils;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Toolbox.ScriptableObjects.Variables
+namespace AS.Toolbox.ScriptableObjects
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Bool", fileName = "bool_")]
     public class BoolVar : VariableSOBase<bool>

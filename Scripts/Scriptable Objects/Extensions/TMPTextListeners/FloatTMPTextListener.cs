@@ -1,8 +1,7 @@
 using TMPro;
-using Toolbox.ScriptableObjects.Variables;
 using UnityEngine;
 
-namespace Toolbox.ScriptableObjects.Utils
+namespace AS.Toolbox.ScriptableObjects
 {
 
     [RequireComponent(typeof(TMP_Text))]

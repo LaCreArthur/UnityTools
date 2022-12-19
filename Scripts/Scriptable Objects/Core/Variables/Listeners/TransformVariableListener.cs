@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Toolbox.ScriptableObjects.Variables
+namespace AS.Toolbox.ScriptableObjects
 {
-    public class TransformVariableListener : VariableListenerBase<Transform, TransformVar>
-    {
-    }
+    public class TransformVariableListener : VariableListenerBase<Transform, TransformVar> {}
 }

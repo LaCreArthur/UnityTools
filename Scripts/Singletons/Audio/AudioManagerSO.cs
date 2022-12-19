@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Toolbox.Audio
+namespace AS.Toolbox.Singletons.Audio
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Managers/Audio Manager")]
     public class AudioManagerSO : ScriptableObject

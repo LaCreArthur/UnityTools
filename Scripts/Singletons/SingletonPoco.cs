@@ -1,9 +1,9 @@
-﻿namespace Toolbox.Singletons
+﻿namespace AS.Toolbox.Singletons
 {
     public class SingletonPoco<T> where T : new()
     {
         static T s_instance;
-        protected SingletonPoco() { }
+        protected SingletonPoco() {}
 
         public static T Instance
         {

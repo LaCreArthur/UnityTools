@@ -1,13 +1,12 @@
 using System;
 using System.Collections;
-using Toolbox.ScriptableObjects.Variables;
-using Toolbox.Singletons;
-using Toolbox.Utils;
+using AS.Toolbox.ScriptableObjects;
+using AS.Toolbox.Utils;
 using UnityEngine;
 using UnityEngine.Audio;
 using Random = UnityEngine.Random;
 
-namespace Toolbox.Audio
+namespace AS.Toolbox.Singletons.Audio
 {
     public class AudioSM : SingletonMono<AudioSM>
     {

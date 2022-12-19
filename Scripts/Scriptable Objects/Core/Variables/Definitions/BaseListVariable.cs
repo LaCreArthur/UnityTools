@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Toolbox.ScriptableObjects.Variables
+namespace AS.Toolbox.ScriptableObjects
 {
     public class BaseListVariable<T> : VariableSOBase<List<T>>
     {

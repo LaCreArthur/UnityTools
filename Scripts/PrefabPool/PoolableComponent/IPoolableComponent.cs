@@ -1,5 +1,8 @@
-public interface IPoolableComponent
+namespace AS.Toolbox.PrefabPool.PoolableComponent
 {
-    void OnSpawn();
-    void OnDespawn();
+    public interface IPoolableComponent
+    {
+        void OnSpawn();
+        void OnDespawn();
+    }
 }

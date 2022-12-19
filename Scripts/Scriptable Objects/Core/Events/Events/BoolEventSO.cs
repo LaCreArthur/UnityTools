@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Toolbox.ScriptableObjects.Events
+namespace AS.Toolbox.ScriptableObjects
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Events/Bool Event", fileName = "BoolE_")]
     public class BoolEventSO : LoadedEventSO<bool> {}
