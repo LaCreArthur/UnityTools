@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace AS.Toolbox.ScriptableObjects
 {
-    public class BaseListVariable<T> : VariableSOBase<List<T>>
+    public class SOListVariable<T> : SOVariable<List<T>>
     {
         public bool clearOnEnable;
 

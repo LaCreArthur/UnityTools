@@ -3,5 +3,5 @@
 namespace AS.Toolbox.ScriptableObjects
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Transform", fileName = "transform_")]
-    public class TransformVar : VariableSOBase<Transform> {}
+    public class TransformVar : SOVariable<Transform> {}
 }

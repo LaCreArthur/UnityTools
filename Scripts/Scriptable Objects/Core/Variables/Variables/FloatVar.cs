@@ -4,7 +4,7 @@ using UnityEngine;
 namespace AS.Toolbox.ScriptableObjects
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Float", fileName = "float_")]
-    public class FloatVar : VariableSOBase<float>
+    public class FloatVar : SOVariable<float>
     {
         public override void Save()
         {

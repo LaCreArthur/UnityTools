@@ -8,7 +8,7 @@ using Object = UnityEngine.Object;
 namespace AS.Toolbox.ScriptableObjects
 {
     [AssetSelector]
-    public class VariableSOBase<T> : ScriptableObject, IVariableSO, IStorable<T>
+    public class SOVariable<T> : ScriptableObject, IVariableSO, IStorable<T>
     {
         protected virtual void OnEnable()
         {
@@ -103,7 +103,7 @@ namespace AS.Toolbox.ScriptableObjects
 
         #region Debug
 
-        [TitleGroup("Debug"), SerializeField, Delayed, OnValueChanged("SetValue")]
+        [TitleGroup("Debug"), SerializeField, Delayed, OnValueChanged("SetValue"), InlineButton("SetValue", "Set")]
         T newValue;
 
         public virtual void SetValue(T newVal) => v = newVal;
