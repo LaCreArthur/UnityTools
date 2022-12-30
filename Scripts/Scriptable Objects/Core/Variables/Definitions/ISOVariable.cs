@@ -3,7 +3,7 @@ using Object = UnityEngine.Object;
 
 namespace AS.Toolbox.ScriptableObjects
 {
-    public interface IVariableSO
+    public interface ISOVariable
     {
         public void AddOnChangeCallback(Action callback, Object listener);
 

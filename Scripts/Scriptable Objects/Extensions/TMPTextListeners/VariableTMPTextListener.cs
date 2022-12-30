@@ -6,7 +6,7 @@ namespace AS.Toolbox.ScriptableObjects
     public class VariableTMPTextListener : SerializedMonoBehaviour
     {
         [ValidateInput("@variable != null", "a variable must be provided"), AssetsOnly]
-        public IVariableSO variable;
+        public ISOVariable variable;
         public string prefix;
         public string suffix;
         public bool autoUpdateOnChange = true;
