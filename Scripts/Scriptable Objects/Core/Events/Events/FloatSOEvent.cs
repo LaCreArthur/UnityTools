@@ -3,5 +3,5 @@ using UnityEngine;
 namespace AS.Toolbox.ScriptableObjects
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Events/Float Event", fileName = "FloatE_")]
-    public class FloatEventSO : LoadedEventSO<float> {}
+    public class FloatSOEvent : LoadedSOEvent<float> {}
 }

@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 
 namespace AS.Toolbox.ScriptableObjects
 {
-    public abstract class LoadedEventSO<T> : EventSOBase, IEventSO<UnityEvent<T>>
+    public abstract class LoadedSOEvent<T> : SOEventBase, ISOEvent<UnityEvent<T>>
     {
         [TitleGroup("Debug"), SerializeField, InlineButton("RaiseWithTestValue")]
         T testValue;

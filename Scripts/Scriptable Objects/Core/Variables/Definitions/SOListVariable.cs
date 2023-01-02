@@ -20,7 +20,7 @@ namespace AS.Toolbox.ScriptableObjects
         }
 
         public void Add(T x) => v.Add(x);
-        public void Remove(T x) => v.Remove(x);
+        public bool Remove(T x) => v.Remove(x);
         public void Clear() => v.Clear();
         public int Count => v.Count;
     }

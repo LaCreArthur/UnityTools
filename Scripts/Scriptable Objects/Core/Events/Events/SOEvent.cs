@@ -8,7 +8,7 @@ using Object = UnityEngine.Object;
 namespace AS.Toolbox.ScriptableObjects
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Events/Event", fileName = "E_")]
-    public class EventSO : EventSOBase, IEventSO<UnityEvent>
+    public class SOEvent : SOEventBase, ISOEvent<UnityEvent>
     {
         [TitleGroup("Listener"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullElements")]
         public ReferencedCallbacks listeners = new ReferencedCallbacks();

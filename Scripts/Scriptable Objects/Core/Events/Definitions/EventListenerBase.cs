@@ -6,7 +6,7 @@ namespace AS.Toolbox.ScriptableObjects
 {
     [ExecuteAlways]
     public abstract class EventListenerBase<TEvent, TCallbacks> : MonoBehaviour
-        where TEvent : IEventSO<TCallbacks>
+        where TEvent : ISOEvent<TCallbacks>
         where TCallbacks : UnityEventBase
     {
         [SerializeField] protected TEvent eventSO;
