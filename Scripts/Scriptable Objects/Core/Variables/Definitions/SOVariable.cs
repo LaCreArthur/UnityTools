@@ -124,7 +124,7 @@ namespace AS.Toolbox.ScriptableObjects
 
         void RemoveNullElements() => onChange?.RemoveAll(c => c.reference == null);
 
-        void OnChange()
+        protected void OnChange()
         {
             if (logOnChange)
                 Debug.Log($"{this.TypeAndNameToString()} has changed to <color=yellow>{value}</color>");
