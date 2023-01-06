@@ -27,8 +27,8 @@ namespace AS.Toolbox.Singletons
         public static GameStateSO LevelSelection => GetState(StateEnum.LevelSelection);
 
         protected override void OnAwake() => StartCoroutine(DelayedEntryState());
-        public static void SetState(GameStateSO newGS) => Instance.variable.SetValue(newGS);
-        public static void SetState(StateEnum newGS) => Instance.variable.SetValue(GetState(newGS));
+        public static void SetState(GameStateSO newGS) => Instance.variable.v = newGS;
+        public static void SetState(StateEnum newGS) => Instance.variable.v = GetState(newGS);
         public static GameStateSO GetState(StateEnum gsEnum) => Instance.gameStates.Find(gs => gs.stateEnum == gsEnum);
 
         // we must delay setting the entry state so the state listeners are properly registered in the initial frame 

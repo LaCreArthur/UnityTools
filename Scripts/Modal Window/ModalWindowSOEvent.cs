@@ -3,6 +3,6 @@ using UnityEngine;
 
 namespace AS.Toolbox.Modal_Window
 {
-    [CreateAssetMenu(menuName = "Create ModalWindowEvent", fileName = "ModalWindowEvent", order = 0)]
+    [CreateAssetMenu(menuName = "Scriptable Objects/ModalWindowEvent", fileName = "ModalWindowEvent", order = 0)]
     public class ModalWindowSOEvent : LoadedSOEvent<ModalWindowTemplate> {}
 }

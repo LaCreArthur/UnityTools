@@ -154,6 +154,7 @@ namespace AS.Toolbox.UI
         }
 
         //todo: maybe not it responsibility
+        // refactoring this with a new component dedicated to slide panels? 
         // in case of multiple tab panels
         public void Show(int lastIndex, int newIndex)
         {
@@ -178,7 +179,9 @@ namespace AS.Toolbox.UI
             }
             if (slideOut)
             {
-                transform.DOLocalMove(GetSlideDirection(), slideOutDuration).SetEase(slideOutEase).SetUpdate(true)
+                transform.DOLocalMove(GetSlideDirection(), slideOutDuration)
+                    .SetEase(slideOutEase)
+                    .SetUpdate(true)
                     .OnComplete(() =>
                         {
                             _canvasGroup.alpha = 0;

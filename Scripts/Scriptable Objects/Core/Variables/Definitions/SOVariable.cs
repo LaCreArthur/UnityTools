@@ -107,6 +107,7 @@ namespace AS.Toolbox.ScriptableObjects
         [TitleGroup("Debug"), SerializeField, Delayed, OnValueChanged("SetValue"), InlineButton("SetValue", "Set")]
         T newValue;
 
+        // used for serialized unity event callback
         public virtual void SetValue(T newVal) => v = newVal;
 
         [TitleGroup("Debug"), HideIf("isConstant"), SerializeField]
