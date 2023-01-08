@@ -40,19 +40,19 @@ namespace AS.Toolbox.ScriptableObjects
 
         #region Value
 
-        [TitleGroup("Values"), SerializeField, PropertyOrder(0)]
-        protected T initialValue;
+        [TitleGroup("Values"), SerializeField, ReadOnly, PropertyOrder(0)]
+        protected T value;
 
         [TitleGroup("Values"), SerializeField, ReadOnly, PropertyOrder(0)]
         protected T previousValue;
 
-        [TitleGroup("Values"), SerializeField, ReadOnly, PropertyOrder(0)]
-        protected T value;
+        [TitleGroup("Values"), SerializeField, PropertyOrder(0)]
+        protected T initialValue;
 
-        [SerializeField]
+        [TitleGroup("Values"), SerializeField]
         protected bool isConstant;
 
-        [HideIf("isConstant"), SerializeField]
+        [TitleGroup("Values"), HideIf("isConstant"), SerializeField]
         bool isStored;
 
         public T InitialValue
@@ -117,10 +117,10 @@ namespace AS.Toolbox.ScriptableObjects
 
         #region OnChange
 
-        [TitleGroup("On Change"), HideIf("isConstant"), SerializeField]
+        [FoldoutGroup("On Change"), HideIf("isConstant"), SerializeField]
         bool logListeners;
 
-        [TitleGroup("On Change"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullElements")]
+        [FoldoutGroup("On Change"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullElements")]
         public ReferencedCallbacks<T> onChange = new ReferencedCallbacks<T>();
 
         void RemoveNullElements() => onChange?.RemoveAll(c => c.reference == null);
