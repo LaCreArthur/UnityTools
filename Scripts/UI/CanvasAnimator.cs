@@ -158,7 +158,7 @@ namespace AS.Toolbox.UI
         // in case of multiple tab panels
         public void Show(int lastIndex, int newIndex)
         {
-            slideOutDirection = newIndex > lastIndex ? SlideDirection.Right : SlideDirection.Left;
+            slideInDirection = newIndex > lastIndex ? SlideDirection.Right : SlideDirection.Left;
             Show();
         }
 
