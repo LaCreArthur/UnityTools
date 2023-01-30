@@ -3,7 +3,6 @@ using UnityEngine;
 #if UNITY_EDITOR
 using Sirenix.OdinInspector.Editor;
 using UnityEditor;
-using Sirenix.OdinInspector.Editor;
 #endif
 
 namespace AS.Toolbox.Utils.Editor
