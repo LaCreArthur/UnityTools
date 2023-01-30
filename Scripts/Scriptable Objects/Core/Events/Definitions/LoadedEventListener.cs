@@ -2,5 +2,5 @@
 
 namespace AS.Toolbox.ScriptableObjects
 {
-    public abstract class LoadedEventListener<T> : EventListenerBase<LoadedEventSO<T>, UnityEvent<T>> {}
+    public abstract class LoadedEventListener<T> : EventListenerBase<LoadedSOEvent<T>, UnityEvent<T>> {}
 }

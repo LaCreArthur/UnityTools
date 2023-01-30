@@ -8,8 +8,9 @@ using Object = UnityEngine.Object;
 namespace AS.Toolbox.ScriptableObjects
 {
     [AssetSelector]
-    public class VariableSOBase<T> : ScriptableObject, IVariableSO, IStorable<T>
+    public class SOVariable<T> : ScriptableObject, ISOVariable, IStorable<T>
     {
+
         protected virtual void OnEnable()
         {
 #if UNITY_EDITOR// dont load if not on playmode
@@ -39,19 +40,19 @@ namespace AS.Toolbox.ScriptableObjects
 
         #region Value
 
-        [TitleGroup("Values"), SerializeField, PropertyOrder(0)]
-        protected T initialValue;
+        [TitleGroup("Values"), SerializeField, ReadOnly, PropertyOrder(0)]
+        protected T value;
 
         [TitleGroup("Values"), SerializeField, ReadOnly, PropertyOrder(0)]
         protected T previousValue;
 
-        [TitleGroup("Values"), SerializeField, ReadOnly, PropertyOrder(0)]
-        protected T value;
+        [TitleGroup("Values"), SerializeField, PropertyOrder(0)]
+        protected T initialValue;
 
-        [SerializeField]
+        [TitleGroup("Values"), SerializeField]
         protected bool isConstant;
 
-        [HideIf("isConstant"), SerializeField]
+        [TitleGroup("Values"), HideIf("isConstant"), SerializeField]
         bool isStored;
 
         public T InitialValue
@@ -103,9 +104,10 @@ namespace AS.Toolbox.ScriptableObjects
 
         #region Debug
 
-        [TitleGroup("Debug"), SerializeField, Delayed, OnValueChanged("SetValue")]
+        [TitleGroup("Debug"), SerializeField, Delayed, OnValueChanged("SetValue"), InlineButton("SetValue", "Set")]
         T newValue;
 
+        // used for serialized unity event callback
         public virtual void SetValue(T newVal) => v = newVal;
 
         [TitleGroup("Debug"), HideIf("isConstant"), SerializeField]
@@ -115,20 +117,44 @@ namespace AS.Toolbox.ScriptableObjects
 
         #region OnChange
 
-        [TitleGroup("On Change"), HideIf("isConstant"), SerializeField]
+        [FoldoutGroup("On Change"), HideIf("isConstant"), SerializeField]
         bool logListeners;
 
-        [TitleGroup("On Change"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullElements")]
+        [FoldoutGroup("On Change"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullElements")]
         public ReferencedCallbacks<T> onChange = new ReferencedCallbacks<T>();
 
         void RemoveNullElements() => onChange?.RemoveAll(c => c.reference == null);
 
-        void OnChange()
+        protected void OnChange()
         {
             if (logOnChange)
                 Debug.Log($"{this.TypeAndNameToString()} has changed to <color=yellow>{value}</color>");
 
             onChange.Invoke(this, value, logListeners);
+        }
+
+        #endregion
+
+        #region Create Asset
+
+        public static bool IsCreating;
+        public static bool IsNotCreating => !IsCreating;
+        public static void Create()
+        {
+            IsCreating = true;
+        }
+
+        public static void CreateAsset()
+        {
+            var asset = CreateInstance<SOVariable<T>>();
+            AssetDatabase.CreateAsset(asset, $"Assets/{typeof(T).Name}.asset");
+            AssetDatabase.SaveAssets();
+            IsCreating = false;
+        }
+
+        public static void CancelCreate()
+        {
+            IsCreating = false;
         }
 
         #endregion

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace AS.Toolbox.ScriptableObjects
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Variables/String", fileName = "string_")]
-    public class StringVariable : VariableSOBase<string>
+    public class StringVariable : SOVariable<string>
     {
         public override void Save()
         {

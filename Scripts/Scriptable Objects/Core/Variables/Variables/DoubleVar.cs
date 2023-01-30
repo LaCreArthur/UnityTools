@@ -4,7 +4,7 @@ using UnityEngine;
 namespace AS.Toolbox.ScriptableObjects
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Double", fileName = "double_")]
-    public class DoubleVar : VariableSOBase<double>
+    public class DoubleVar : SOVariable<double>
     {
         public override void Save()
         {

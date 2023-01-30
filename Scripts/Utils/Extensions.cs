@@ -34,6 +34,7 @@ namespace AS.Toolbox.Utils
 
         #endregion
 
+        #region Component
 
         public static bool LazyGetComponent<T, C>(this C c, ref T component) where C : Component
         {
@@ -46,7 +47,21 @@ namespace AS.Toolbox.Utils
             return false;
         }
 
+        public static T GetOrAddComponent<T>(this Component c) where T : Component
+        {
+            var component = c.GetComponent<T>();
+            if (component == null)
+            {
+                component = c.gameObject.AddComponent<T>();
+            }
+            return component;
+        }
+
+        #endregion
+
         public static bool CollidesWith(this LayerMask layerMask, int layer) => (1 << layer & layerMask) != 0;
+
+        #region Arrays
 
         public static void MoveIndex(this ref int index, bool left, int maxIndex)
         {
@@ -85,11 +100,14 @@ namespace AS.Toolbox.Utils
             return array[index];
         }
 
+        #endregion
+
         public static string ToTimeString(this float time) => $"{Mathf.FloorToInt(time / 60):0}:{Mathf.FloorToInt(time % 60):00}";
 
         public static string TypeAndNameToString(this ScriptableObject so) => $"{so.GetType().Name} [<color=cyan>{so.name}</color>]";
 
         public static float Normalize(this float x, float min, float max) => (x - min) / (max - min);
+
 
         public static string Encrypt(string pass)
         {
@@ -116,6 +134,7 @@ namespace AS.Toolbox.Utils
 
             return firstCopy;
         }
+
 
         public static void SetSizeWithCurrentAnchors(this RectTransform rectTransform, RectTransform otherRectTransform)
         {

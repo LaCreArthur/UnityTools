@@ -5,7 +5,7 @@ using UnityEngine;
 namespace AS.Toolbox.ScriptableObjects
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Bool", fileName = "bool_")]
-    public class BoolVar : VariableSOBase<bool>
+    public class BoolVar : SOVariable<bool>
     {
         [Button]
         public void Toggle() => v = !v;

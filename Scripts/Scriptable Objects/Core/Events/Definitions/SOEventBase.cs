@@ -4,7 +4,7 @@ using UnityEngine;
 namespace AS.Toolbox.ScriptableObjects
 {
     [AssetSelector]
-    public abstract class EventSOBase : ScriptableObject
+    public abstract class SOEventBase : ScriptableObject
     {
         [TitleGroup("Debug"), SerializeField]
         protected bool logRaise;

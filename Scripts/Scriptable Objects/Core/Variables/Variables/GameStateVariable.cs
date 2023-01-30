@@ -7,7 +7,7 @@ namespace AS.Toolbox.ScriptableObjects
     public enum EventEnum { OnEnter, OnExit }
 
     [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Game State Variable")]
-    public class GameStateVariable : VariableSOBase<GameStateSO>
+    public class GameStateVariable : SOVariable<GameStateSO>
     {
         [SerializeField]
         bool debugStateChange;

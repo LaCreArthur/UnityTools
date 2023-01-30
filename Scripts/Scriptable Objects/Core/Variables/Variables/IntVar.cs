@@ -4,7 +4,7 @@ using UnityEngine;
 namespace AS.Toolbox.ScriptableObjects
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Int", fileName = "int_")]
-    public class IntVar : VariableSOBase<int>
+    public class IntVar : SOVariable<int>
     {
         public override void Save() => EncryptedPlayerPrefs.SetInt(name, v);
 
