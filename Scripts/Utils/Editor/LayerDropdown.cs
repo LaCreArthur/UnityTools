@@ -1,8 +1,8 @@
 using System;
-using Sirenix.OdinInspector.Editor;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
+using Sirenix.OdinInspector.Editor;
 #endif
 
 namespace AS.Toolbox.Utils.Editor
