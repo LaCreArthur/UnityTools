@@ -13,14 +13,14 @@ namespace AS.Toolbox.ScriptableObjects
         public StateEnum stateEnum;
         public List<GameStateSO> validNextStates = new List<GameStateSO>();
 
-        [TitleGroup("On Enter Listener")]
+        [FoldoutGroup("On Enter Listener")]
         public bool logOnEnterCallbacks;
-        [HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullOnEnter")]
+        [FoldoutGroup("On Enter Listener"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullOnEnter")]
         ReferencedCallbacks onEnter = new ReferencedCallbacks();
 
-        [TitleGroup("On Exit Listener")]
+        [FoldoutGroup("On Exit Listener")]
         public bool logOnExitCallbacks;
-        [HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullOnExit")]
+        [FoldoutGroup("On Exit Listener"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullOnExit")]
         ReferencedCallbacks onExit = new ReferencedCallbacks();
 
         void RemoveNullOnEnter() => onEnter.RemoveAll(l => l.reference == null);
@@ -89,7 +89,7 @@ namespace AS.Toolbox.ScriptableObjects
         }
         public void RaiseOnExit()
         {
-            if (onExit != null) onExit.Invoke(this, logOnEnterCallbacks);
+            if (onExit != null) onExit.Invoke(this, logOnExitCallbacks);
             else Debug.Log($"{name} onExit is null", this);
         }
     }
