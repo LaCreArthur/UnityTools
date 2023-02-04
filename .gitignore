@@ -1,0 +1,2 @@
+# ignore asmdef file because GUID references are not stable 
+Scripts/AS.Toolbox.asmdef*
