@@ -19,7 +19,7 @@ namespace AS.Toolbox.ScriptableObjects
     public class GameStateListener : SerializedMonoBehaviour
     {
         [SerializeField, Required("A variable must be assigned for this listener!")]
-        protected GameStateVariable gameState;
+        protected GameStateVar gameState;
 
         [SerializeField, DictionaryDrawerSettings(KeyLabel = "State", DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
         readonly Dictionary<GameStateSO, GameStateCallbacks> callbacks = new Dictionary<GameStateSO, GameStateCallbacks>();

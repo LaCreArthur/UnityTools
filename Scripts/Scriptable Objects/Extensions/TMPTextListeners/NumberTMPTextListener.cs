@@ -5,7 +5,7 @@ using UnityEngine;
 namespace AS.Toolbox.ScriptableObjects
 {
     [RequireComponent(typeof(TMP_Text))]
-    public abstract class NumberTMPTextListener<T, TVar> : MonoBehaviour where TVar : SOVariable<T>
+    public abstract class NumberTMPTextListener<T, TVar> : MonoBehaviour where TVar : SOVar<T>
     {
         public TVar var;
         public int decimals;

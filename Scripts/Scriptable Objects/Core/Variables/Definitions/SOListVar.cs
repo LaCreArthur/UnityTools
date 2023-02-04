@@ -3,7 +3,7 @@ using Sirenix.OdinInspector;
 
 namespace AS.Toolbox.ScriptableObjects
 {
-    public class SOListVariable<T> : SOVariable<List<T>>
+    public class SOListVar<T> : SOVar<List<T>>
     {
         [TitleGroup("Values")]
         public bool clearOnEnable;

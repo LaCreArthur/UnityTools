@@ -7,7 +7,7 @@ using UnityEngine.Events;
 namespace AS.Toolbox.ScriptableObjects
 {
     [ExecuteAlways]
-    public abstract class VariableListenerBase<T, TVariable> : MonoBehaviour where TVariable : SOVariable<T>
+    public abstract class VarListenerBase<T, TVariable> : MonoBehaviour where TVariable : SOVar<T>
     {
         [SerializeField, Required("A variable must be assigned for this listener!"), InlineButton("New"), HideIf("_isCreating")]
         protected TVariable variable;

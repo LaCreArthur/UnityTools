@@ -8,7 +8,7 @@ using Object = UnityEngine.Object;
 namespace AS.Toolbox.ScriptableObjects
 {
     [AssetSelector]
-    public class SOVariable<T> : ScriptableObject, ISOVariable, IStorable<T>
+    public class SOVar<T> : ScriptableObject, ISOVariable, IStorable<T>
     {
 
         protected virtual void OnEnable()
@@ -98,7 +98,7 @@ namespace AS.Toolbox.ScriptableObjects
             }
         }
 
-        protected virtual T ProcessValue(T oldVal) => oldVal;
+        protected virtual T ProcessValue(T newVal) => newVal;
 
         #endregion
 
@@ -146,7 +146,7 @@ namespace AS.Toolbox.ScriptableObjects
 
         public static void CreateAsset()
         {
-            var asset = CreateInstance<SOVariable<T>>();
+            var asset = CreateInstance<SOVar<T>>();
             AssetDatabase.CreateAsset(asset, $"Assets/{typeof(T).Name}.asset");
             AssetDatabase.SaveAssets();
             IsCreating = false;
