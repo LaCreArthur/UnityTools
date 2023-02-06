@@ -22,7 +22,6 @@ namespace AS.Toolbox.Singletons
         public static GameStateSO Home => GetState(StateEnum.Home);
         public static GameStateSO Settings => GetState(StateEnum.Settings);
         public static GameStateSO InGame => GetState(StateEnum.InGame);
-        public static GameStateSO Pause => GetState(StateEnum.Pause);
         public static GameStateSO GameOver => GetState(StateEnum.GameOver);
         public static GameStateSO Ending => GetState(StateEnum.Ending);
         public static GameStateSO Win => GetState(StateEnum.Win);

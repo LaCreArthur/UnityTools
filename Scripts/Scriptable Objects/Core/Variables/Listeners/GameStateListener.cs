@@ -12,7 +12,7 @@ namespace AS.Toolbox.ScriptableObjects
     [Serializable, InlineProperty, HideReferenceObjectPicker, HideLabel]
     internal class GameStateCallbacks
     {
-        [HideReferenceObjectPicker, HideLabel]
+        [HideReferenceObjectPicker]
         public UnityEvent onEnter, onLeave;
     }
 
