@@ -137,6 +137,7 @@ namespace AS.Toolbox.ScriptableObjects
 
         #region Create Asset
 
+        #if UNITY_EDITOR
         public static bool IsCreating;
         public static bool IsNotCreating => !IsCreating;
         public static void Create()
@@ -156,6 +157,7 @@ namespace AS.Toolbox.ScriptableObjects
         {
             IsCreating = false;
         }
+        #endif
 
         #endregion
     }
