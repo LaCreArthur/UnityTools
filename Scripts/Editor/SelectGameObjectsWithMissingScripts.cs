@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace AS.Toolbox.Utils.Editor
+namespace AS.Toolbox.Editor
 {
     public class SelectGameObjectsWithMissingScripts : UnityEditor.Editor
     {

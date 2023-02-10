@@ -3,7 +3,7 @@ using System.IO;
 using UnityEditor;
 using UnityEditor.Presets;
 
-namespace AS.Toolbox.Utils.Editor
+namespace AS.Toolbox.Editor
 {
     /// <summary>
     ///     The following script applies a Preset based on the folder that you add an asset to.

@@ -1,8 +1,8 @@
 using System;
+using AS.Toolbox.Editor;
 using AS.Toolbox.ScriptableObjects;
 using AS.Toolbox.Singletons;
 using AS.Toolbox.Utils;
-using AS.Toolbox.Utils.Editor;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -14,16 +14,12 @@ namespace AS.Toolbox.Components
     {
         public ColliderEventType type;
         public bool useTag;
-        [ShowIf("useTag")]
-        [TagDropdown] public string otherTag = "";
-        [HideIf("useTag")]
-        public LayerMask otherLayer;
+        [ShowIf("useTag"), TagDropdown] public string otherTag = "";
+        [HideIf("useTag")] public LayerMask otherLayer;
 
         public bool onlyOnce;
-        [ShowIf("onlyOnce")]
-        public bool destroyGO;
-        [ShowIf("destroyGO")]
-        public float delay;
+        [ShowIf("onlyOnce")] public bool destroyGO;
+        [ShowIf("destroyGO")] public float delay;
 
         public bool resetTriggerOnStateEvent;
         [ShowIf("resetTriggerOnStateEvent")]
