@@ -1,5 +1,5 @@
 {
-    "name": "AS.Toolbox",
+    "name": "AS.Toolbox.Runtime",
     "rootNamespace": "",
     "references": [
         "GUID:6055be8ebefd69e48b49212b09b47b2f",
@@ -7,7 +7,7 @@
         "GUID:145856c53ee017942bd775df997f9a28",
         "GUID:865b414a121ed594e91db2e09f65d38c",
         "GUID:041029188fa88c54f9efffc039b6a1c9",
-        "GUID:2aae764327a0eec47be8d20b3c8af988"
+        "GUID:3bf190805f4aa6c4da8323ff5e5a613e"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
