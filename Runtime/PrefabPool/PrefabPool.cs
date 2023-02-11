@@ -35,7 +35,7 @@ namespace AS.Toolbox.PrefabPool
             {
                 // instantiate a new go and add it to the list
                 GameObject newGO = Object.Instantiate(prefab, parent);
-                data = new PoolableInstances { instance = newGO, poolableComponents = newGO.GetComponents<IPoolableComponent>() };
+                data = new PoolableInstances { instance = newGO, poolableComponents = newGO.GetComponentsInChildren<IPoolableComponent>() };
             }
 
             var spawnedGO = data.instance;
