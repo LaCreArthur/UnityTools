@@ -17,10 +17,13 @@ namespace AS.Toolbox.ScriptableObjects
             return v;
         }
 
-        public void Add(float x)
-        {
-            v += x;
-        }
+        public void Add(float x) => v += x;
+        public void Subtract(float x) => v -= x;
+        public void Multiply(float x) => v *= x;
+        public void Divide(float x) => v /= x;
+
+
+        #region Operators Overloads
 
         public static FloatVar operator ++(FloatVar a)
         {
@@ -55,5 +58,7 @@ namespace AS.Toolbox.ScriptableObjects
             res.v = a.v - b.v;
             return res;
         }
+
+        #endregion
     }
 }
