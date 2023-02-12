@@ -1,4 +1,3 @@
-using System;
 using AS.Toolbox.Editor;
 using AS.Toolbox.ScriptableObjects;
 using AS.Toolbox.Singletons;
@@ -34,9 +33,9 @@ namespace AS.Toolbox.Components
         bool triggered;
 
         [ShowIf("@type==ColliderEventType.CollisionEnter||type==ColliderEventType.CollisionStay||type==ColliderEventType.CollisionExit")]
-        public CollisionEvent collisionEvent;
+        public UnityEvent<Collision> collisionEvent;
         [HideIf("@type==ColliderEventType.CollisionEnter||type==ColliderEventType.CollisionStay||type==ColliderEventType.CollisionExit")]
-        public TriggerEvent triggerEvent;
+        public UnityEvent<Collider> triggerEvent;
 
         void Start()
         {
@@ -90,10 +89,4 @@ namespace AS.Toolbox.Components
     }
 
     public enum ColliderEventType { CollisionEnter, CollisionStay, CollisionExit, TriggerEnter, TriggerStay, TriggerExit }
-
-    [Serializable]
-    public class CollisionEvent : UnityEvent<Collision> {}
-
-    [Serializable]
-    public class TriggerEvent : UnityEvent<Collider> {}
 }
