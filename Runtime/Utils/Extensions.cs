@@ -102,13 +102,14 @@ namespace AS.Toolbox.Utils
 
         #endregion
 
-        public static string ToTimeString(this float time) => $"{Mathf.FloorToInt(time / 60):0}:{Mathf.FloorToInt(time % 60):00}";
-
-        public static string TypeAndNameToString(this ScriptableObject so) => $"{so.GetType().Name} [<color=cyan>{so.name}</color>]";
+        #region Math
 
         public static float Normalize(this float x, float min, float max) => (x - min) / (max - min);
 
+        #endregion
 
+        public static string ToTimeString(this float time) => $"{Mathf.FloorToInt(time / 60):0}:{Mathf.FloorToInt(time % 60):00}";
+        public static string TypeAndNameToString(this ScriptableObject so) => $"{so.GetType().Name} [<color=cyan>{so.name}</color>]";
         public static string Encrypt(string pass)
         {
             var x = new MD5CryptoServiceProvider();
