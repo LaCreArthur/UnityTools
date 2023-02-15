@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 
 namespace AS.Toolbox.ScriptableObjects
 {
@@ -10,19 +9,18 @@ namespace AS.Toolbox.ScriptableObjects
         where TCallbacks : UnityEventBase
     {
         [SerializeField] protected TEvent eventSO;
-        [FormerlySerializedAs("callbacks")]
-        [SerializeField] protected TCallbacks events;
+        [SerializeField] protected TCallbacks callbacks;
 
         protected void AddListener()
         {
             if (eventSO != null)
-                eventSO.Add(new ReferencedEvent<TCallbacks>(events, this));
+                eventSO.Add(new ReferencedEvent<TCallbacks>(callbacks, this));
         }
 
         protected void RemoveListener()
         {
             if (eventSO != null)
-                eventSO.Remove(new ReferencedEvent<TCallbacks>(events, this));
+                eventSO.Remove(new ReferencedEvent<TCallbacks>(callbacks, this));
         }
 
         protected void OnEnable() => AddListener();
