@@ -25,10 +25,10 @@ namespace AS.Toolbox.Components
         public float delay;
 
         public bool resetTriggerOnStateEvent;
-        [ShowIf("resetTriggerOnStateEvent")]
-        public StateEnum resetTriggerState;
-        [ShowIf("resetTriggerOnStateEvent")]
-        public EventEnum resetTriggerEvent;
+        [ShowIf("resetTriggerOnStateEvent"), Indent]
+        public StateEnum whatState;
+        [ShowIf("resetTriggerOnStateEvent"), Indent]
+        public EventEnum whatEvent;
         [SerializeField, ReadOnly]
         bool triggered;
 
@@ -42,10 +42,10 @@ namespace AS.Toolbox.Components
             if (!resetTriggerOnStateEvent)
                 return;
 
-            GameState.GetState(resetTriggerState).Add(resetTriggerEvent, DisableTrigger, this);
+            GameState.GetState(whatState).Add(whatEvent, ResetTrigger, this);
         }
 
-        void DisableTrigger() => triggered = false;
+        void ResetTrigger() => triggered = false;
         void OnCollisionEnter(Collision other) => CheckCollisions(other, ColliderEventType.CollisionEnter);
         void OnCollisionStay(Collision other) => CheckCollisions(other, ColliderEventType.CollisionStay);
         void OnCollisionExit(Collision other) => CheckCollisions(other, ColliderEventType.CollisionExit);
