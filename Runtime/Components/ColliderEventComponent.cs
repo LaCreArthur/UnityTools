@@ -1,4 +1,4 @@
-using AS.Toolbox.Editor;
+using AS.Toolbox.Attributes;
 using AS.Toolbox.ScriptableObjects;
 using AS.Toolbox.Singletons;
 using AS.Toolbox.Utils;

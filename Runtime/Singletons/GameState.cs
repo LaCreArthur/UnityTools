@@ -1,16 +1,11 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using AS.Toolbox.ScriptableObjects;
-using AS.Toolbox.Utils;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace AS.Toolbox.Singletons
 {
-    [Serializable]
-    public class GameStateDictionary : UnitySerializedDictionary<StateEnum, GameStateSO> {}
-
     public class GameState : SingletonMono<GameState>
     {
         public StateEnum entryState = StateEnum.Home;

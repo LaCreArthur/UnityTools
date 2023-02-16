@@ -5,7 +5,7 @@ using UnityEditor;
 using Sirenix.OdinInspector.Editor;
 #endif
 
-namespace AS.Toolbox.Editor
+namespace AS.Toolbox.Attributes
 {
 
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
