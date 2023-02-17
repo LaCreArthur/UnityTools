@@ -1,5 +1,9 @@
 using UnityEngine;
 
+
+/// <summary>
+///     simple component that can be added to a prefab to make it poolable
+/// </summary>
 namespace AS.Toolbox.PrefabPool.PoolableComponent
 {
     public class SimplePoolable : MonoBehaviour, IPoolableComponent
