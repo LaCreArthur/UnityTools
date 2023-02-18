@@ -29,8 +29,6 @@ namespace AS.Toolbox.Components
         float _startY;
         float _startZ;
         bool _initialized;
-        [ShowInInspector, ReadOnly]
-        bool _isActive = true;
         Transform _targetInternal;
         Vector3 _velocity;
 
@@ -43,16 +41,16 @@ namespace AS.Toolbox.Components
             _startZ = position.z;
 
             _targetInternal = isSO ? targetSO.v : target;
-            if (onStart) SetActive(true);
+            SetEnable(onStart);
+            if (isSO) targetSO.AddOnChangeCallback(UpdateTarget, this);
         }
 
 
         void LateUpdate()
         {
-            if (!_isActive) return;
             if (_targetInternal == null)
             {
-                _isActive = false;
+                enabled = false;
                 return;
             }
             var tarPos = _targetInternal.position;
@@ -83,14 +81,20 @@ namespace AS.Toolbox.Components
                 transform.rotation = _targetInternal.rotation;
         }
 
-        public void SetActive(bool active)
+        public void SetEnable(bool enable)
         {
-            _isActive = active;
-            if (_isActive && keepStartingOffset && !_initialized)
+            enabled = enable;
+            if (enabled && keepStartingOffset && !_initialized)
             {
                 offset += transform.position - _targetInternal.position;
                 _initialized = true;
             }
+        }
+
+        void UpdateTarget()
+        {
+            _targetInternal = isSO ? targetSO.v : target;
+            if (onStart && !enabled) SetEnable(true);
         }
     }
 }
