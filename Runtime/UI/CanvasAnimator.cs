@@ -79,6 +79,13 @@ namespace AS.Toolbox.UI
 
             InitChildTweens();
 
+            if (associatedState != StateEnum.None)
+            {
+                var state = GameState.GetState(associatedState);
+                state.AddOnEnter(Show, this);
+                state.AddOnExit(Hide, this);
+            }
+
             if (startVisible)
                 Show();
             else
@@ -86,13 +93,7 @@ namespace AS.Toolbox.UI
                 _canvasGroup.alpha = 0;
                 _canvasGroup.blocksRaycasts = false;
                 _canvas.enabled = false;
-            }
-
-            if (associatedState != StateEnum.None)
-            {
-                var state = GameState.GetState(associatedState);
-                state.AddOnEnter(Show, this);
-                state.AddOnExit(Hide, this);
+                gameObject.SetActive(false);
             }
         }
 
@@ -129,6 +130,7 @@ namespace AS.Toolbox.UI
         [Button]
         public void Show()
         {
+            gameObject.SetActive(true);
             _canvas.enabled = true;
             onShowEvents.Invoke();
             _canvasGroup.blocksRaycasts = blockRaycastWhenVisible;
@@ -175,24 +177,25 @@ namespace AS.Toolbox.UI
 
             if (fadeOut)
             {
-                _canvasGroup.DOFade(0f, fadeOutDuration).SetEase(fadeOutEase).SetUpdate(true).OnComplete(() => _canvas.enabled = false);
+                _canvasGroup.DOFade(0f, fadeOutDuration).SetEase(fadeOutEase).SetUpdate(true).OnComplete(FinalizeHide);
             }
             if (slideOut)
             {
                 transform.DOLocalMove(GetSlideDirection(), slideOutDuration)
                     .SetEase(slideOutEase)
                     .SetUpdate(true)
-                    .OnComplete(() =>
-                        {
-                            _canvasGroup.alpha = 0;
-                            _canvas.enabled = false;
-                        }
-                    );
+                    .OnComplete(FinalizeHide);
             }
             if (!slideOut && !fadeOut)
             {
+                FinalizeHide();
+            }
+
+            void FinalizeHide()
+            {
                 _canvasGroup.alpha = 0;
                 _canvas.enabled = false;
+                gameObject.SetActive(false);
             }
         }
 
@@ -206,11 +209,13 @@ namespace AS.Toolbox.UI
         Vector3 GetSlideDirection()
         {
             return slideOutDirection switch
-            { SlideDirection.Left => new Vector3(-OutOfScreenWidth, 0, 0),
-              SlideDirection.Right => new Vector3(OutOfScreenWidth, 0, 0),
-              SlideDirection.Up => new Vector3(0, OutOfScreenHeight, 0),
-              SlideDirection.Down => new Vector3(0, -OutOfScreenHeight, 0),
-              _ => Vector3.zero };
+            {
+                SlideDirection.Left => new Vector3(-OutOfScreenWidth, 0, 0),
+                SlideDirection.Right => new Vector3(OutOfScreenWidth, 0, 0),
+                SlideDirection.Up => new Vector3(0, OutOfScreenHeight, 0),
+                SlideDirection.Down => new Vector3(0, -OutOfScreenHeight, 0),
+                _ => Vector3.zero,
+            };
         }
     }
 }
