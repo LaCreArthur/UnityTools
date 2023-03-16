@@ -8,10 +8,11 @@ namespace AS.Toolbox.Singletons
 {
     public class GameState : SingletonMono<GameState>
     {
-        public StateEnum entryState = StateEnum.Home;
         public GameStateVar var;
+        [SerializeField] StateEnum entryState = StateEnum.Home;
         [AssetList(AutoPopulate = true)]
-        public List<GameStateSO> gameStates;
+        [SerializeField] List<GameStateSO> gameStates;
+        [SerializeField] bool forceState;
 
         public static GameStateSO CurrentState => Instance.var.v;
         public static GameStateSO Home => GetState(StateEnum.Home);
@@ -30,7 +31,10 @@ namespace AS.Toolbox.Singletons
         IEnumerator DelayedEntryState()
         {
             yield return new WaitForEndOfFrame();
-            SetState(entryState);
+            yield return new WaitForEndOfFrame();
+            yield return new WaitForEndOfFrame();
+            if (forceState) Instance.var.FinalizeSetValue(GetState(entryState));
+            else SetState(entryState);
         }
     }
 }

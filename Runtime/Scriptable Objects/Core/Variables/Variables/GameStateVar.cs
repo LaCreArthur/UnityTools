@@ -25,11 +25,7 @@ namespace AS.Toolbox.ScriptableObjects
 
             if (v.validNextStates.Contains(newVal))
             {
-                if (v != null) v.RaiseOnExit();
-                v = newVal;
-                v.RaiseOnEnter();
-                if (debugStateChange)
-                    Debug.Log($"Game state switch from {PreviousValue.name} to {newVal.name}");
+                FinalizeSetValue(newVal);
             }
             else
             {
@@ -37,7 +33,12 @@ namespace AS.Toolbox.ScriptableObjects
             }
         }
 
-        [Button]
-        public void SetValueForced(GameStateSO newVal) => v = newVal;
+        [Button("Force SetValue")]
+        public void FinalizeSetValue(GameStateSO newVal)
+        {
+            if (v != null) v.RaiseOnExit();
+            v = newVal;
+            v.RaiseOnEnter();
+        }
     }
 }
