@@ -128,7 +128,7 @@ namespace AS.Toolbox.ScriptableObjects
         protected void OnChange()
         {
             if (logOnChange)
-                Debug.Log($"{this.TypeAndNameToString()} has changed to <color=yellow>{value}</color>");
+                Debug.Log($"{this.TypeAndNameToString()} has changed to <color=yellow>{value}</color>", this);
 
             onChange.Invoke(this, value, logListeners);
         }
