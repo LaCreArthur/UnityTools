@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using AS.Toolbox.ScriptableObjects;
 using AS.Toolbox.Singletons;
 using DG.Tweening;
@@ -85,7 +86,10 @@ namespace AS.Toolbox.UI
                 state.AddOnEnter(Show, this);
                 state.AddOnExit(Hide, this);
             }
+        }
 
+        IEnumerator Start()
+        {
             if (startVisible)
                 Show();
             else
@@ -93,6 +97,8 @@ namespace AS.Toolbox.UI
                 _canvasGroup.alpha = 0;
                 _canvasGroup.blocksRaycasts = false;
                 _canvas.enabled = false;
+                // wait for a frame so children components have time to initialize
+                yield return new WaitForEndOfFrame();
                 gameObject.SetActive(false);
             }
         }
