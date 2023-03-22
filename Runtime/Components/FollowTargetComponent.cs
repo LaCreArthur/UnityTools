@@ -42,7 +42,7 @@ namespace AS.Toolbox.Components
 
             _targetInternal = isSO ? targetSO.v : target;
             SetEnable(onStart);
-            if (isSO) targetSO.AddOnChangeCallback(UpdateTarget, this);
+            if (isSO) targetSO.AddOnChange(UpdateTarget, this);
         }
 
 

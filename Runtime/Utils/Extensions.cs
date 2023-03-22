@@ -59,8 +59,6 @@ namespace AS.Toolbox.Utils
 
         #endregion
 
-        public static bool CollidesWith(this LayerMask layerMask, int layer) => (1 << layer & layerMask) != 0;
-
         #region Arrays
 
         public static void MoveIndex(this ref int index, bool left, int maxIndex)
@@ -108,8 +106,20 @@ namespace AS.Toolbox.Utils
 
         #endregion
 
+        #region Strings
+
+        public static string ToCurrencyString(this double value, bool isDoge) => $"{value:#,0.##}<sprite index={(isDoge ? 0 : 1)}>";
+
         public static string ToTimeString(this float time) => $"{Mathf.FloorToInt(time / 60):0}:{Mathf.FloorToInt(time % 60):00}";
+
+        public static string ToStringWithNoNamespace<T>(this T obj)
+        {
+            string objString = obj.ToString();
+            string typeString = obj.GetType().Name;
+            return $"{objString[..objString.LastIndexOf('(')]}({typeString})";
+        }
         public static string TypeAndNameToString(this ScriptableObject so) => $"{so.GetType().Name} [<color=cyan>{so.name}</color>]";
+
         public static string Encrypt(string pass)
         {
             var x = new MD5CryptoServiceProvider();
@@ -124,6 +134,10 @@ namespace AS.Toolbox.Utils
             return s.ToString();
         }
 
+        #endregion
+
+        public static bool CollidesWith(this LayerMask layerMask, int layer) => (1 << layer & layerMask) != 0;
+
         public static List<T> Except<T>(this List<T> first, List<T> second)
         {
             List<T> firstCopy = new List<T>(first);
@@ -135,7 +149,6 @@ namespace AS.Toolbox.Utils
 
             return firstCopy;
         }
-
 
         public static void SetSizeWithCurrentAnchors(this RectTransform rectTransform, RectTransform otherRectTransform)
         {

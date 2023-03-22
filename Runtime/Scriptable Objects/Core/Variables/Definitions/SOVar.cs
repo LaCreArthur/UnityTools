@@ -30,12 +30,9 @@ namespace AS.Toolbox.ScriptableObjects
             return t;
         }
 
-        public void AddOnChangeCallback(Action callback, Object listener) => onChange.Add(callback, listener);
-
-        public void RemoveOnChangeCallback(Action callback, Object listener) => onChange.Remove(callback, listener);
-
+        public void AddOnChange(Action callback, Object listener) => onChange.Add(callback, listener);
+        public void RemoveOnChange(Action callback, Object listener) => onChange.Remove(callback, listener);
         void OnDisable() => onChange.RemoveRuntimeEvents();
-
         public override string ToString() => value.ToString().Replace($"({value.GetType()})", "");
 
         #region Value
@@ -128,7 +125,7 @@ namespace AS.Toolbox.ScriptableObjects
         protected void OnChange()
         {
             if (logOnChange)
-                Debug.Log($"{this.TypeAndNameToString()} has changed to <color=yellow>{value}</color>", this);
+                Debug.Log($"{this.TypeAndNameToString()} has changed to <color=yellow>{value.ToStringWithNoNamespace()}</color>", this);
 
             onChange.Invoke(this, value, logListeners);
         }

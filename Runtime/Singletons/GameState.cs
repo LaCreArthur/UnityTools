@@ -19,8 +19,8 @@ namespace AS.Toolbox.Singletons
         public static GameStateSO Settings => GetState(StateEnum.Settings);
         public static GameStateSO InGame => GetState(StateEnum.InGame);
         public static GameStateSO GameOver => GetState(StateEnum.GameOver);
-        public static GameStateSO Ending => GetState(StateEnum.Ending);
-        public static GameStateSO Win => GetState(StateEnum.Win);
+        // public static GameStateSO Ending => GetState(StateEnum.Ending);
+        // public static GameStateSO Win => GetState(StateEnum.Win);
 
         protected override void OnAwake() => StartCoroutine(DelayedEntryState());
         public static void SetState(GameStateSO newGS) => Instance.var.SetValue(newGS);
