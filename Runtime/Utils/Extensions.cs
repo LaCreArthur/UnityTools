@@ -108,7 +108,8 @@ namespace AS.Toolbox.Utils
 
         #region Strings
 
-        public static string ToCurrencyString(this double value, bool isDoge) => $"{value:#,0.##}<sprite index={(isDoge ? 0 : 1)}>";
+        public static string ToCurrencyString(this float value, bool isDoge) => $"{value:#,0.##}<sprite index={(isDoge ? 0 : 1)}>";
+        public static string ToCurrencyString(this double value, bool isDoge) => ((float)value).ToCurrencyString(isDoge);
 
         public static string ToTimeString(this float time) => $"{Mathf.FloorToInt(time / 60):0}:{Mathf.FloorToInt(time % 60):00}";
 
