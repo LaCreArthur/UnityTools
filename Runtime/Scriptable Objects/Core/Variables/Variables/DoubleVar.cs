@@ -22,6 +22,11 @@ namespace AS.Toolbox.ScriptableObjects
             v += x;
         }
 
+        public void Add(float x)// Unity doesn't serialize double
+        {
+            v += x;
+        }
+
         public static DoubleVar operator ++(DoubleVar a)
         {
             a.v++;
