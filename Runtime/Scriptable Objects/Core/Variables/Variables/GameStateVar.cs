@@ -6,7 +6,7 @@ namespace AS.Toolbox.ScriptableObjects
     // useful enum for the GameState static methods
     // todo: should be defined on a per project basis because it's not generic enough to be in the toolbox
     // also would be better avoid this enum but it's not possible to use the SOs in a static context
-    public enum StateEnum { None, Init, Home, Settings, InGame, GameOver }
+    public enum StateEnum { None, Init, Home, Settings, InGame, GameOver, Station }
     public enum EventEnum { OnEnter, OnExit }
 
     [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Game State Variable")]
@@ -24,13 +24,9 @@ namespace AS.Toolbox.ScriptableObjects
             }
 
             if (v.validNextStates.Contains(newVal))
-            {
                 FinalizeSetValue(newVal);
-            }
             else
-            {
                 Debug.LogWarning($"Game state try to switch from {v.name} to {newVal.name} which is not possible, state not changed !");
-            }
         }
 
         [Button("Force SetValue")]
