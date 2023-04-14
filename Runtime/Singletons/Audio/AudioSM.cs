@@ -16,17 +16,13 @@ namespace AS.Toolbox.Singletons.Audio
         [SerializeField]
         AudioMixerGroup sfxMixerGroup;
 
-        [Header("Sounds")]
-        [Range(0.0f, 1.0f)]
-        [SerializeField]
+        [Header("Sounds"), Range(0.0f, 1.0f), SerializeField]
         float soundVolume = 1.0f;
 
         [SerializeField]
         Sound[] sounds = Array.Empty<Sound>();
 
-        [Header("Musics")]
-        [Range(0.0f, 1.0f)]
-        [SerializeField]
+        [Header("Musics"), Range(0.0f, 1.0f), SerializeField]
         float musicVolume = 1.0f;
 
         [SerializeField]
@@ -133,7 +129,7 @@ namespace AS.Toolbox.Singletons.Audio
         {
             if (soundArray == null)
                 return;// scenes without audio manager are creating empty one
-            foreach (Sound s in soundArray)
+            foreach (var s in soundArray)
             {
                 s.source = gameObject.AddComponent<AudioSource>();
                 s.source.clip = s.clips.Count > 0 ? s.clips.GetRandom() : s.clips[0];
@@ -146,7 +142,7 @@ namespace AS.Toolbox.Singletons.Audio
         {
             if (isAudio != null && !isAudio.v)
                 return;
-            Sound s = Array.Find(sounds, item => item.name == sound);
+            var s = Array.Find(sounds, item => item.name == sound);
             if (s == null)
             {
                 Debug.LogWarning($"Play sound: {sound} not found!");
@@ -164,7 +160,7 @@ namespace AS.Toolbox.Singletons.Audio
 
         public void Stop(string sound)
         {
-            Sound s = Array.Find(sounds, item => item.name == sound);
+            var s = Array.Find(sounds, item => item.name == sound);
             if (s == null)
             {
                 Debug.LogWarning($"Stop sound: {sound} not found!");
@@ -181,6 +177,7 @@ namespace AS.Toolbox.Singletons.Audio
                 Play("audio");
                 AutoPlayMusic();
             }
+
             AudioListener.pause = !isAudio.v;
         }
     }
