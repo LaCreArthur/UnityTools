@@ -26,7 +26,7 @@ namespace AS.Toolbox.ScriptableObjects
 
         void OnEnable()
         {
-            foreach (var callback in callbacks)
+            foreach (KeyValuePair<GameStateSO, GameStateCallbacks> callback in callbacks)
             {
                 callback.Key.AddOnEnter(callback.Value.onEnter, this);
                 callback.Key.AddOnExit(callback.Value.onLeave, this);

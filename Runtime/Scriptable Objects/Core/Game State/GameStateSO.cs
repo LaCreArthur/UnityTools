@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 
 namespace AS.Toolbox.ScriptableObjects
 {
-    [CreateAssetMenu(menuName = "Scriptable Objects/Game State")]
+    [CreateAssetMenu(menuName = "Scriptable Objects/Game State"), AssetSelector]
     public class GameStateSO : ScriptableObject
     {
         public StateEnum stateEnum;
