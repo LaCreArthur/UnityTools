@@ -51,9 +51,7 @@ namespace AS.Toolbox.Utils
         {
             var component = c.GetComponent<T>();
             if (component == null)
-            {
                 component = c.gameObject.AddComponent<T>();
-            }
             return component;
         }
 
@@ -68,6 +66,7 @@ namespace AS.Toolbox.Utils
                 Debug.LogWarning($"MoveIndex: invalid maxIndex < 1 ({maxIndex})");
                 return;
             }
+
             int newIndex = index + (left ? -1 : 1);
             newIndex.ModIndex(maxIndex);
             index = newIndex;
@@ -80,6 +79,7 @@ namespace AS.Toolbox.Utils
                 Debug.LogWarning($"ModIndex: invalid maxIndex < 1 ({maxIndex})");
                 return;
             }
+
             int newIndex = index % maxIndex;
             if (newIndex < 0)
                 newIndex = maxIndex - 1;
@@ -92,8 +92,9 @@ namespace AS.Toolbox.Utils
             if (arrayLength <= 0)
             {
                 Debug.LogWarning("AtModIndex called on empty array");
-                return default;
+                return default(T);
             }
+
             ModIndex(ref index, arrayLength);
             return array[index];
         }
@@ -117,7 +118,8 @@ namespace AS.Toolbox.Utils
         {
             string objString = obj.ToString();
             string typeString = obj.GetType().Name;
-            return $"{objString[..objString.LastIndexOf('(')]}({typeString})";
+            int lastIndex = objString.LastIndexOf('(');
+            return lastIndex >= 0 ? $"{objString[..lastIndex]}({typeString})" : objString;
         }
         public static string TypeAndNameToString(this ScriptableObject so) => $"{so.GetType().Name} [<color=cyan>{so.name}</color>]";
 
@@ -128,9 +130,7 @@ namespace AS.Toolbox.Utils
             bs = x.ComputeHash(bs);
             var s = new StringBuilder();
             foreach (byte b in bs)
-            {
                 s.Append(b.ToString("x2").ToLower());
-            }
 
             return s.ToString();
         }
@@ -141,12 +141,10 @@ namespace AS.Toolbox.Utils
 
         public static List<T> Except<T>(this List<T> first, List<T> second)
         {
-            List<T> firstCopy = new List<T>(first);
-            foreach (T t in second)
-            {
+            var firstCopy = new List<T>(first);
+            foreach (var t in second)
                 if (first.Contains(t))
                     firstCopy.Remove(t);
-            }
 
             return firstCopy;
         }
