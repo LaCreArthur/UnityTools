@@ -27,29 +27,29 @@ namespace AS.Toolbox.ScriptableObjects
         void RemoveNullOnExit() => onExit.RemoveAll(l => l.reference == null);
 
 
-        public void Add(EventEnum eventEnum, Action callback, Object listener)
+        public void Add(EventEnum eventEnum, Action callback)
         {
             switch (eventEnum)
             {
                 case EventEnum.OnEnter:
-                    AddOnEnter(callback, listener);
+                    AddOnEnter(callback);
                     break;
                 case EventEnum.OnExit:
-                    AddOnExit(callback, listener);
+                    AddOnExit(callback);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
 
-        public void AddOnEnter(Action callback, Object listener)
+        public void AddOnEnter(Action callback)
         {
-            if (onEnter != null) onEnter.Add(callback, listener);
+            if (onEnter != null) onEnter.Add(callback, (Object)callback.Target);
             else Debug.Log($"{name} onEnter is null, cannot add callback", this);
         }
-        public void AddOnExit(Action callback, Object listener)
+        public void AddOnExit(Action callback)
         {
-            if (onExit != null) onExit.Add(callback, listener);
+            if (onExit != null) onExit.Add(callback, (Object)callback.Target);
             else Debug.Log($"{name} onExit is null, cannot add callback", this);
         }
         public void AddOnEnter(UnityEvent uEvent, Object listener)
@@ -62,14 +62,14 @@ namespace AS.Toolbox.ScriptableObjects
             if (onExit != null) onExit.Add(uEvent, listener);
             else Debug.Log($"{name} onExit is null, cannot add callback", this);
         }
-        public void RemoveOnEnter(Action callback, Object listener)
+        public void RemoveOnEnter(Action callback)
         {
-            if (onEnter != null) onEnter.Remove(callback, listener);
+            if (onEnter != null) onEnter.Remove(callback, (Object)callback.Target);
             else Debug.Log($"{name} onEnter is null, cannot remove callback", this);
         }
-        public void RemoveOnExit(Action callback, Object listener)
+        public void RemoveOnExit(Action callback)
         {
-            if (onExit != null) onExit.Remove(callback, listener);
+            if (onExit != null) onExit.Remove(callback, (Object)callback.Target);
             else Debug.Log($"{name} onExit is null, cannot remove callback", this);
         }
         public void RemoveOnEnter(UnityEvent uEvent, Object listener)

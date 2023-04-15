@@ -42,7 +42,7 @@ namespace AS.Toolbox.Components
 
             _targetInternal = isSO ? targetSO.v : target;
             SetEnable(onStart);
-            if (isSO) targetSO.AddOnChange(UpdateTarget, this);
+            if (isSO) targetSO.AddOnChange(UpdateTarget);
         }
 
 
@@ -53,26 +53,22 @@ namespace AS.Toolbox.Components
                 enabled = false;
                 return;
             }
+
             var tarPos = _targetInternal.position;
             if (!isSmoothed)
             {
-                transform.position = new Vector3(
-                    freezeX ? _startX : tarPos.x + offset.x,
+                transform.position = new Vector3(freezeX ? _startX : tarPos.x + offset.x,
                     freezeY ? _startY : tarPos.y + offset.y,
-                    freezeZ ? _startZ : tarPos.z + offset.z
-                );
+                    freezeZ ? _startZ : tarPos.z + offset.z);
             }
             else
             {
                 transform.position = Vector3.SmoothDamp(transform.position,
-                    new Vector3(
-                        freezeX ? _startX : tarPos.x + offset.x,
+                    new Vector3(freezeX ? _startX : tarPos.x + offset.x,
                         freezeY ? _startY : tarPos.y + offset.y,
-                        freezeZ ? _startZ : tarPos.z + offset.z
-                    ),
+                        freezeZ ? _startZ : tarPos.z + offset.z),
                     ref _velocity,
-                    smoothFollowFactor * Time.deltaTime
-                );
+                    smoothFollowFactor * Time.deltaTime);
             }
 
             if (isLookingAt)

@@ -9,8 +9,7 @@ using UnityEngine.Events;
 
 namespace AS.Toolbox.UI
 {
-    [RequireComponent(typeof(Canvas))]
-    [RequireComponent(typeof(CanvasGroup))]
+    [RequireComponent(typeof(Canvas)), RequireComponent(typeof(CanvasGroup))]
     public class CanvasAnimator : MonoBehaviour
     {
         public enum SlideDirection { Left, Right, Up, Down }
@@ -83,8 +82,8 @@ namespace AS.Toolbox.UI
             if (associatedState != StateEnum.None)
             {
                 var state = GameState.GetState(associatedState);
-                state.AddOnEnter(Show, this);
-                state.AddOnExit(Hide, this);
+                state.AddOnEnter(Show);
+                state.AddOnExit(Hide);
             }
         }
 
@@ -113,7 +112,7 @@ namespace AS.Toolbox.UI
             _childTweens = new List<Tween>();
 
             // get all DOTweenAnimation components in child
-            var tweenAnimations = GetComponentsInChildren<DOTweenAnimation>();
+            DOTweenAnimation[] tweenAnimations = GetComponentsInChildren<DOTweenAnimation>();
 
             GameObject previousChild = null;
             foreach (var anim in tweenAnimations)
@@ -145,13 +144,10 @@ namespace AS.Toolbox.UI
             DOTween.Kill(_canvasGroup);
             if (playChildTweensOnShow) _childTweens.ForEach(tween => tween.Play());
 
-
             if (fadeIn)
                 _canvasGroup.DOFade(1f, slideInDuration).SetEase(slideInEase).SetUpdate(true);
             else
-            {
                 _canvasGroup.alpha = 1;
-            }
 
             if (slideIn)
             {
@@ -180,11 +176,8 @@ namespace AS.Toolbox.UI
             DOTween.Kill(_canvasGroup);
             if (rewindChildTweensOnHide) _childTweens.ForEach(tween => tween.Rewind());
 
-
             if (fadeOut)
-            {
                 _canvasGroup.DOFade(0f, fadeOutDuration).SetEase(fadeOutEase).SetUpdate(true).OnComplete(FinalizeHide);
-            }
             if (slideOut)
             {
                 transform.DOLocalMove(GetSlideDirection(), slideOutDuration)
@@ -192,10 +185,9 @@ namespace AS.Toolbox.UI
                     .SetUpdate(true)
                     .OnComplete(FinalizeHide);
             }
+
             if (!slideOut && !fadeOut)
-            {
                 FinalizeHide();
-            }
 
             void FinalizeHide()
             {
@@ -212,16 +204,13 @@ namespace AS.Toolbox.UI
             Hide();
         }
 
-        Vector3 GetSlideDirection()
+        Vector3 GetSlideDirection() => slideOutDirection switch
         {
-            return slideOutDirection switch
-            {
-                SlideDirection.Left => new Vector3(-OutOfScreenWidth, 0, 0),
-                SlideDirection.Right => new Vector3(OutOfScreenWidth, 0, 0),
-                SlideDirection.Up => new Vector3(0, OutOfScreenHeight, 0),
-                SlideDirection.Down => new Vector3(0, -OutOfScreenHeight, 0),
-                _ => Vector3.zero,
-            };
-        }
+            SlideDirection.Left => new Vector3(-OutOfScreenWidth, 0, 0),
+            SlideDirection.Right => new Vector3(OutOfScreenWidth, 0, 0),
+            SlideDirection.Up => new Vector3(0, OutOfScreenHeight, 0),
+            SlideDirection.Down => new Vector3(0, -OutOfScreenHeight, 0),
+            _ => Vector3.zero,
+        };
     }
 }

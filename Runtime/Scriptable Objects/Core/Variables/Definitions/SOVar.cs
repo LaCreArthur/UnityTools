@@ -26,12 +26,12 @@ namespace AS.Toolbox.ScriptableObjects
 
         public virtual T Load()
         {
-            T t = default(T);
+            var t = default(T);
             return t;
         }
 
-        public void AddOnChange(Action callback, Object listener) => onChange.Add(callback, listener);
-        public void RemoveOnChange(Action callback, Object listener) => onChange.Remove(callback, listener);
+        public void AddOnChange(Action callback) => onChange.Add(callback, (Object)callback.Target);
+        public void RemoveOnChange(Action callback) => onChange.Remove(callback, (Object)callback.Target);
         void OnDisable() => onChange.RemoveRuntimeEvents();
         public override string ToString() => value.ToString().Replace($"({value.GetType()})", "");
 
@@ -134,13 +134,10 @@ namespace AS.Toolbox.ScriptableObjects
 
         #region Create Asset
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         public static bool IsCreating;
         public static bool IsNotCreating => !IsCreating;
-        public static void Create()
-        {
-            IsCreating = true;
-        }
+        public static void Create() => IsCreating = true;
 
         public static void CreateAsset()
         {
@@ -150,11 +147,8 @@ namespace AS.Toolbox.ScriptableObjects
             IsCreating = false;
         }
 
-        public static void CancelCreate()
-        {
-            IsCreating = false;
-        }
-        #endif
+        public static void CancelCreate() => IsCreating = false;
+#endif
 
         #endregion
     }

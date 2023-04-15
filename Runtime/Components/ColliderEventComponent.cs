@@ -13,8 +13,8 @@ namespace AS.Toolbox.Components
     {
         public ColliderEventType type;
         public bool useTag;
-        [ShowIf("useTag")]
-        [TagDropdown] public string otherTag = "";
+        [ShowIf("useTag"), TagDropdown]
+         public string otherTag = "";
         [HideIf("useTag")]
         public LayerMask otherLayer;
 
@@ -42,7 +42,7 @@ namespace AS.Toolbox.Components
             if (!resetTriggerOnStateEvent)
                 return;
 
-            GameState.GetState(whatState).Add(whatEvent, ResetTrigger, this);
+            GameState.GetState(whatState).Add(whatEvent, ResetTrigger);
         }
 
         void ResetTrigger() => triggered = false;

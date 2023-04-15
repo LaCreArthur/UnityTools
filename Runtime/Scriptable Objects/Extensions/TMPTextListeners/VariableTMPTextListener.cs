@@ -17,7 +17,7 @@ namespace AS.Toolbox.ScriptableObjects
         {
             _tmp = GetComponent<TMP_Text>();
             if (variable != null && autoUpdateOnChange)
-                variable.AddOnChange(SetText, this);
+                variable.AddOnChange(SetText);
             SetText();
         }
 
