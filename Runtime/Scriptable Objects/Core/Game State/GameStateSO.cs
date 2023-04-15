@@ -16,15 +16,15 @@ namespace AS.Toolbox.ScriptableObjects
         [FoldoutGroup("On Enter Listener")]
         public bool logOnEnterCallbacks;
         [FoldoutGroup("On Enter Listener"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullOnEnter")]
-        ReferencedCallbacks onEnter = new ReferencedCallbacks();
+        public ReferencedCallbacks OnEnter { get; private set; } = new ReferencedCallbacks();
 
         [FoldoutGroup("On Exit Listener")]
         public bool logOnExitCallbacks;
         [FoldoutGroup("On Exit Listener"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullOnExit")]
-        ReferencedCallbacks onExit = new ReferencedCallbacks();
+        public ReferencedCallbacks OnExit { get; private set; } = new ReferencedCallbacks();
 
-        void RemoveNullOnEnter() => onEnter.RemoveAll(l => l.reference == null);
-        void RemoveNullOnExit() => onExit.RemoveAll(l => l.reference == null);
+        void RemoveNullOnEnter() => OnEnter.RemoveAll(l => l.reference == null);
+        void RemoveNullOnExit() => OnExit.RemoveAll(l => l.reference == null);
 
 
         public void Add(EventEnum eventEnum, Action callback)
@@ -44,52 +44,52 @@ namespace AS.Toolbox.ScriptableObjects
 
         public void AddOnEnter(Action callback)
         {
-            if (onEnter != null) onEnter.Add(callback, (Object)callback.Target);
+            if (OnEnter != null) OnEnter.Add(callback, (Object)callback.Target);
             else Debug.Log($"{name} onEnter is null, cannot add callback", this);
         }
         public void AddOnExit(Action callback)
         {
-            if (onExit != null) onExit.Add(callback, (Object)callback.Target);
+            if (OnExit != null) OnExit.Add(callback, (Object)callback.Target);
             else Debug.Log($"{name} onExit is null, cannot add callback", this);
         }
         public void AddOnEnter(UnityEvent uEvent, Object listener)
         {
-            if (onEnter != null) onEnter.Add(uEvent, listener);
+            if (OnEnter != null) OnEnter.Add(uEvent, listener);
             else Debug.Log($"{name} onEnter is null, cannot add callback", this);
         }
         public void AddOnExit(UnityEvent uEvent, Object listener)
         {
-            if (onExit != null) onExit.Add(uEvent, listener);
+            if (OnExit != null) OnExit.Add(uEvent, listener);
             else Debug.Log($"{name} onExit is null, cannot add callback", this);
         }
         public void RemoveOnEnter(Action callback)
         {
-            if (onEnter != null) onEnter.Remove(callback, (Object)callback.Target);
+            if (OnEnter != null) OnEnter.Remove(callback, (Object)callback.Target);
             else Debug.Log($"{name} onEnter is null, cannot remove callback", this);
         }
         public void RemoveOnExit(Action callback)
         {
-            if (onExit != null) onExit.Remove(callback, (Object)callback.Target);
+            if (OnExit != null) OnExit.Remove(callback, (Object)callback.Target);
             else Debug.Log($"{name} onExit is null, cannot remove callback", this);
         }
         public void RemoveOnEnter(UnityEvent uEvent, Object listener)
         {
-            if (onEnter != null) onEnter.Remove(uEvent, listener);
+            if (OnEnter != null) OnEnter.Remove(uEvent, listener);
             else Debug.Log($"{name} onEnter is null, cannot remove callback", this);
         }
         public void RemoveOnExit(UnityEvent uEvent, Object listener)
         {
-            if (onExit != null) onExit.Remove(uEvent, listener);
+            if (OnExit != null) OnExit.Remove(uEvent, listener);
             else Debug.Log($"{name} onExit is null, cannot remove callback", this);
         }
         public void RaiseOnEnter()
         {
-            if (onEnter != null) onEnter.Invoke(this, logOnEnterCallbacks);
+            if (OnEnter != null) OnEnter.Invoke(this, logOnEnterCallbacks);
             else Debug.Log($"{name} onEnter is null", this);
         }
         public void RaiseOnExit()
         {
-            if (onExit != null) onExit.Invoke(this, logOnExitCallbacks);
+            if (OnExit != null) OnExit.Invoke(this, logOnExitCallbacks);
             else Debug.Log($"{name} onExit is null", this);
         }
     }
