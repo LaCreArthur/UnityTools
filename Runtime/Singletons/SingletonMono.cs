@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace AS.Toolbox.Singletons
 {
@@ -38,7 +37,7 @@ namespace AS.Toolbox.Singletons
                     s_instance = FindObjectOfType<T>();
                     if (s_instance == null)
                     {
-                        Type t = typeof(T);
+                        var t = typeof(T);
                         s_instance = new GameObject(t.Name, t).GetComponent<T>();
                     }
 
@@ -54,8 +53,7 @@ namespace AS.Toolbox.Singletons
             if (s_instance != null && s_instance != this)
             {
                 Debug.LogWarning($"An instance of \"{typeof(T).Name}\" already exists. Destroying duplicate one.",
-                    s_instance.gameObject
-                );
+                    s_instance.gameObject);
                 Destroy(this);
             }
             else
