@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using System.IO;
+﻿using System.IO;
 using UnityEditor;
 using UnityEditor.Presets;
 
@@ -19,16 +18,15 @@ namespace AS.Toolbox.Editor
             if (assetImporter.importSettingsMissing)
             {
                 // Get the current imported asset folder.
-                var path = Path.GetDirectoryName(assetPath);
+                string path = Path.GetDirectoryName(assetPath);
                 while (!string.IsNullOrEmpty(path))
                 {
                     // break the while loop if at root folder
                     if (path == "Assets" || path == "ProjectSettings" || path == "Library") break;
                     // Find all Preset assets in this folder.
-                    var presetGuids = AssetDatabase.FindAssets("t:Preset",
-                        new[] { path }
-                    );
-                    foreach (var presetGuid in presetGuids)
+                    string[] presetGuids = AssetDatabase.FindAssets("t:Preset",
+                        new[] { path });
+                    foreach (string presetGuid in presetGuids)
                     {
                         // Make sure we are not testing Presets in a subfolder.
                         string presetPath = AssetDatabase.GUIDToAssetPath(presetGuid);
@@ -48,4 +46,3 @@ namespace AS.Toolbox.Editor
         }
     }
 }
-#endif

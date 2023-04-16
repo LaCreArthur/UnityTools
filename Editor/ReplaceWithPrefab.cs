@@ -1,5 +1,3 @@
-#if UNITY_EDITOR
-
 using UnityEditor;
 using UnityEngine;
 
@@ -7,17 +5,14 @@ namespace AS.Toolbox.Editor
 {
     public class ReplaceWithPrefab : EditorWindow
     {
-        [SerializeField] private GameObject prefab;
-        [SerializeField] private bool usePrefabScale;
-        [SerializeField] private bool usePrefabRot;
+        [SerializeField] GameObject prefab;
+        [SerializeField] bool usePrefabScale;
+        [SerializeField] bool usePrefabRot;
 
         [MenuItem("Tools/My Utilities/Replace With Prefab")]
-        static void CreateReplaceWithPrefab()
-        {
-            GetWindow<ReplaceWithPrefab>();
-        }
+        static void CreateReplaceWithPrefab() => GetWindow<ReplaceWithPrefab>();
 
-        private void OnGUI()
+        void OnGUI()
         {
             prefab = (GameObject)EditorGUILayout.ObjectField("Prefab", prefab, typeof(GameObject), false);
             usePrefabRot = EditorGUILayout.Toggle("Use Prefab Rotations", usePrefabRot);
@@ -25,9 +20,9 @@ namespace AS.Toolbox.Editor
 
             if (GUILayout.Button("Replace"))
             {
-                var selection = Selection.gameObjects;
+                GameObject[] selection = Selection.gameObjects;
 
-                for (var i = selection.Length - 1; i >= 0; --i)
+                for (int i = selection.Length - 1; i >= 0; --i)
                 {
                     var selected = selection[i];
                     PrefabUtility.GetPrefabAssetType(prefab);
@@ -35,9 +30,7 @@ namespace AS.Toolbox.Editor
                     GameObject newObject;
 
                     if (prefabType != PrefabAssetType.NotAPrefab)
-                    {
                         newObject = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
-                    }
                     else
                     {
                         newObject = Instantiate(prefab);
@@ -52,8 +45,8 @@ namespace AS.Toolbox.Editor
 
                     Undo.RegisterCreatedObjectUndo(newObject, "Replace With Prefabs");
                     newObject.transform.SetParent(selected.transform.parent,
-                        newObject.GetComponent<RectTransform>() == null
-                    );//worldPositionStays to be false if newObject has a rectTransform (UI)
+                        newObject.GetComponent<RectTransform>() ==
+                        null);//worldPositionStays to be false if newObject has a rectTransform (UI)
                     newObject.transform.localPosition = selected.transform.localPosition;
                     newObject.transform.localRotation = usePrefabRot ? prefab.transform.localRotation : selected.transform.localRotation;
                     newObject.transform.localScale = usePrefabScale ? prefab.transform.localScale : selected.transform.localScale;
@@ -67,4 +60,3 @@ namespace AS.Toolbox.Editor
         }
     }
 }
-#endif
