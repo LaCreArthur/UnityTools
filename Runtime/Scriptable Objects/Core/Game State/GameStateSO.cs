@@ -10,7 +10,6 @@ namespace AS.Toolbox.ScriptableObjects
     [CreateAssetMenu(menuName = "Scriptable Objects/Game State"), AssetSelector]
     public class GameStateSO : ScriptableObject
     {
-        public StateEnum stateEnum;
         public List<GameStateSO> validNextStates = new List<GameStateSO>();
 
         [FoldoutGroup("On Enter Listener")]

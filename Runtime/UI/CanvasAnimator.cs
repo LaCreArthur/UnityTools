@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using AS.Toolbox.ScriptableObjects;
-using AS.Toolbox.Singletons;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -15,10 +14,12 @@ namespace AS.Toolbox.UI
         public enum SlideDirection { Left, Right, Up, Down }
 
         [Header("Start behaviours")]
-        public bool startVisible = true;
+        public bool startVisible = true;//todo should not start visible if associated state is not active
         public bool resetPosOnStart = true;
         public bool blockRaycastWhenVisible = true;
-        public StateEnum associatedState;
+        public GameStateSO associatedState;
+        [ListDrawerSettings(Expanded = true, AlwaysAddDefaultValue = true), InlineProperty(LabelWidth = 20)]
+        public GameStateSO[] associatedStates;
 
         [FoldoutGroup("On Show")]
         public bool playChildTweensOnShow;
@@ -79,16 +80,25 @@ namespace AS.Toolbox.UI
 
             InitChildTweens();
 
-            if (associatedState != StateEnum.None)
+            if (associatedState != null)
             {
-                var state = GameState.GetState(associatedState);
-                state.AddOnEnter(Show);
-                state.AddOnExit(Hide);
+                associatedState.AddOnEnter(Show);
+                associatedState.AddOnExit(Hide);
+            }
+
+            if (associatedStates.Length > 0)
+            {
+                foreach (var state in associatedStates)
+                {
+                    state.AddOnEnter(Show);
+                    state.AddOnExit(Hide);
+                }
             }
         }
 
         IEnumerator Start()
         {
+            isHidden = true;
             if (startVisible)
                 Show();
             else
@@ -135,6 +145,10 @@ namespace AS.Toolbox.UI
         [Button]
         public void Show()
         {
+            // if already visible, do nothing
+            if (!isHidden)
+                return;
+
             gameObject.SetActive(true);
             _canvas.enabled = true;
             onShowEvents.Invoke();
@@ -169,6 +183,10 @@ namespace AS.Toolbox.UI
         [Button]
         public void Hide()
         {
+            // if already hidden, do nothing
+            if (isHidden)
+                return;
+
             onHideEvents.Invoke();
             _canvasGroup.blocksRaycasts = false;
             isHidden = true;

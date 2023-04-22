@@ -1,6 +1,5 @@
 using AS.Toolbox.Attributes;
 using AS.Toolbox.ScriptableObjects;
-using AS.Toolbox.Singletons;
 using AS.Toolbox.Utils;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -14,7 +13,7 @@ namespace AS.Toolbox.Components
         public ColliderEventType type;
         public bool useTag;
         [ShowIf("useTag"), TagDropdown]
-         public string otherTag = "";
+        public string otherTag = "";
         [HideIf("useTag")]
         public LayerMask otherLayer;
 
@@ -26,7 +25,7 @@ namespace AS.Toolbox.Components
 
         public bool resetTriggerOnStateEvent;
         [ShowIf("resetTriggerOnStateEvent"), Indent]
-        public StateEnum whatState;
+        public GameStateSO whatState;
         [ShowIf("resetTriggerOnStateEvent"), Indent]
         public EventEnum whatEvent;
         [SerializeField, ReadOnly]
@@ -42,7 +41,13 @@ namespace AS.Toolbox.Components
             if (!resetTriggerOnStateEvent)
                 return;
 
-            GameState.GetState(whatState).Add(whatEvent, ResetTrigger);
+            if (whatState == null)
+            {
+                Debug.LogWarning($"No state set for {name}", this);
+                return;
+            }
+
+            whatState.Add(whatEvent, ResetTrigger);
         }
 
         void ResetTrigger() => triggered = false;
