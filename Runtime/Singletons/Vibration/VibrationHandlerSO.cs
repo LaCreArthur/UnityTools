@@ -1,7 +1,7 @@
+using UnityEngine;
 #if MOREMOUNTAINS_NICEVIBRATIONS
 using MoreMountains.NiceVibrations;
 #endif
-using UnityEngine;
 
 namespace AS.Toolbox.Singletons.Vibration
 {

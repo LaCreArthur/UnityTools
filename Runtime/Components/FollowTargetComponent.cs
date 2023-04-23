@@ -24,18 +24,18 @@ namespace AS.Toolbox.Components
         public bool isSmoothed;
         [ShowIf("isSmoothed")]
         public float smoothFollowFactor;
+        bool _initialized;
 
         float _startX;
         float _startY;
         float _startZ;
-        bool _initialized;
         Transform _targetInternal;
         Vector3 _velocity;
 
         void Start()
         {
             _initialized = false;
-            var position = transform.position;
+            Vector3 position = transform.position;
             _startX = position.x;
             _startY = position.y;
             _startZ = position.z;
@@ -54,7 +54,7 @@ namespace AS.Toolbox.Components
                 return;
             }
 
-            var tarPos = _targetInternal.position;
+            Vector3 tarPos = _targetInternal.position;
             if (!isSmoothed)
             {
                 transform.position = new Vector3(freezeX ? _startX : tarPos.x + offset.x,

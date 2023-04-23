@@ -49,14 +49,14 @@ namespace AS.Toolbox.Components
 
             whatState.Add(whatEvent, ResetTrigger);
         }
+        void OnCollisionEnter(Collision other) => CheckCollisions(other, ColliderEventType.CollisionEnter);
+        void OnCollisionExit(Collision other) => CheckCollisions(other, ColliderEventType.CollisionExit);
+        void OnCollisionStay(Collision other) => CheckCollisions(other, ColliderEventType.CollisionStay);
+        void OnTriggerEnter(Collider other) => CheckTrigger(other, ColliderEventType.TriggerEnter);
+        void OnTriggerExit(Collider other) => CheckTrigger(other, ColliderEventType.TriggerExit);
+        void OnTriggerStay(Collider other) => CheckTrigger(other, ColliderEventType.TriggerStay);
 
         void ResetTrigger() => triggered = false;
-        void OnCollisionEnter(Collision other) => CheckCollisions(other, ColliderEventType.CollisionEnter);
-        void OnCollisionStay(Collision other) => CheckCollisions(other, ColliderEventType.CollisionStay);
-        void OnCollisionExit(Collision other) => CheckCollisions(other, ColliderEventType.CollisionExit);
-        void OnTriggerEnter(Collider other) => CheckTrigger(other, ColliderEventType.TriggerEnter);
-        void OnTriggerStay(Collider other) => CheckTrigger(other, ColliderEventType.TriggerStay);
-        void OnTriggerExit(Collider other) => CheckTrigger(other, ColliderEventType.TriggerExit);
 
         void CheckCollisions(Collision other, ColliderEventType t)
         {

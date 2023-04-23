@@ -6,10 +6,7 @@ namespace AS.Toolbox.ScriptableObjects
     [CreateAssetMenu(menuName = "Scriptable Objects/Variables/String", fileName = "string_")]
     public class StringVar : SOVar<string>
     {
-        public override void Save()
-        {
-            EncryptedPlayerPrefs.SetString(name, v);
-        }
+        public override void Save() => EncryptedPlayerPrefs.SetString(name, v);
 
         public override string Load()
         {

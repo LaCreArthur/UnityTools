@@ -22,9 +22,10 @@ namespace AS.Toolbox.ModalWindow
         public GameObject altBtnGO;
         public TextMeshProUGUI altBtnTmp;
 
-        public static event Action OnClose;
-        Action _onAccept, _onDecline, _onAlt;
         bool _init;
+        Action _onAccept, _onDecline, _onAlt;
+
+        public static event Action OnClose;
 
         void Init() => _init = true;
 

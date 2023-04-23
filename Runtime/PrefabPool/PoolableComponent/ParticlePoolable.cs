@@ -9,10 +9,10 @@ namespace AS.Toolbox.PrefabPool.PoolableComponent
 
         void Awake() => _ps = GetComponent<ParticleSystem>();
 
+        public void OnParticleSystemStopped() => PrefabPoolingSystem.Despawn(gameObject);
+
         public void OnSpawn() => _ps.Play();
 
         public void OnDespawn() => _ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-
-        public void OnParticleSystemStopped() => PrefabPoolingSystem.Despawn(gameObject);
     }
 }

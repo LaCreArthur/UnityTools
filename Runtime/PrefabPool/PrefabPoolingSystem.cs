@@ -21,15 +21,12 @@ namespace AS.Toolbox.PrefabPool
         public static void DebugPools()
         {
             Debug.Log("Prefab Pool");
-            foreach (var prefabPool in s_prefabToPoolMap)
-            {
+            foreach (KeyValuePair<GameObject, PrefabPool> prefabPool in s_prefabToPoolMap)
                 Debug.Log($"{prefabPool.Key} - {prefabPool.Value}");
-            }
+
             Debug.Log("GO Pool");
-            foreach (var goPool in s_goToPoolMap)
-            {
+            foreach (KeyValuePair<GameObject, PrefabPool> goPool in s_goToPoolMap)
                 Debug.Log($"{goPool.Key} - {goPool.Value}");
-            }
         }
 
         /// <summary>
@@ -41,23 +38,19 @@ namespace AS.Toolbox.PrefabPool
         {
             var spawnedObjects = new List<GameObject>();
             for (int i = 0; i < numToSpawn; i++)
-            {
                 spawnedObjects.Add(Spawn(prefab));
-            }
 
             for (int i = 0; i < numToSpawn; i++)
-            {
                 Despawn(spawnedObjects[i]);
-            }
 
             spawnedObjects.Clear();
         }
 
         public static void PopulateWithInstances(GameObject prefab, GameObject root)
         {
-            var pool = GetOrCreatePool(prefab);
+            PrefabPool pool = GetOrCreatePool(prefab);
             var poolableComponent = prefab.GetComponent<IPoolableComponent>();
-            var childrenComponents = root.GetComponentsInChildren(poolableComponent.GetType(), true);
+            Component[] childrenComponents = root.GetComponentsInChildren(poolableComponent.GetType(), true);
 
             // Debug.Log($"Adding {childrenComponents.Length} GOs to pool {pool}");
             pool.AddInstances(childrenComponents);
@@ -71,7 +64,7 @@ namespace AS.Toolbox.PrefabPool
         /// <returns>the spawned instance</returns>
         public static GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent = null)
         {
-            var pool = GetOrCreatePool(prefab);
+            PrefabPool pool = GetOrCreatePool(prefab);
 
             GameObject go = pool.Spawn(prefab, position, rotation, parent);
             s_goToPoolMap.Add(go, pool);
@@ -80,11 +73,7 @@ namespace AS.Toolbox.PrefabPool
 
         static PrefabPool GetOrCreatePool(GameObject prefab)
         {
-            if (!s_prefabToPoolMap.ContainsKey(prefab))
-            {
-                s_prefabToPoolMap.Add(prefab, new PrefabPool());
-            }
-
+            s_prefabToPoolMap.TryAdd(prefab, new PrefabPool());
             return s_prefabToPoolMap[prefab];
         }
 
@@ -117,6 +106,7 @@ namespace AS.Toolbox.PrefabPool
                 Debug.LogError($"Object {obj.name} not managed by pool system!", obj);
                 return false;
             }
+
             PrefabPool pool = s_goToPoolMap[obj];
 
             if (pool.Despawn(obj))
@@ -124,6 +114,7 @@ namespace AS.Toolbox.PrefabPool
                 s_goToPoolMap.Remove(obj);
                 return true;
             }
+
             return false;
         }
     }

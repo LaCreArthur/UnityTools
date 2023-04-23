@@ -9,8 +9,8 @@ namespace AS.Toolbox.ModalWindow
     {
         public ModalWindow modalWindow;
 
-        Stack<IModalWindowProvider> _modalStack = new Stack<IModalWindowProvider>();
         IModalWindowProvider _lastModal;
+        Stack<IModalWindowProvider> _modalStack = new Stack<IModalWindowProvider>();
 
         void Start() => modalWindow.Close();
         void OnEnable() => ModalWindow.OnClose += OnModalClose;
@@ -22,9 +22,9 @@ namespace AS.Toolbox.ModalWindow
         {
             if (_lastModal != null) _modalStack.Push(_lastModal);
 
-            var onAccept = SetAction(provider.OnAccept());
-            var onDecline = SetAction(provider.OnDecline());
-            var onAlt = SetAction(provider.OnAlt());
+            Action onAccept = SetAction(provider.OnAccept());
+            Action onDecline = SetAction(provider.OnDecline());
+            Action onAlt = SetAction(provider.OnAlt());
 
             modalWindow.SetContent(provider.Title(), provider.Content(), provider.Sprite(),
                 provider.AcceptBtnText(), provider.DeclineBtnText(), provider.AcceptBtnText(), provider.BodyOrientation(), onAccept,

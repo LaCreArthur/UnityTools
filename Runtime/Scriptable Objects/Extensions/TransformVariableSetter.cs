@@ -17,9 +17,6 @@ namespace AS.Toolbox.ScriptableObjects
             if (onAwake) Set();
         }
 
-        public void Set()
-        {
-            transformVar.v = transform;
-        }
+        public void Set() => transformVar.v = transform;
     }
 }

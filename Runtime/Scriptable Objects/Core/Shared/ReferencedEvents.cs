@@ -9,11 +9,11 @@ namespace AS.Toolbox.ScriptableObjects
 {
     public abstract class ReferencedEventBase<T>
     {
-        [HideLabel]
-        public readonly Object reference;
 
         [HideReferenceObjectPicker, ListDrawerSettings(Expanded = true)]
         public readonly T callbacks;
+        [HideLabel]
+        public readonly Object reference;
 
         protected ReferencedEventBase(T callbacks, Object reference)
         {
@@ -51,9 +51,9 @@ namespace AS.Toolbox.ScriptableObjects
         public void LogCallback(ScriptableObject so, object t)
         {
             string header = LogHelper.HeaderStr(so.name, reference.name);
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             UnityEventHelper.GetPersistentCalls("events", reference).ForEach(c => LogHelper.LogMethodCall(c, header, t));
-            #endif
+#endif
         }
     }
 }

@@ -18,12 +18,14 @@ namespace AS.Toolbox.ScriptableObjects
         public void Add(Action<T> callback, Object listener)
         {
             // look in listeners if the listener already exists
-            var existingListener = runtimeLoadedListeners.Find(l => l.reference == listener);
+            ReferencedAction<T> existingListener = runtimeLoadedListeners.Find(l => l.reference == listener);
             if (existingListener?.callbacks == null || existingListener.reference == null)
             {
-                existingListener = new ReferencedAction<T>(new List<Action<T>> { callback },
-                    listener
-                );
+                existingListener = new ReferencedAction<T>(new List<Action<T>>
+                    {
+                        callback
+                    },
+                    listener);
                 runtimeLoadedListeners.Add(existingListener);
             }
             else
@@ -38,26 +40,28 @@ namespace AS.Toolbox.ScriptableObjects
 
         public void Remove(Action<T> callback, Object listener)
         {
-            var existingListener = runtimeLoadedListeners.Find(l => l.reference == listener);
+            ReferencedAction<T> existingListener = runtimeLoadedListeners.Find(l => l.reference == listener);
             existingListener?.callbacks?.Remove(callback);
         }
 
         public void Invoke(ScriptableObject caller, T param, bool logListeners)
         {
-            foreach (var referencedEvent in persistentListeners)
+            foreach (ReferencedEvent<UnityEvent<T>> referencedEvent in persistentListeners)
             {
                 if (logListeners)
                     referencedEvent.LogCallback(caller, param);
 
                 referencedEvent.callbacks.Invoke(param);
             }
-            foreach (var referencedAction in runtimeLoadedListeners)
+
+            foreach (ReferencedAction<T> referencedAction in runtimeLoadedListeners)
             {
                 if (logListeners)
                     referencedAction.LogCallback(caller, param);
 
                 referencedAction.callbacks.ForEach(c => c.Invoke(param));
             }
+
             base.Invoke(caller, logListeners);
         }
     }
@@ -66,13 +70,14 @@ namespace AS.Toolbox.ScriptableObjects
     {
         public override void Invoke(ScriptableObject caller, bool logListeners)
         {
-            foreach (var referencedEvent in persistentListeners)
+            foreach (ReferencedEvent<UnityEvent> referencedEvent in persistentListeners)
             {
                 if (logListeners)
                     referencedEvent.LogCallback(caller, null);
 
                 referencedEvent.callbacks.Invoke();
             }
+
             base.Invoke(caller, logListeners);
         }
 
@@ -99,12 +104,14 @@ namespace AS.Toolbox.ScriptableObjects
         public void Add(Action callback, Object listener)
         {
             // look in listeners if the listener already exists
-            var existingListener = runtimeListeners.Find(l => l.reference == listener);
+            ReferencedAction existingListener = runtimeListeners.Find(l => l.reference == listener);
             if (existingListener?.callbacks == null || existingListener.reference == null)
             {
-                existingListener = new ReferencedAction(new List<Action> { callback },
-                    listener
-                );
+                existingListener = new ReferencedAction(new List<Action>
+                    {
+                        callback
+                    },
+                    listener);
                 runtimeListeners.Add(existingListener);
             }
             else
@@ -113,7 +120,7 @@ namespace AS.Toolbox.ScriptableObjects
 
         public void Remove(Action callback, Object listener)
         {
-            var existingListener = runtimeListeners.Find(l => l.reference == listener);
+            ReferencedAction existingListener = runtimeListeners.Find(l => l.reference == listener);
             existingListener?.callbacks?.Remove(callback);
         }
 
@@ -125,9 +132,7 @@ namespace AS.Toolbox.ScriptableObjects
             for (int i = persistentListeners.Count - 1; i >= 0; i--)
             {
                 if (match(persistentListeners[i]))
-                {
                     persistentListeners.RemoveAt(i);
-                }
             }
         }
 
@@ -142,13 +147,13 @@ namespace AS.Toolbox.ScriptableObjects
             if (persistentListeners == null)
                 return;
 
-            var listener = persistentListeners.Find(l => l.reference == refAction.reference);
+            ReferencedEvent<T> listener = persistentListeners.Find(l => l.reference == refAction.reference);
             persistentListeners.Remove(listener);
         }
 
         public virtual void Invoke(ScriptableObject caller, bool logListeners)
         {
-            foreach (var referencedAction in runtimeListeners)
+            foreach (ReferencedAction referencedAction in runtimeListeners)
             {
                 if (logListeners)
                     referencedAction.LogCallback(caller);

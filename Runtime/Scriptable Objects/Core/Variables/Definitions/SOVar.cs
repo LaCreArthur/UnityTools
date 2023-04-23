@@ -19,8 +19,13 @@ namespace AS.Toolbox.ScriptableObjects
 #endif
             v = isStored ? Load() : initialValue;
         }
+        void OnDisable() => onChange.RemoveRuntimeEvents();
 
         void OnValidate() => OnEnable();
+
+        public void AddOnChange(Action callback) => onChange.Add(callback, (Object)callback.Target);
+        public void RemoveOnChange(Action callback) => onChange.Remove(callback, (Object)callback.Target);
+        public override string ToString() => value.ToString().Replace($"({value.GetType()})", "");
 
         public virtual void Save() {}
 
@@ -29,11 +34,6 @@ namespace AS.Toolbox.ScriptableObjects
             var t = default(T);
             return t;
         }
-
-        public void AddOnChange(Action callback) => onChange.Add(callback, (Object)callback.Target);
-        public void RemoveOnChange(Action callback) => onChange.Remove(callback, (Object)callback.Target);
-        void OnDisable() => onChange.RemoveRuntimeEvents();
-        public override string ToString() => value.ToString().Replace($"({value.GetType()})", "");
 
         #region Value
 

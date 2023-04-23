@@ -48,15 +48,6 @@ namespace AS.Toolbox.Singletons.Audio
 
         AudioSource _currentMusic;
 
-        protected override void OnAwake()
-        {
-            if (audioManagerSO != null)
-                audioManagerSO.audioSingleton = this;
-            InitSoundArray(sounds, false);
-            InitSoundArray(musics, true);
-            AutoPlayMusic();
-        }
-
         void OnEnable()
         {
             if (isAudio != null)
@@ -67,6 +58,15 @@ namespace AS.Toolbox.Singletons.Audio
         {
             if (isAudio != null)
                 isAudio.onChange.Remove(SetAudio, this);
+        }
+
+        protected override void OnAwake()
+        {
+            if (audioManagerSO != null)
+                audioManagerSO.audioSingleton = this;
+            InitSoundArray(sounds, false);
+            InitSoundArray(musics, true);
+            AutoPlayMusic();
         }
 
         void AutoPlayMusic()
@@ -85,14 +85,14 @@ namespace AS.Toolbox.Singletons.Audio
                 return;
             }
 
-            var m = Array.Find(musics, item => item.name == music);
+            Sound m = Array.Find(musics, item => item.name == music);
             if (m == null)
             {
                 Debug.LogWarning($"Play music: {music} not found!");
                 return;
             }
 
-            var clip = m.clips[clipId];
+            AudioClip clip = m.clips[clipId];
             _currentMusic = m.source;
             _currentMusic.clip = clip;
             _currentMusic.volume = m.volume * musicVolume;
@@ -129,7 +129,7 @@ namespace AS.Toolbox.Singletons.Audio
         {
             if (soundArray == null)
                 return;// scenes without audio manager are creating empty one
-            foreach (var s in soundArray)
+            foreach (Sound s in soundArray)
             {
                 s.source = gameObject.AddComponent<AudioSource>();
                 s.source.clip = s.clips.Count > 0 ? s.clips.GetRandom() : s.clips[0];
@@ -142,7 +142,7 @@ namespace AS.Toolbox.Singletons.Audio
         {
             if (isAudio != null && !isAudio.v)
                 return;
-            var s = Array.Find(sounds, item => item.name == sound);
+            Sound s = Array.Find(sounds, item => item.name == sound);
             if (s == null)
             {
                 Debug.LogWarning($"Play sound: {sound} not found!");
@@ -160,7 +160,7 @@ namespace AS.Toolbox.Singletons.Audio
 
         public void Stop(string sound)
         {
-            var s = Array.Find(sounds, item => item.name == sound);
+            Sound s = Array.Find(sounds, item => item.name == sound);
             if (s == null)
             {
                 Debug.LogWarning($"Stop sound: {sound} not found!");

@@ -6,6 +6,33 @@ namespace AS.Toolbox.Utils
 {
     public static class Extensions
     {
+
+        #region Math
+
+        public static float Normalize(this float x, float min, float max) => (x - min) / (max - min);
+
+        #endregion
+
+        public static bool CollidesWith(this LayerMask layerMask, int layer) => ((1 << layer) & layerMask) != 0;
+
+        public static List<T> Except<T>(this List<T> first, List<T> second)
+        {
+            var firstCopy = new List<T>(first);
+            foreach (T t in second)
+            {
+                if (first.Contains(t))
+                    firstCopy.Remove(t);
+            }
+
+            return firstCopy;
+        }
+
+        public static void SetSizeWithCurrentAnchors(this RectTransform rectTransform, RectTransform otherRectTransform)
+        {
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, otherRectTransform.rect.size.x);
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, otherRectTransform.rect.size.y);
+            rectTransform.anchoredPosition = otherRectTransform.anchoredPosition;
+        }
         #region Random
 
         public static T GetRandom<T>(this T[] array) => array[Random.Range(0, array.Length)];
@@ -21,11 +48,11 @@ namespace AS.Toolbox.Utils
 
         public static void Shuffle<T>(this IList<T> lst)
         {
-            var n = lst.Count;
+            int n = lst.Count;
             while (n > 1)
             {
                 n--;
-                var k = Random.Range(0, n + 1);
+                int k = Random.Range(0, n + 1);
                 (lst[k], lst[n]) = (lst[n], lst[k]);
             }
         }
@@ -65,7 +92,7 @@ namespace AS.Toolbox.Utils
                 return;
             }
 
-            var newIndex = index + (left ? -1 : 1);
+            int newIndex = index + (left ? -1 : 1);
             newIndex.ModIndex(maxIndex);
             index = newIndex;
         }
@@ -78,7 +105,7 @@ namespace AS.Toolbox.Utils
                 return;
             }
 
-            var newIndex = index % maxIndex;
+            int newIndex = index % maxIndex;
             if (newIndex < 0)
                 newIndex = maxIndex - 1;
             index = newIndex;
@@ -86,7 +113,7 @@ namespace AS.Toolbox.Utils
 
         public static T AtModIndex<T>(this T[] array, int index)
         {
-            var arrayLength = array.Length;
+            int arrayLength = array.Length;
             if (arrayLength <= 0)
             {
                 Debug.LogWarning("AtModIndex called on empty array");
@@ -99,12 +126,6 @@ namespace AS.Toolbox.Utils
 
         #endregion
 
-        #region Math
-
-        public static float Normalize(this float x, float min, float max) => (x - min) / (max - min);
-
-        #endregion
-
         #region Strings
 
         public static string ToCurrencyString(this float value, bool isDoge) => $"{value:#,0.##}<sprite index={(isDoge ? 0 : 1)}>";
@@ -114,32 +135,13 @@ namespace AS.Toolbox.Utils
 
         public static string ToStringWithNoNamespace<T>(this T obj)
         {
-            var objString = obj.ToString();
-            var typeString = obj.GetType().Name;
-            var lastIndex = objString.LastIndexOf('(');
+            string objString = obj.ToString();
+            string typeString = obj.GetType().Name;
+            int lastIndex = objString.LastIndexOf('(');
             return lastIndex >= 0 ? $"{objString[..lastIndex]}({typeString})" : objString;
         }
         public static string TypeAndNameToString(this ScriptableObject so) => $"{so.GetType().Name} [<color=cyan>{so.name}</color>]";
 
         #endregion
-
-        public static bool CollidesWith(this LayerMask layerMask, int layer) => (1 << layer & layerMask) != 0;
-
-        public static List<T> Except<T>(this List<T> first, List<T> second)
-        {
-            var firstCopy = new List<T>(first);
-            foreach (var t in second)
-                if (first.Contains(t))
-                    firstCopy.Remove(t);
-
-            return firstCopy;
-        }
-
-        public static void SetSizeWithCurrentAnchors(this RectTransform rectTransform, RectTransform otherRectTransform)
-        {
-            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, otherRectTransform.rect.size.x);
-            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, otherRectTransform.rect.size.y);
-            rectTransform.anchoredPosition = otherRectTransform.anchoredPosition;
-        }
     }
 }

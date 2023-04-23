@@ -12,6 +12,16 @@ namespace AS.Toolbox.ScriptableObjects
         public bool callEventsOnStart;
         public UnityEvent<T> events;
 
+        void Start()
+        {
+            if (callEventsOnStart)
+                events.Invoke(variable.v);
+        }
+
+        protected virtual void OnEnable() => Subscribe();
+
+        protected virtual void OnDisable() => Unsubscribe();
+
         void Subscribe()
         {
             if (variable != null)
@@ -22,16 +32,6 @@ namespace AS.Toolbox.ScriptableObjects
         {
             if (variable != null)
                 variable.onChange?.Remove(new ReferencedEvent<UnityEvent<T>>(events, this));
-        }
-
-        protected virtual void OnEnable() => Subscribe();
-
-        protected virtual void OnDisable() => Unsubscribe();
-
-        void Start()
-        {
-            if (callEventsOnStart)
-                events.Invoke(variable.v);
         }
     }
 }

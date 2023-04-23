@@ -25,9 +25,6 @@ namespace AS.Toolbox.PrefabPool
         }
 
         [Button]
-        public void DebugPools()
-        {
-            PrefabPoolingSystem.DebugPools();
-        }
+        public void DebugPools() => PrefabPoolingSystem.DebugPools();
     }
 }

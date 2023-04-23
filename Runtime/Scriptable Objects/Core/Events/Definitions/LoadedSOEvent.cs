@@ -12,17 +12,17 @@ namespace AS.Toolbox.ScriptableObjects
         [TitleGroup("Debug"), SerializeField, InlineButton("RaiseWithTestValue")]
         T testValue;
 
-        public void RaiseWithTestValue() => Raise(testValue);
-
         [TitleGroup("Listener"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullElements")]
         public ReferencedCallbacks<T> listeners = new ReferencedCallbacks<T>();
 
-        void RemoveNullElements() => listeners.RemoveAll(l => l.reference == null);
-
         public void Add(ReferencedEvent<UnityEvent<T>> rEvent) => listeners.Add(rEvent);
-        public void Add(Action<T> action) => listeners.Add(action, (Object)action.Target);
 
         public void Remove(ReferencedEvent<UnityEvent<T>> rEvent) => listeners.Remove(rEvent);
+
+        public void RaiseWithTestValue() => Raise(testValue);
+
+        void RemoveNullElements() => listeners.RemoveAll(l => l.reference == null);
+        public void Add(Action<T> action) => listeners.Add(action, (Object)action.Target);
         public void Remove(Action<T> action) => listeners.Remove(action, (Object)action.Target);
 
         public void Raise(T value)

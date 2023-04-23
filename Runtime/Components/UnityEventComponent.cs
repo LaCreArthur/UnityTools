@@ -5,25 +5,16 @@ namespace AS.Toolbox.Components
 {
     public class UnityEventComponent : MonoBehaviour
     {
-        public UnityEvent events;
-        public bool onlyOnce;
-        bool _invoked;
-
         public enum When
         {
             OnStart, OnUpdate, OnFixedUpdate, OnLateUpdate, OnDisable, OnEnable, OnDestroy, OnBecameVisible, OnBecameInvisible
         }
 
+        public UnityEvent events;
+        public bool onlyOnce;
         public When when;
 
-        void TryInvokeEvents(When whenEvent)
-        {
-            if (when != whenEvent || onlyOnce && _invoked)
-                return;
-
-            events.Invoke();
-            _invoked = true;
-        }
+        bool _invoked;
 
         void Start() => TryInvokeEvents(When.OnStart);
 
@@ -39,8 +30,17 @@ namespace AS.Toolbox.Components
 
         void OnDestroy() => TryInvokeEvents(When.OnDestroy);
 
+        void OnBecameInvisible() => TryInvokeEvents(When.OnBecameInvisible);
+
         void OnBecameVisible() => TryInvokeEvents(When.OnBecameVisible);
 
-        void OnBecameInvisible() => TryInvokeEvents(When.OnBecameInvisible);
+        void TryInvokeEvents(When whenEvent)
+        {
+            if (when != whenEvent || (onlyOnce && _invoked))
+                return;
+
+            events.Invoke();
+            _invoked = true;
+        }
     }
 }

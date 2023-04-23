@@ -14,11 +14,11 @@ namespace AS.Toolbox.ScriptableObjects
 
         [FoldoutGroup("On Enter Listener")]
         public bool logOnEnterCallbacks;
-        [FoldoutGroup("On Enter Listener"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullOnEnter")]
-        public ReferencedCallbacks OnEnter { get; private set; } = new ReferencedCallbacks();
 
         [FoldoutGroup("On Exit Listener")]
         public bool logOnExitCallbacks;
+        [FoldoutGroup("On Enter Listener"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullOnEnter")]
+        public ReferencedCallbacks OnEnter { get; private set; } = new ReferencedCallbacks();
         [FoldoutGroup("On Exit Listener"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullOnExit")]
         public ReferencedCallbacks OnExit { get; private set; } = new ReferencedCallbacks();
 

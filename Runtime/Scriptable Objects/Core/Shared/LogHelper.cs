@@ -16,14 +16,14 @@ namespace AS.Toolbox.ScriptableObjects
             DebugLogMethodCall(methodCall, header, target as Object);
         }
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         public static void LogMethodCall(PersistentCall p, string header, object t = null)
         {
             StringBuilder methodCall = MethodStr(p.GetTarget().GetType().Name, p.MethodName());
             methodCall.Append(p.IsDynamicParams() ? LP(t).P() : p.GetParams().P());
             DebugLogMethodCall(methodCall, header, p.GetTarget());
         }
-        #endif
+#endif
 
         static void DebugLogMethodCall(StringBuilder mc, string h, Object t) => Debug.Log(mc.Insert(0, h), t);
 

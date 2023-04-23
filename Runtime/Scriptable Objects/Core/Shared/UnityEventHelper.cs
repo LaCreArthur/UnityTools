@@ -17,16 +17,17 @@ namespace AS.Toolbox.ScriptableObjects
         public static List<PersistentCall> GetPersistentCalls(string srcEventName, Object srcObj)
         {
             var src = new SerializedObject(srcObj);
-            var srcCalls = src.FindProperty($"{srcEventName}.m_PersistentCalls.m_Calls");
+            SerializedProperty srcCalls = src.FindProperty($"{srcEventName}.m_PersistentCalls.m_Calls");
             var calls = new List<PersistentCall>();
             if (srcCalls == null)
                 return calls;
-            for (var srcIndex = 0; srcIndex < srcCalls.arraySize; srcIndex++)
+            for (int srcIndex = 0; srcIndex < srcCalls.arraySize; srcIndex++)
             {
-                var srcCallProperty = srcCalls.GetArrayElementAtIndex(srcIndex);
+                SerializedProperty srcCallProperty = srcCalls.GetArrayElementAtIndex(srcIndex);
                 var srcCall = new PersistentCall(srcCallProperty, "{srcEventName}");
                 calls.Add(srcCall);
             }
+
             return calls;
         }
     }

@@ -6,10 +6,7 @@ namespace AS.Toolbox.ScriptableObjects
     [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Float", fileName = "float_")]
     public class FloatVar : SOVar<float>
     {
-        public override void Save()
-        {
-            EncryptedPlayerPrefs.SetFloat(name, v);
-        }
+        public override void Save() => EncryptedPlayerPrefs.SetFloat(name, v);
 
         public override float Load()
         {

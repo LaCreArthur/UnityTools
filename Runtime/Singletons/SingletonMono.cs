@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace AS.Toolbox.Singletons
 {
@@ -16,9 +17,9 @@ namespace AS.Toolbox.Singletons
     public abstract class SingletonMono<T> : MonoBehaviour where T : SingletonMono<T>
     {
         static T s_instance;
+        bool _alive;
 
         bool _isAwoken;
-        bool _alive;
 
         public static T Instance
         {
@@ -37,7 +38,7 @@ namespace AS.Toolbox.Singletons
                     s_instance = FindObjectOfType<T>();
                     if (s_instance == null)
                     {
-                        var t = typeof(T);
+                        Type t = typeof(T);
                         s_instance = new GameObject(t.Name, t).GetComponent<T>();
                     }
 
@@ -47,6 +48,8 @@ namespace AS.Toolbox.Singletons
                 return s_instance;
             }
         }
+
+        public static bool IsAlive => s_instance != null && s_instance._alive;
 
         void Awake()
         {
@@ -64,6 +67,9 @@ namespace AS.Toolbox.Singletons
             }
         }
 
+        void OnDestroy() => _alive = false;
+        void OnApplicationQuit() => _alive = false;
+
         void Init()
         {
             if (_isAwoken)
@@ -75,10 +81,5 @@ namespace AS.Toolbox.Singletons
         }
 
         protected virtual void OnAwake() {}
-
-        public static bool IsAlive => s_instance != null && s_instance._alive;
-
-        void OnDestroy() => _alive = false;
-        void OnApplicationQuit() => _alive = false;
     }
 }

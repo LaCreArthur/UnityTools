@@ -1,8 +1,8 @@
 using AS.Toolbox.ScriptableObjects;
 using UnityEngine;
-
 #if MOREMOUNTAINS_NICEVIBRATIONS
 using MoreMountains.NiceVibrations;
+
 #else
 #endif
 namespace AS.Toolbox.Singletons.Vibration
@@ -12,9 +12,9 @@ namespace AS.Toolbox.Singletons.Vibration
         [SerializeField]
         BoolVar isHaptic;
 
-        void OnEnable() => isHaptic.onChange.Add(SetHapticsActive, this);
-
         void Awake() => SetHapticsActive();
+
+        void OnEnable() => isHaptic.onChange.Add(SetHapticsActive, this);
 
         public static void AndroidVibrate()
         {
@@ -26,15 +26,15 @@ namespace AS.Toolbox.Singletons.Vibration
         public void SetHapticsActive()
         {
 #if MOREMOUNTAINS_NICEVIBRATIONS
-        MMVibrationManager.SetHapticsActive(isHaptic.v);
-        MMVibrationManager.Haptic(HapticTypes.Success);
+            MMVibrationManager.SetHapticsActive(isHaptic.v);
+            MMVibrationManager.Haptic(HapticTypes.Success);
 #endif
         }
 
         public static void Vibrate()
         {
 #if MOREMOUNTAINS_NICEVIBRATIONS
-        MMVibrationManager.Vibrate();
+            MMVibrationManager.Vibrate();
 #endif
         }
 
@@ -42,42 +42,42 @@ namespace AS.Toolbox.Singletons.Vibration
             int controllerID)
         {
 #if MOREMOUNTAINS_NICEVIBRATIONS
-        MMVibrationManager.Haptic(type, defaultToRegularVibrate, alsoRumble, coroutineSupport, controllerID);
+            MMVibrationManager.Haptic(type, defaultToRegularVibrate, alsoRumble, coroutineSupport, controllerID);
 #endif
         }
 
         public static void Haptic(HapticTypes type)
         {
 #if MOREMOUNTAINS_NICEVIBRATIONS
-        MMVibrationManager.Haptic(type);
+            MMVibrationManager.Haptic(type);
 #endif
         }
 
         public static void HapticSuccess()
         {
 #if MOREMOUNTAINS_NICEVIBRATIONS
-        MMVibrationManager.Haptic(HapticTypes.Success);
+            MMVibrationManager.Haptic(HapticTypes.Success);
 #endif
         }
 
         public static void HapticFailure()
         {
 #if MOREMOUNTAINS_NICEVIBRATIONS
-        MMVibrationManager.Haptic(HapticTypes.Failure);
+            MMVibrationManager.Haptic(HapticTypes.Failure);
 #endif
         }
 
         public static void HapticSelection()
         {
 #if MOREMOUNTAINS_NICEVIBRATIONS
-        MMVibrationManager.Haptic(HapticTypes.Selection);
+            MMVibrationManager.Haptic(HapticTypes.Selection);
 #endif
         }
 
         public static void HapticSoft()
         {
 #if MOREMOUNTAINS_NICEVIBRATIONS
-        MMVibrationManager.Haptic(HapticTypes.SoftImpact);
+            MMVibrationManager.Haptic(HapticTypes.SoftImpact);
 #endif
         }
 
@@ -85,7 +85,7 @@ namespace AS.Toolbox.Singletons.Vibration
             int controllerID)
         {
 #if MOREMOUNTAINS_NICEVIBRATIONS
-        MMVibrationManager.TransientHaptic(intensity, sharpness, alsoRumble, coroutineSupport, controllerID);
+            MMVibrationManager.TransientHaptic(intensity, sharpness, alsoRumble, coroutineSupport, controllerID);
 #endif
         }
 
@@ -96,15 +96,15 @@ namespace AS.Toolbox.Singletons.Vibration
             MonoBehaviour coroutineSupport, bool threaded)
         {
 #if MOREMOUNTAINS_NICEVIBRATIONS
-        MMVibrationManager.TransientHaptic(vibrateiOS, iOSIntensity, iOSSharpness, vibrateAndroid, androidIntensity, androidSharpness,
-            vibrateAndroidIfNoSupport, rumble, rumbleIntensity, rumbleSharpness, controllerID, coroutineSupport, threaded);
+            MMVibrationManager.TransientHaptic(vibrateiOS, iOSIntensity, iOSSharpness, vibrateAndroid, androidIntensity, androidSharpness,
+                vibrateAndroidIfNoSupport, rumble, rumbleIntensity, rumbleSharpness, controllerID, coroutineSupport, threaded);
 #endif
         }
 
         public static void ContinuousHaptic(float intensity, float sharpness, float duration, HapticTypes fallbackOldiOS = HapticTypes.None)
         {
 #if MOREMOUNTAINS_NICEVIBRATIONS
-        MMVibrationManager.ContinuousHaptic(intensity, sharpness, duration, fallbackOldiOS);
+            MMVibrationManager.ContinuousHaptic(intensity, sharpness, duration, fallbackOldiOS);
 #endif
         }
 
@@ -113,7 +113,8 @@ namespace AS.Toolbox.Singletons.Vibration
             bool alsoRumble, int controllerID, bool threaded, bool fullIntensity)
         {
 #if MOREMOUNTAINS_NICEVIBRATIONS
-        MMVibrationManager.ContinuousHaptic(intensity, sharpness, duration, fallbackOldiOS, mono, alsoRumble, controllerID, threaded, fullIntensity);
+            MMVibrationManager.ContinuousHaptic(intensity, sharpness, duration, fallbackOldiOS, mono, alsoRumble, controllerID, threaded,
+                fullIntensity);
 #endif
         }
 
@@ -123,15 +124,16 @@ namespace AS.Toolbox.Singletons.Vibration
             float rumbleSharpness, int controllerID, float duration, MonoBehaviour mono, bool threaded, bool fullIntensity)
         {
 #if MOREMOUNTAINS_NICEVIBRATIONS
-        MMVibrationManager.ContinuousHaptic(vibrateiOS, iOSIntensity, iOSSharpness, fallbackOldiOS, vibrateAndroid, androidIntensity, androidSharpness,
-            vibrateAndroidIfNoSupport, rumble, rumbleIntensity, rumbleSharpness, controllerID, duration, mono, threaded, fullIntensity);
+            MMVibrationManager.ContinuousHaptic(vibrateiOS, iOSIntensity, iOSSharpness, fallbackOldiOS, vibrateAndroid, androidIntensity,
+                androidSharpness,
+                vibrateAndroidIfNoSupport, rumble, rumbleIntensity, rumbleSharpness, controllerID, duration, mono, threaded, fullIntensity);
 #endif
         }
 
         public static void UpdateContinuousHaptic(float intensity, float sharpness, bool alsoRumble, int controllerID, bool threaded)
         {
 #if MOREMOUNTAINS_NICEVIBRATIONS
-        MMVibrationManager.UpdateContinuousHaptic(intensity, sharpness, alsoRumble, controllerID, threaded);
+            MMVibrationManager.UpdateContinuousHaptic(intensity, sharpness, alsoRumble, controllerID, threaded);
 #endif
         }
 
@@ -139,22 +141,23 @@ namespace AS.Toolbox.Singletons.Vibration
             float androidSharpness, bool rumble, float rumbleIntensity, float rumbleSharpness, int controllerID, bool threaded)
         {
 #if MOREMOUNTAINS_NICEVIBRATIONS
-        MMVibrationManager.UpdateContinuousHaptic(ios, iosIntensity, iosSharpness, android, androidIntensity, androidSharpness, rumble, rumbleIntensity,
-            rumbleSharpness, controllerID, threaded);
+            MMVibrationManager.UpdateContinuousHaptic(ios, iosIntensity, iosSharpness, android, androidIntensity, androidSharpness, rumble,
+                rumbleIntensity,
+                rumbleSharpness, controllerID, threaded);
 #endif
         }
 
         public static void StopAllHaptics(bool alsoRumble)
         {
 #if MOREMOUNTAINS_NICEVIBRATIONS
-        MMVibrationManager.StopAllHaptics(alsoRumble);
+            MMVibrationManager.StopAllHaptics(alsoRumble);
 #endif
         }
 
         public static void StopContinuousHaptic(bool alsoRumble)
         {
 #if MOREMOUNTAINS_NICEVIBRATIONS
-        MMVibrationManager.StopContinuousHaptic(alsoRumble);
+            MMVibrationManager.StopContinuousHaptic(alsoRumble);
 #endif
         }
     }

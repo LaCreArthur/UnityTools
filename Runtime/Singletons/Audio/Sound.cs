@@ -12,16 +12,16 @@ namespace AS.Toolbox.Singletons.Audio
 
         public List<AudioClip> clips;
 
-        [FoldoutGroup("Options")] [Range(0f, 1f)]
+        [FoldoutGroup("Options"), Range(0f, 1f)]
         public float volume = 1f;
 
-        [FoldoutGroup("Options")] [Range(0f, 1f)]
+        [FoldoutGroup("Options"), Range(0f, 1f)]
         public float volumeVariance;
 
-        [FoldoutGroup("Options")] [Range(.1f, 3f)]
+        [FoldoutGroup("Options"), Range(.1f, 3f)]
         public float pitch = 1f;
 
-        [FoldoutGroup("Options")] [Range(0f, 1f)]
+        [FoldoutGroup("Options"), Range(0f, 1f)]
         public float pitchVariance;
 
         [FoldoutGroup("Options")] public bool loop;

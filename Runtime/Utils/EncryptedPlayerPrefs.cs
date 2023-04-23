@@ -17,14 +17,14 @@ namespace AS.Toolbox.Utils
         static string Md5(string strToEncrypt)
         {
             var ue = new UTF8Encoding();
-            var bytes = ue.GetBytes(strToEncrypt);
+            byte[] bytes = ue.GetBytes(strToEncrypt);
 
             var md5 = new MD5CryptoServiceProvider();
-            var hashBytes = md5.ComputeHash(bytes);
+            byte[] hashBytes = md5.ComputeHash(bytes);
 
-            var hashString = "";
+            string hashString = "";
 
-            for (var i = 0; i < hashBytes.Length; i++)
+            for (int i = 0; i < hashBytes.Length; i++)
                 hashString += Convert.ToString(hashBytes[i], 16).PadLeft(2, '0');
 
             return hashString.PadLeft(32, '0');
@@ -32,20 +32,20 @@ namespace AS.Toolbox.Utils
 
         static void SaveEncryption(string key, string type, string value)
         {
-            var keyIndex = (int)Mathf.Floor(Random.value * Keys.Length);
-            var secretKey = Keys[keyIndex];
-            var check = Md5(type + "_" + PRIVATE_KEY + "_" + secretKey + "_" + value);
+            int keyIndex = (int)Mathf.Floor(Random.value * Keys.Length);
+            string secretKey = Keys[keyIndex];
+            string check = Md5(type + "_" + PRIVATE_KEY + "_" + secretKey + "_" + value);
             PlayerPrefs.SetString(key + "_encryption_check", check);
             PlayerPrefs.SetInt(key + "_used_key", keyIndex);
         }
 
         static bool CheckEncryption(string key, string type, string value)
         {
-            var keyIndex = PlayerPrefs.GetInt(key + "_used_key");
-            var secretKey = Keys[keyIndex];
-            var check = Md5(type + "_" + PRIVATE_KEY + "_" + secretKey + "_" + value);
+            int keyIndex = PlayerPrefs.GetInt(key + "_used_key");
+            string secretKey = Keys[keyIndex];
+            string check = Md5(type + "_" + PRIVATE_KEY + "_" + secretKey + "_" + value);
             if (!PlayerPrefs.HasKey(key + "_encryption_check")) return false;
-            var storedCheck = PlayerPrefs.GetString(key + "_encryption_check");
+            string storedCheck = PlayerPrefs.GetString(key + "_encryption_check");
             return storedCheck == check;
         }
 
@@ -71,9 +71,9 @@ namespace AS.Toolbox.Utils
 
         public static void SetDouble(string key, double value)
         {
-            var storeBytes = BitConverter.GetBytes(value);
-            var storeIntLow = BitConverter.ToInt32(storeBytes, 0);
-            var storeIntHigh = BitConverter.ToInt32(storeBytes, 4);
+            byte[] storeBytes = BitConverter.GetBytes(value);
+            int storeIntLow = BitConverter.ToInt32(storeBytes, 0);
+            int storeIntHigh = BitConverter.ToInt32(storeBytes, 4);
             PlayerPrefs.SetInt($"{key}_low", storeIntLow);
             PlayerPrefs.SetInt($"{key}_high", storeIntHigh);
 
@@ -89,37 +89,37 @@ namespace AS.Toolbox.Utils
 
         public static int GetInt(string key, int defaultValue)
         {
-            var value = PlayerPrefs.GetInt(key);
+            int value = PlayerPrefs.GetInt(key);
             return !CheckEncryption(key, "int", value.ToString()) ? defaultValue : value;
         }
 
         public static bool GetBool(string key, bool defaultValue = false)
         {
-            var tmp = GetInt(key, Convert.ToInt32(defaultValue));
+            int tmp = GetInt(key, Convert.ToInt32(defaultValue));
             return Convert.ToBoolean(tmp);
         }
 
         public static float GetFloat(string key, float defaultValue)
         {
-            var value = PlayerPrefs.GetFloat(key);
+            float value = PlayerPrefs.GetFloat(key);
             return !CheckEncryption(key, "float", Mathf.Floor(value * 1000).ToString()) ? defaultValue : value;
         }
 
         public static string GetString(string key, string defaultValue)
         {
-            var value = PlayerPrefs.GetString(key);
+            string value = PlayerPrefs.GetString(key);
             return !CheckEncryption(key, "string", value) ? defaultValue : value;
         }
 
         public static double GetDouble(string key, double defaultValue)
         {
-            var valueLow = PlayerPrefs.GetInt($"{key}_low");
-            var valueHigh = PlayerPrefs.GetInt($"{key}_high");
+            int valueLow = PlayerPrefs.GetInt($"{key}_low");
+            int valueHigh = PlayerPrefs.GetInt($"{key}_high");
 
             if (!CheckEncryption($"{key}_low", "int", valueLow.ToString())) return defaultValue;
             if (!CheckEncryption($"{key}_high", "int", valueHigh.ToString())) return defaultValue;
 
-            var retrieveBytes = new byte[8];
+            byte[] retrieveBytes = new byte[8];
             Array.Copy(BitConverter.GetBytes(valueLow), retrieveBytes, 4);
             Array.Copy(BitConverter.GetBytes(valueHigh), 0, retrieveBytes, 4, 4);
             return BitConverter.ToDouble(retrieveBytes, 0);

@@ -62,10 +62,10 @@ namespace AS.Toolbox.UI
 
         [Header("State"), SerializeField, ReadOnly]
         public bool isHidden;
-
-        List<Tween> _childTweens;
-        CanvasGroup _canvasGroup;
+        
         Canvas _canvas;
+        CanvasGroup _canvasGroup;
+        List<Tween> _childTweens;
 
         static float OutOfScreenWidth => Screen.width * 1.5f;
         static float OutOfScreenHeight => Screen.height * 1.5f;
@@ -88,7 +88,7 @@ namespace AS.Toolbox.UI
 
             if (associatedStates.Length > 0)
             {
-                foreach (var state in associatedStates)
+                foreach (GameStateSO state in associatedStates)
                 {
                     state.AddOnEnter(Show);
                     state.AddOnExit(Hide);
@@ -125,7 +125,7 @@ namespace AS.Toolbox.UI
             DOTweenAnimation[] tweenAnimations = GetComponentsInChildren<DOTweenAnimation>();
 
             GameObject previousChild = null;
-            foreach (var anim in tweenAnimations)
+            foreach (DOTweenAnimation anim in tweenAnimations)
             {
                 // no need to add tweens if there is more than one DOTweenAnimation component on the same GO
                 // since anim.GetTweens() returns all the tweens
@@ -228,7 +228,7 @@ namespace AS.Toolbox.UI
             SlideDirection.Right => new Vector3(OutOfScreenWidth, 0, 0),
             SlideDirection.Up => new Vector3(0, OutOfScreenHeight, 0),
             SlideDirection.Down => new Vector3(0, -OutOfScreenHeight, 0),
-            _ => Vector3.zero,
+            _ => Vector3.zero
         };
     }
 }

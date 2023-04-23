@@ -6,10 +6,7 @@ namespace AS.Toolbox.ScriptableObjects
     [CreateAssetMenu(menuName = "Scriptable Objects/Variables/Double", fileName = "double_")]
     public class DoubleVar : SOVar<double>
     {
-        public override void Save()
-        {
-            EncryptedPlayerPrefs.SetDouble(name, v);
-        }
+        public override void Save() => EncryptedPlayerPrefs.SetDouble(name, v);
 
         public override double Load()
         {
@@ -17,15 +14,10 @@ namespace AS.Toolbox.ScriptableObjects
             return v;
         }
 
-        public void Add(double x)
-        {
-            v += x;
-        }
+        public void Add(double x) => v += x;
 
-        public void Add(float x)// Unity doesn't serialize double
-        {
-            v += x;
-        }
+        // Unity doesn't serialize double
+        public void Add(float x) => v += x;
 
         public static DoubleVar operator ++(DoubleVar a)
         {

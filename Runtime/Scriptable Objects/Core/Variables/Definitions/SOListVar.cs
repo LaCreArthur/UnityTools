@@ -13,8 +13,12 @@ namespace AS.Toolbox.ScriptableObjects
         [FoldoutGroup("On Removed"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullRemoved")]
         public ReferencedCallbacks<T> onRemoved = new ReferencedCallbacks<T>();
 
-        void RemoveNullAdded() => onAdded?.RemoveAll(c => c.reference == null);
-        void RemoveNullRemoved() => onRemoved?.RemoveAll(c => c.reference == null);
+        public T this[int i]
+        {
+            get => v[i];
+            set => v[i] = value;
+        }
+        public int Count => v.Count;
 
         protected override void OnEnable()
         {
@@ -23,11 +27,8 @@ namespace AS.Toolbox.ScriptableObjects
             if (clearOnEnable) Clear();
         }
 
-        public T this[int i]
-        {
-            get => v[i];
-            set => v[i] = value;
-        }
+        void RemoveNullAdded() => onAdded?.RemoveAll(c => c.reference == null);
+        void RemoveNullRemoved() => onRemoved?.RemoveAll(c => c.reference == null);
 
         public void Add(T x)
         {
@@ -43,6 +44,7 @@ namespace AS.Toolbox.ScriptableObjects
                 OnChange();
                 onRemoved.Invoke(this, x, false);
             }
+
             return remove;
         }
         public void Clear()
@@ -50,6 +52,5 @@ namespace AS.Toolbox.ScriptableObjects
             v.Clear();
             OnChange();
         }
-        public int Count => v.Count;
     }
 }
