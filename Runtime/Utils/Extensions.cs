@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using UnityEngine;
 
 namespace AS.Toolbox.Utils
@@ -23,11 +21,11 @@ namespace AS.Toolbox.Utils
 
         public static void Shuffle<T>(this IList<T> lst)
         {
-            int n = lst.Count;
+            var n = lst.Count;
             while (n > 1)
             {
                 n--;
-                int k = Random.Range(0, n + 1);
+                var k = Random.Range(0, n + 1);
                 (lst[k], lst[n]) = (lst[n], lst[k]);
             }
         }
@@ -67,7 +65,7 @@ namespace AS.Toolbox.Utils
                 return;
             }
 
-            int newIndex = index + (left ? -1 : 1);
+            var newIndex = index + (left ? -1 : 1);
             newIndex.ModIndex(maxIndex);
             index = newIndex;
         }
@@ -80,7 +78,7 @@ namespace AS.Toolbox.Utils
                 return;
             }
 
-            int newIndex = index % maxIndex;
+            var newIndex = index % maxIndex;
             if (newIndex < 0)
                 newIndex = maxIndex - 1;
             index = newIndex;
@@ -88,7 +86,7 @@ namespace AS.Toolbox.Utils
 
         public static T AtModIndex<T>(this T[] array, int index)
         {
-            int arrayLength = array.Length;
+            var arrayLength = array.Length;
             if (arrayLength <= 0)
             {
                 Debug.LogWarning("AtModIndex called on empty array");
@@ -116,24 +114,12 @@ namespace AS.Toolbox.Utils
 
         public static string ToStringWithNoNamespace<T>(this T obj)
         {
-            string objString = obj.ToString();
-            string typeString = obj.GetType().Name;
-            int lastIndex = objString.LastIndexOf('(');
+            var objString = obj.ToString();
+            var typeString = obj.GetType().Name;
+            var lastIndex = objString.LastIndexOf('(');
             return lastIndex >= 0 ? $"{objString[..lastIndex]}({typeString})" : objString;
         }
         public static string TypeAndNameToString(this ScriptableObject so) => $"{so.GetType().Name} [<color=cyan>{so.name}</color>]";
-
-        public static string Encrypt(string pass)
-        {
-            var x = new MD5CryptoServiceProvider();
-            byte[] bs = Encoding.UTF8.GetBytes(pass);
-            bs = x.ComputeHash(bs);
-            var s = new StringBuilder();
-            foreach (byte b in bs)
-                s.Append(b.ToString("x2").ToLower());
-
-            return s.ToString();
-        }
 
         #endregion
 
