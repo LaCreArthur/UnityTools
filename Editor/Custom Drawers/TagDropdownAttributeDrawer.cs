@@ -1,19 +1,21 @@
-﻿using AS.Toolbox.Attributes;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(TagDropdownAttribute))]
-public class TagDropdownAttributeDrawer : PropertyDrawer
+namespace AS.Toolbox.Attributes
 {
-    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    [CustomPropertyDrawer(typeof(TagDropdownAttribute))]
+    public class TagDropdownAttributeDrawer : PropertyDrawer
     {
-        if (property.propertyType == SerializedPropertyType.String)
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            EditorGUI.BeginProperty(position, label, property);
-            property.stringValue = EditorGUI.TagField(position, label, property.stringValue);
-            EditorGUI.EndProperty();
+            if (property.propertyType == SerializedPropertyType.String)
+            {
+                EditorGUI.BeginProperty(position, label, property);
+                property.stringValue = EditorGUI.TagField(position, label, property.stringValue);
+                EditorGUI.EndProperty();
+            }
+            else
+                EditorGUI.LabelField(position, label, new GUIContent("Error: Use TagDropdown with string type only"));
         }
-        else
-            EditorGUI.LabelField(position, label, new GUIContent("Error: Use TagDropdown with string type only"));
     }
 }

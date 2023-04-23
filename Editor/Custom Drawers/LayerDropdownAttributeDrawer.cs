@@ -1,19 +1,21 @@
-﻿using AS.Toolbox.Attributes;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(LayerDropdownAttribute))]
-public class LayerDropdownAttributeDrawer : PropertyDrawer
+namespace AS.Toolbox.Attributes
 {
-    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    [CustomPropertyDrawer(typeof(LayerDropdownAttribute))]
+    public class LayerDropdownAttributeDrawer : PropertyDrawer
     {
-        if (property.propertyType == SerializedPropertyType.Integer)
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            EditorGUI.BeginProperty(position, label, property);
-            property.intValue = EditorGUI.LayerField(position, label, property.intValue);
-            EditorGUI.EndProperty();
+            if (property.propertyType == SerializedPropertyType.Integer)
+            {
+                EditorGUI.BeginProperty(position, label, property);
+                property.intValue = EditorGUI.LayerField(position, label, property.intValue);
+                EditorGUI.EndProperty();
+            }
+            else
+                EditorGUI.LabelField(position, label, new GUIContent("Error: Use LayerDropdown with int type only"));
         }
-        else
-            EditorGUI.LabelField(position, label, new GUIContent("Error: Use LayerDropdown with int type only"));
     }
 }
