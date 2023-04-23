@@ -6,16 +6,15 @@ namespace AS.Toolbox.PrefabPool.PoolableComponent
     public class ResetRBPoolable : MonoBehaviour, IPoolableComponent
     {
         Rigidbody _rb;
+        Rigidbody Rb => _rb ??= GetComponent<Rigidbody>();
 
         public void OnSpawn() {}
 
         public void OnDespawn()
         {
-            if (_rb == null)
-                _rb = GetComponent<Rigidbody>();// lazy init
-            if (_rb == null)
-                return;// no rb
-            _rb.velocity = _rb.angularVelocity = Vector3.zero;
+            if (Rb == null)
+                return;
+            Rb.velocity = Rb.angularVelocity = Vector3.zero;
         }
     }
 }
