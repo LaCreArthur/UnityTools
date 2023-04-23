@@ -14,13 +14,13 @@ namespace AS.Toolbox.UI
         [SerializeField] Ease easeIn = Ease.InOutSine;
         [SerializeField] Ease easeOut = Ease.InOutSine;
         [SerializeField] bool onEnable;
-        [ShowIf("onEnable")]
-        [SerializeField] AnimType animType;
+        [ShowIf("onEnable"), SerializeField]
+        AnimType animType;
         [SerializeField] bool loop;
-        [ShowIf("loop")]
-        [SerializeField] int loops;
-        [ShowIf("loop")]
-        [SerializeField] LoopType loopType;
+        [ShowIf("loop"), SerializeField]
+        int loops;
+        [ShowIf("loop"), SerializeField]
+        LoopType loopType;
 
         RectTransform _rect;
         Sequence _inAndOutLoopSeq;

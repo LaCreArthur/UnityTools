@@ -1,6 +1,7 @@
 using AS.Toolbox.Attributes;
 using AS.Toolbox.ScriptableObjects;
 using AS.Toolbox.Utils;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
