@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
-namespace AS.Toolbox.Modal_Window
+namespace AS.Toolbox.ModalWindow
 {
     public interface IModalWindowProvider
     {

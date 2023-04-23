@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace AS.Toolbox.Modal_Window
+namespace AS.Toolbox.ModalWindow
 {
     [Serializable]
     public class ModalWindowProvider : IModalWindowProvider

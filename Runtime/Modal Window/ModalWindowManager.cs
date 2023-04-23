@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace AS.Toolbox.Modal_Window
+namespace AS.Toolbox.ModalWindow
 {
     public class ModalWindowManager : MonoBehaviour
     {
@@ -22,14 +22,13 @@ namespace AS.Toolbox.Modal_Window
         {
             if (_lastModal != null) _modalStack.Push(_lastModal);
 
-            Action onAccept = SetAction(provider.OnAccept());
-            Action onDecline = SetAction(provider.OnDecline());
-            Action onAlt = SetAction(provider.OnAlt());
+            var onAccept = SetAction(provider.OnAccept());
+            var onDecline = SetAction(provider.OnDecline());
+            var onAlt = SetAction(provider.OnAlt());
 
             modalWindow.SetContent(provider.Title(), provider.Content(), provider.Sprite(),
                 provider.AcceptBtnText(), provider.DeclineBtnText(), provider.AcceptBtnText(), provider.BodyOrientation(), onAccept,
-                onDecline, onAlt
-            );
+                onDecline, onAlt);
             modalWindow.gameObject.SetActive(true);
             _lastModal = provider;
         }

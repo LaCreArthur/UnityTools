@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace AS.Toolbox.Modal_Window
+namespace AS.Toolbox.ModalWindow
 {
     public class ModalWindow : MonoBehaviour
     {
@@ -26,10 +26,7 @@ namespace AS.Toolbox.Modal_Window
         Action _onAccept, _onDecline, _onAlt;
         bool _init;
 
-        void Init()
-        {
-            _init = true;
-        }
+        void Init() => _init = true;
 
         public void SetContent(string titleStr, string contentStr, Sprite sprite, string acceptBtnText, string declineBtnText,
             string altBtnText,
@@ -57,6 +54,7 @@ namespace AS.Toolbox.Modal_Window
                 verticalBodyGO.SetActive(false);
                 return;
             }
+
             horizontalBodyGO.SetActive(orientation == BodyOrientation.Horizontal);
             verticalBodyGO.SetActive(orientation == BodyOrientation.Vertical);
             content.text = contentStr;
