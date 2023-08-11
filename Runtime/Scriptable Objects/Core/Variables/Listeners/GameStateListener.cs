@@ -1,12 +1,9 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
-#endregion
 namespace AS.Toolbox.ScriptableObjects
 {
     [Serializable, InlineProperty, HideReferenceObjectPicker, HideLabel]

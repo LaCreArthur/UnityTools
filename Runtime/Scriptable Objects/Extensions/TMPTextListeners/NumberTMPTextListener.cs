@@ -19,9 +19,9 @@ namespace AS.Toolbox.ScriptableObjects
 
         [SerializeField] protected bool isValueMultiplied;
         [ShowIf("isValueMultiplied"), SerializeField] protected float multiple;
+        [SerializeField] UnityEvent onValueChanged;
 
         protected TMP_Text text;
-        [SerializeField] UnityEvent onValueChanged;
         void Start()
         {
             text = GetComponent<TMP_Text>();

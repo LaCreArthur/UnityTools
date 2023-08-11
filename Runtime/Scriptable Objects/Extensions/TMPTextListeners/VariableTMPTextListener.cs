@@ -1,17 +1,16 @@
 using Sirenix.OdinInspector;
 using TMPro;
+using UnityEngine;
 
 namespace AS.Toolbox.ScriptableObjects
 {
     public class VariableTMPTextListener : SerializedMonoBehaviour
     {
-        [Required, AssetsOnly]
-        public ISOVariable variable;
-        public string prefix;
-        public string suffix;
-        public bool autoUpdateOnChange = true;
-
+        [SerializeField] string prefix;
+        [SerializeField] string suffix;
+        [SerializeField] bool autoUpdateOnChange = true;
         TMP_Text _tmp;
+        [SerializeField, Required, AssetsOnly] ISOVariable variable;
 
         void Start()
         {
@@ -21,6 +20,6 @@ namespace AS.Toolbox.ScriptableObjects
             SetText();
         }
 
-        public void SetText() => _tmp.text = $"{prefix}{variable.ToString()}{suffix}";
+        void SetText() => _tmp.text = $"{prefix}{variable.ToString()}{suffix}";
     }
 }
