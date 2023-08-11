@@ -13,7 +13,7 @@ namespace AS.Toolbox.ScriptableObjects
 
         protected virtual void OnEnable()
         {
-#if UNITY_EDITOR// dont load if not on playmode
+#if UNITY_EDITOR // dont load if not on playmode
             if (!EditorApplication.isPlayingOrWillChangePlaymode)
                 return;
 #endif
@@ -65,13 +65,13 @@ namespace AS.Toolbox.ScriptableObjects
             get => value;
             set
             {
-#if UNITY_EDITOR// dont reset value for nothing on GUI refresh
+#if UNITY_EDITOR // dont reset value for nothing on GUI refresh
                 if (EditorApplication.isPlayingOrWillChangePlaymode && this.value != null && this.value.Equals(value))
                     return;
 #endif
                 if (isConstant)
                 {
-#if UNITY_EDITOR// constant value can be set only in editor when not playing
+#if UNITY_EDITOR // constant value can be set only in editor when not playing
                     if (!EditorApplication.isPlayingOrWillChangePlaymode)
                     {
                         previousValue = this.value;

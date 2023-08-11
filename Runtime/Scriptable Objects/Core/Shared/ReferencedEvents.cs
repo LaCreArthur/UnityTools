@@ -10,7 +10,7 @@ namespace AS.Toolbox.ScriptableObjects
     public abstract class ReferencedEventBase<T>
     {
 
-        [HideReferenceObjectPicker, ListDrawerSettings(Expanded = true)]
+        [HideReferenceObjectPicker, ListDrawerSettings(DefaultExpandedState = true)]
         public readonly T callbacks;
         [HideLabel]
         public readonly Object reference;

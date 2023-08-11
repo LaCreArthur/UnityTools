@@ -1,5 +1,4 @@
 using AS.Toolbox.Singletons.Audio;
-using AS.Toolbox.Singletons.Vibration;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -24,10 +23,11 @@ namespace AS.Toolbox.UI
         [Button]
         public void Play()
         {
+            DOTween.Kill(transform);
             if (sfx)
                 AudioSM.Instance.Play("click");
             if (haptic)
-                VibrationHandler.HapticSelection();
+                VibrationManager.HapticSelection();
             if (punchScale)
             {
                 transform.localScale = Vector3.one;

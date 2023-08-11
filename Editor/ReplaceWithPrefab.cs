@@ -46,7 +46,7 @@ namespace AS.Toolbox.Editor
                     Undo.RegisterCreatedObjectUndo(newObject, "Replace With Prefabs");
                     newObject.transform.SetParent(selected.transform.parent,
                         newObject.GetComponent<RectTransform>() ==
-                        null);//worldPositionStays to be false if newObject has a rectTransform (UI)
+                        null); //worldPositionStays to be false if newObject has a rectTransform (UI)
                     newObject.transform.localPosition = selected.transform.localPosition;
                     newObject.transform.localRotation = usePrefabRot ? prefab.transform.localRotation : selected.transform.localRotation;
                     newObject.transform.localScale = usePrefabScale ? prefab.transform.localScale : selected.transform.localScale;

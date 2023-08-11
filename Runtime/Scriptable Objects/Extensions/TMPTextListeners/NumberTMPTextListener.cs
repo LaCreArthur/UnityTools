@@ -1,31 +1,38 @@
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace AS.Toolbox.ScriptableObjects
 {
     [RequireComponent(typeof(TMP_Text))]
     public abstract class NumberTMPTextListener<T, TVar> : MonoBehaviour where TVar : SOVar<T>
     {
-        public TVar var;
-        public int decimals;
-        public string prefix;
-        public string suffix;
-        public bool autoUpdateOnChange = true;
+        [SerializeField] protected TVar var;
+        [SerializeField] protected int decimals;
+        [SerializeField] protected string prefix;
+        [SerializeField] protected string suffix;
+        [SerializeField] protected bool autoUpdateOnChange = true;
 
-        public bool isValueOffset;
-        [ShowIf("isValueOffset")] public float valueOffset;
+        [SerializeField] protected bool isValueOffset;
+        [ShowIf("isValueOffset"), SerializeField] protected float valueOffset;
 
-        public bool isValueMultiplied;
-        [ShowIf("isValueMultiplied")] public float multiple;
+        [SerializeField] protected bool isValueMultiplied;
+        [ShowIf("isValueMultiplied"), SerializeField] protected float multiple;
 
         protected TMP_Text text;
-
+        [SerializeField] UnityEvent onValueChanged;
         void Start()
         {
             text = GetComponent<TMP_Text>();
-            if (autoUpdateOnChange) var.onChange.Add(SetText, this);
+            if (autoUpdateOnChange) var.onChange.Add(SetTextInternal, this);
+            SetTextInternal();
+        }
+
+        void SetTextInternal()
+        {
             SetText();
+            onValueChanged?.Invoke();
         }
 
         protected virtual void SetText() {}

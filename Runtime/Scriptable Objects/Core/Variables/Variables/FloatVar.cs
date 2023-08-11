@@ -21,7 +21,6 @@ namespace AS.Toolbox.ScriptableObjects
 
 
         #region Operators Overloads
-
         public static FloatVar operator ++(FloatVar a)
         {
             a.v++;
@@ -55,7 +54,6 @@ namespace AS.Toolbox.ScriptableObjects
             res.v = a.v - b.v;
             return res;
         }
-
         #endregion
     }
 }
