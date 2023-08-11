@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AS.Toolbox.ScriptableObjects;
 using DG.Tweening;
 using Sirenix.OdinInspector;
@@ -14,11 +13,11 @@ namespace AS.Toolbox.UI
         public enum SlideDirection { Left, Right, Up, Down }
 
         [Header("Start behaviours")]
-        public bool startVisible = true;//todo should not start visible if associated state is not active
+        public bool startVisible = true;
         public bool resetPosOnStart = true;
         public bool blockRaycastWhenVisible = true;
         public GameStateSO associatedState;
-        [ListDrawerSettings(Expanded = true, AlwaysAddDefaultValue = true), InlineProperty(LabelWidth = 20)]
+        [ListDrawerSettings(DefaultExpandedState = true, AlwaysAddDefaultValue = true), InlineProperty(LabelWidth = 20)]
         public GameStateSO[] associatedStates;
 
         [FoldoutGroup("On Show")]
@@ -62,15 +61,16 @@ namespace AS.Toolbox.UI
 
         [Header("State"), SerializeField, ReadOnly]
         public bool isHidden;
-        
+
         Canvas _canvas;
         CanvasGroup _canvasGroup;
         List<Tween> _childTweens;
+        public bool IsInitialized { get; private set; }
 
         static float OutOfScreenWidth => Screen.width * 1.5f;
         static float OutOfScreenHeight => Screen.height * 1.5f;
 
-        void Awake()
+        public void Awake()
         {
             _canvas = GetComponent<Canvas>();
             _canvasGroup = GetComponent<CanvasGroup>();
@@ -79,6 +79,8 @@ namespace AS.Toolbox.UI
                 transform.localPosition = Vector3.zero;
 
             InitChildTweens();
+
+            isHidden = true;
 
             if (associatedState != null)
             {
@@ -94,11 +96,7 @@ namespace AS.Toolbox.UI
                     state.AddOnExit(Hide);
                 }
             }
-        }
 
-        IEnumerator Start()
-        {
-            isHidden = true;
             if (startVisible)
                 Show();
             else
@@ -106,10 +104,10 @@ namespace AS.Toolbox.UI
                 _canvasGroup.alpha = 0;
                 _canvasGroup.blocksRaycasts = false;
                 _canvas.enabled = false;
-                // wait for a frame so children components have time to initialize
-                yield return new WaitForEndOfFrame();
                 gameObject.SetActive(false);
             }
+
+            IsInitialized = true;
         }
 
         void InitChildTweens()
@@ -148,12 +146,11 @@ namespace AS.Toolbox.UI
             // if already visible, do nothing
             if (!isHidden)
                 return;
+            isHidden = false;
 
             gameObject.SetActive(true);
             _canvas.enabled = true;
-            onShowEvents.Invoke();
             _canvasGroup.blocksRaycasts = blockRaycastWhenVisible;
-            isHidden = false;
 
             DOTween.Kill(_canvasGroup);
             if (playChildTweensOnShow) _childTweens.ForEach(tween => tween.Play());
@@ -169,6 +166,8 @@ namespace AS.Toolbox.UI
                 transform.localPosition = GetSlideDirection();
                 transform.DOLocalMove(Vector3.zero, slideInDuration).SetEase(slideInEase).SetUpdate(true);
             }
+
+            onShowEvents.Invoke();
         }
 
         //todo: maybe not it responsibility
@@ -186,10 +185,9 @@ namespace AS.Toolbox.UI
             // if already hidden, do nothing
             if (isHidden)
                 return;
-
-            onHideEvents.Invoke();
-            _canvasGroup.blocksRaycasts = false;
             isHidden = true;
+
+            _canvasGroup.blocksRaycasts = false;
 
             DOTween.Kill(_canvasGroup);
             if (rewindChildTweensOnHide) _childTweens.ForEach(tween => tween.Rewind());
@@ -203,6 +201,8 @@ namespace AS.Toolbox.UI
                     .SetUpdate(true)
                     .OnComplete(FinalizeHide);
             }
+
+            onHideEvents.Invoke();
 
             if (!slideOut && !fadeOut)
                 FinalizeHide();

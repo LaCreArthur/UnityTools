@@ -128,7 +128,7 @@ namespace AS.Toolbox.Singletons.Audio
         void InitSoundArray(Sound[] soundArray, bool isMusic)
         {
             if (soundArray == null)
-                return;// scenes without audio manager are creating empty one
+                return; // scenes without audio manager are creating empty one
             foreach (Sound s in soundArray)
             {
                 s.source = gameObject.AddComponent<AudioSource>();

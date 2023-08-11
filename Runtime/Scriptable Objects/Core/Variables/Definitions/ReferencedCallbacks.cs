@@ -9,7 +9,8 @@ namespace AS.Toolbox.ScriptableObjects
 {
     public class ReferencedCallbacks<T> : ReferencedCallbacksBase<UnityEvent<T>>
     {
-        [Space, SerializeField, InlineProperty, HideReferenceObjectPicker, ListDrawerSettings(IsReadOnly = true, Expanded = true),
+        [Space, SerializeField, InlineProperty, HideReferenceObjectPicker,
+         ListDrawerSettings(IsReadOnly = true, DefaultExpandedState = true),
          OnInspectorGUI("RemoveNullLoadedRuntime")]
         List<ReferencedAction<T>> runtimeLoadedListeners = new List<ReferencedAction<T>>();
 
@@ -88,12 +89,14 @@ namespace AS.Toolbox.ScriptableObjects
     public class ReferencedCallbacksBase<T> where T : UnityEventBase
     {
         // persistent listeners is a list of UnityEvent 
-        [Space, SerializeField, InlineProperty, HideReferenceObjectPicker, ListDrawerSettings(IsReadOnly = true, Expanded = true),
+        [Space, SerializeField, InlineProperty, HideReferenceObjectPicker,
+         ListDrawerSettings(IsReadOnly = true, DefaultExpandedState = true),
          OnInspectorGUI("RemoveNullPersistent")]
         protected List<ReferencedEvent<T>> persistentListeners = new List<ReferencedEvent<T>>();
 
         // runtime listeners is a list of 
-        [Space, SerializeField, InlineProperty, HideReferenceObjectPicker, ListDrawerSettings(IsReadOnly = true, Expanded = true),
+        [Space, SerializeField, InlineProperty, HideReferenceObjectPicker,
+         ListDrawerSettings(IsReadOnly = true, DefaultExpandedState = true),
          OnInspectorGUI("RemoveNullRuntime")]
         protected List<ReferencedAction> runtimeListeners = new List<ReferencedAction>();
 

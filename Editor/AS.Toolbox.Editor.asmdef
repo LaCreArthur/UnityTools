@@ -1,18 +1,18 @@
 {
-    "name": "AS.Toolbox.Editor",
-    "rootNamespace": "",
-    "references": [
-        "GUID:19746b1e5c8907c4aa50abf4b0af2272"
-    ],
-    "includePlatforms": [
-        "Editor"
-    ],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+  "name": "AS.Toolbox.Editor",
+  "rootNamespace": "",
+  "references": [
+    "GUID:19746b1e5c8907c4aa50abf4b0af2272"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
 }

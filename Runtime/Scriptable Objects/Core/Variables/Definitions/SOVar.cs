@@ -13,7 +13,7 @@ namespace AS.Toolbox.ScriptableObjects
 
         protected virtual void OnEnable()
         {
-#if UNITY_EDITOR// dont load if not on playmode
+#if UNITY_EDITOR // dont load if not on playmode
             if (!EditorApplication.isPlayingOrWillChangePlaymode)
                 return;
 #endif
@@ -36,7 +36,6 @@ namespace AS.Toolbox.ScriptableObjects
         }
 
         #region Value
-
         [TitleGroup("Values"), SerializeField, ReadOnly, PropertyOrder(0)]
         protected T value;
 
@@ -65,13 +64,13 @@ namespace AS.Toolbox.ScriptableObjects
             get => value;
             set
             {
-#if UNITY_EDITOR// dont reset value for nothing on GUI refresh
+#if UNITY_EDITOR // dont reset value for nothing on GUI refresh
                 if (EditorApplication.isPlayingOrWillChangePlaymode && this.value != null && this.value.Equals(value))
                     return;
 #endif
                 if (isConstant)
                 {
-#if UNITY_EDITOR// constant value can be set only in editor when not playing
+#if UNITY_EDITOR // constant value can be set only in editor when not playing
                     if (!EditorApplication.isPlayingOrWillChangePlaymode)
                     {
                         previousValue = this.value;
@@ -96,11 +95,9 @@ namespace AS.Toolbox.ScriptableObjects
         }
 
         protected virtual T ProcessValue(T newVal) => newVal;
-
         #endregion
 
         #region Debug
-
         [TitleGroup("Debug"), SerializeField, Delayed, OnValueChanged("SetValue"), InlineButton("SetValue", "Set")]
         T newValue;
 
@@ -109,11 +106,9 @@ namespace AS.Toolbox.ScriptableObjects
 
         [TitleGroup("Debug"), HideIf("isConstant"), SerializeField]
         protected bool logOnChange;
-
         #endregion
 
         #region OnChange
-
         [FoldoutGroup("On Change"), HideIf("isConstant"), SerializeField]
         bool logListeners;
 
@@ -129,11 +124,9 @@ namespace AS.Toolbox.ScriptableObjects
 
             onChange.Invoke(this, value, logListeners);
         }
-
         #endregion
 
         #region Create Asset
-
 #if UNITY_EDITOR
         public static bool IsCreating;
         public static bool IsNotCreating => !IsCreating;
@@ -149,7 +142,6 @@ namespace AS.Toolbox.ScriptableObjects
 
         public static void CancelCreate() => IsCreating = false;
 #endif
-
         #endregion
     }
 }

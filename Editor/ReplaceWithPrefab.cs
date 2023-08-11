@@ -9,9 +9,6 @@ namespace AS.Toolbox.Editor
         [SerializeField] bool usePrefabScale;
         [SerializeField] bool usePrefabRot;
 
-        [MenuItem("Tools/My Utilities/Replace With Prefab")]
-        static void CreateReplaceWithPrefab() => GetWindow<ReplaceWithPrefab>();
-
         void OnGUI()
         {
             prefab = (GameObject)EditorGUILayout.ObjectField("Prefab", prefab, typeof(GameObject), false);
@@ -24,9 +21,9 @@ namespace AS.Toolbox.Editor
 
                 for (int i = selection.Length - 1; i >= 0; --i)
                 {
-                    var selected = selection[i];
+                    GameObject selected = selection[i];
                     PrefabUtility.GetPrefabAssetType(prefab);
-                    var prefabType = PrefabUtility.GetPrefabAssetType(prefab);
+                    PrefabAssetType prefabType = PrefabUtility.GetPrefabAssetType(prefab);
                     GameObject newObject;
 
                     if (prefabType != PrefabAssetType.NotAPrefab)
@@ -46,7 +43,7 @@ namespace AS.Toolbox.Editor
                     Undo.RegisterCreatedObjectUndo(newObject, "Replace With Prefabs");
                     newObject.transform.SetParent(selected.transform.parent,
                         newObject.GetComponent<RectTransform>() ==
-                        null);//worldPositionStays to be false if newObject has a rectTransform (UI)
+                        null); //worldPositionStays to be false if newObject has a rectTransform (UI)
                     newObject.transform.localPosition = selected.transform.localPosition;
                     newObject.transform.localRotation = usePrefabRot ? prefab.transform.localRotation : selected.transform.localRotation;
                     newObject.transform.localScale = usePrefabScale ? prefab.transform.localScale : selected.transform.localScale;
@@ -58,5 +55,8 @@ namespace AS.Toolbox.Editor
             GUI.enabled = false;
             EditorGUILayout.LabelField("Selection count: " + Selection.objects.Length);
         }
+
+        [MenuItem("Tools/My Utilities/Replace With Prefab")]
+        static void CreateReplaceWithPrefab() => GetWindow<ReplaceWithPrefab>();
     }
 }
