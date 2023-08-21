@@ -6,9 +6,15 @@ namespace AS.Toolbox.Utils
 {
     public static class Coroutines
     {
-        public static IEnumerator WaitAFrameAnd(Action callback)
+        public static IEnumerator WaitForEndOfFrame(Action callback)
         {
             yield return new WaitForEndOfFrame();
+            callback?.Invoke();
+        }
+
+        public static IEnumerator WaitForSecond(float time, Action callback)
+        {
+            yield return new WaitForSeconds(time);
             callback?.Invoke();
         }
     }
