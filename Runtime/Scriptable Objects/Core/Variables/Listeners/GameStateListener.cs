@@ -10,23 +10,26 @@ namespace AS.Toolbox.ScriptableObjects
     internal class GameStateCallbacks
     {
         [HideReferenceObjectPicker]
-        public UnityEvent onEnter, onLeave;
+        public UnityEvent onEnter, onExit;
     }
 
     public class GameStateListener : SerializedMonoBehaviour
     {
-        [SerializeField, Required("A variable must be assigned for this listener!")]
-        protected GameStateVar gameState;
-
         [SerializeField, DictionaryDrawerSettings(KeyLabel = "State", DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
         readonly Dictionary<GameStateSO, GameStateCallbacks> callbacks = new Dictionary<GameStateSO, GameStateCallbacks>();
 
-        void OnEnable()
+        bool _isRegistered;
+
+        void OnEnable() => RegisterCallbacks();
+
+        void RegisterCallbacks()
         {
+            if (_isRegistered) return;
+            _isRegistered = true;
             foreach (KeyValuePair<GameStateSO, GameStateCallbacks> callback in callbacks)
             {
                 callback.Key.AddOnEnter(callback.Value.onEnter, this);
-                callback.Key.AddOnExit(callback.Value.onLeave, this);
+                callback.Key.AddOnExit(callback.Value.onExit, this);
             }
         }
     }
