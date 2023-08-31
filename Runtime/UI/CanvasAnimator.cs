@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using AS.Toolbox.ScriptableObjects;
+using AS.Toolbox.Utils;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -36,7 +37,13 @@ namespace AS.Toolbox.UI
         public Ease slideInEase = Ease.InOutSine;
         [FoldoutGroup("On Show"), ShowIf("slideIn"), Indent]
         public float slideInDuration = 0.25f;
-        [FoldoutGroup("On Show")]
+        [FoldoutGroup("On Show"), FoldoutGroup("On Show")]
+        public bool scaleIn;
+        [FoldoutGroup("On Show"), ShowIf("scaleIn"), Indent]
+        public Ease scaleInEase = Ease.InOutSine;
+        [FoldoutGroup("On Show"), ShowIf("scaleIn"), Indent]
+        public float scaleInDuration = 0.25f;
+
         public UnityEvent onShowEvents;
 
         [FoldoutGroup("On Hide")]
@@ -56,6 +63,14 @@ namespace AS.Toolbox.UI
         public Ease slideOutEase = Ease.InOutSine;
         [FoldoutGroup("On Hide"), ShowIf("slideOut"), Indent]
         public float slideOutDuration = 0.25f;
+
+        [FoldoutGroup("On Hide")]
+        public bool scaleOut;
+        [FoldoutGroup("On Hide"), ShowIf("scaleOut"), Indent]
+        public float scaleOutDuration = 0.25f;
+        [FoldoutGroup("On Hide"), ShowIf("scaleOut"), Indent]
+        public Ease scaleOutEase = Ease.InOutSine;
+
         [FoldoutGroup("On Hide")]
         public UnityEvent onHideEvents;
 
@@ -104,7 +119,7 @@ namespace AS.Toolbox.UI
                 _canvasGroup.alpha = 0;
                 _canvasGroup.blocksRaycasts = false;
                 _canvas.enabled = false;
-                gameObject.SetActive(false);
+                StartCoroutine(Coroutines.WaitForEndOfFrame(() => gameObject.SetActive(false)));
             }
 
             IsInitialized = true;
@@ -167,6 +182,12 @@ namespace AS.Toolbox.UI
                 transform.DOLocalMove(Vector3.zero, slideInDuration).SetEase(slideInEase).SetUpdate(true);
             }
 
+            if (scaleIn)
+            {
+                transform.localScale = Vector3.zero;
+                transform.DOScale(Vector3.one, scaleInDuration).SetEase(scaleInEase).SetUpdate(true);
+            }
+
             onShowEvents.Invoke();
         }
 
@@ -202,10 +223,17 @@ namespace AS.Toolbox.UI
                     .OnComplete(FinalizeHide);
             }
 
+            if (scaleOut)
+            {
+                transform.localScale = Vector3.one;
+                transform.DOScale(Vector3.zero, scaleOutDuration).SetEase(scaleOutEase).SetUpdate(true).OnComplete(FinalizeHide);
+            }
+
             onHideEvents.Invoke();
 
-            if (!slideOut && !fadeOut)
+            if (!slideOut && !fadeOut && !scaleOut)
                 FinalizeHide();
+            return;
 
             void FinalizeHide()
             {
