@@ -44,6 +44,7 @@ namespace AS.Toolbox.UI
         [FoldoutGroup("On Show"), ShowIf("scaleIn"), Indent]
         public float scaleInDuration = 0.25f;
 
+        [FoldoutGroup("On Show")]
         public UnityEvent onShowEvents;
 
         [FoldoutGroup("On Hide")]
