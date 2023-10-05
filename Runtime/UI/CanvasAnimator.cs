@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using AS.Toolbox.ScriptableObjects;
-using AS.Toolbox.Utils;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -81,6 +80,7 @@ namespace AS.Toolbox.UI
         Canvas _canvas;
         CanvasGroup _canvasGroup;
         List<Tween> _childTweens;
+
         public bool IsInitialized { get; private set; }
 
         static float OutOfScreenWidth => Screen.width * 1.5f;
@@ -120,7 +120,9 @@ namespace AS.Toolbox.UI
                 _canvasGroup.alpha = 0;
                 _canvasGroup.blocksRaycasts = false;
                 _canvas.enabled = false;
-                StartCoroutine(Coroutines.WaitForEndOfFrame(() => gameObject.SetActive(false)));
+                // StartCoroutine(Coroutines.WaitForEndOfFrame(() => 
+                gameObject.SetActive(false);
+                // ));
             }
 
             IsInitialized = true;
@@ -159,16 +161,26 @@ namespace AS.Toolbox.UI
         [Button]
         public void Show()
         {
+            if (!IsInitialized)
+            {
+                Debug.Log("Delay show because not initialized yet", this);
+                DOVirtual.DelayedCall(0.1f, Show);
+                return;
+            }
+
             // if already visible, do nothing
             if (!isHidden)
                 return;
+
             isHidden = false;
 
             gameObject.SetActive(true);
             _canvas.enabled = true;
             _canvasGroup.blocksRaycasts = blockRaycastWhenVisible;
 
+            // DOTween.Kill(this); // kill the potential set inactive on awake
             DOTween.Kill(_canvasGroup);
+
             if (playChildTweensOnShow) _childTweens.ForEach(tween => tween.Play());
 
             if (fadeIn)
@@ -178,7 +190,6 @@ namespace AS.Toolbox.UI
 
             if (slideIn)
             {
-                // Debug.Log("Slide In " + slideInDirection);
                 transform.localPosition = GetSlideDirection();
                 transform.DOLocalMove(Vector3.zero, slideInDuration).SetEase(slideInEase).SetUpdate(true);
             }
