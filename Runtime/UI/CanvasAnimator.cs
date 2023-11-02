@@ -7,7 +7,7 @@ using UnityEngine.Events;
 
 namespace AS.Toolbox.UI
 {
-    [RequireComponent(typeof(Canvas)), RequireComponent(typeof(CanvasGroup))]
+    [RequireComponent(typeof(Canvas))] [RequireComponent(typeof(CanvasGroup))]
     public class CanvasAnimator : MonoBehaviour
     {
         public enum SlideDirection { Left, Right, Up, Down }
@@ -17,30 +17,30 @@ namespace AS.Toolbox.UI
         public bool resetPosOnStart = true;
         public bool blockRaycastWhenVisible = true;
         public GameStateSO associatedState;
-        [ListDrawerSettings(DefaultExpandedState = true, AlwaysAddDefaultValue = true), InlineProperty(LabelWidth = 20)]
+        [ListDrawerSettings(DefaultExpandedState = true, AlwaysAddDefaultValue = true)] [InlineProperty(LabelWidth = 20)]
         public GameStateSO[] associatedStates;
 
         [FoldoutGroup("On Show")]
         public bool playChildTweensOnShow;
         [FoldoutGroup("On Show")]
         public bool fadeIn;
-        [FoldoutGroup("On Show"), ShowIf("fadeIn"), Indent]
+        [FoldoutGroup("On Show")] [ShowIf("fadeIn")] [Indent]
         public Ease fadeInEase = Ease.InOutSine;
-        [FoldoutGroup("On Show"), ShowIf("fadeIn"), Indent]
+        [FoldoutGroup("On Show")] [ShowIf("fadeIn")] [Indent]
         public float fadeInDuration = 0.25f;
         [FoldoutGroup("On Show")]
         public bool slideIn;
-        [FoldoutGroup("On Show"), ShowIf("slideIn"), Indent]
+        [FoldoutGroup("On Show")] [ShowIf("slideIn")] [Indent]
         public SlideDirection slideInDirection;
-        [FoldoutGroup("On Show"), ShowIf("slideIn"), Indent]
+        [FoldoutGroup("On Show")] [ShowIf("slideIn")] [Indent]
         public Ease slideInEase = Ease.InOutSine;
-        [FoldoutGroup("On Show"), ShowIf("slideIn"), Indent]
+        [FoldoutGroup("On Show")] [ShowIf("slideIn")] [Indent]
         public float slideInDuration = 0.25f;
-        [FoldoutGroup("On Show"), FoldoutGroup("On Show")]
+        [FoldoutGroup("On Show")] [FoldoutGroup("On Show")]
         public bool scaleIn;
-        [FoldoutGroup("On Show"), ShowIf("scaleIn"), Indent]
+        [FoldoutGroup("On Show")] [ShowIf("scaleIn")] [Indent]
         public Ease scaleInEase = Ease.InOutSine;
-        [FoldoutGroup("On Show"), ShowIf("scaleIn"), Indent]
+        [FoldoutGroup("On Show")] [ShowIf("scaleIn")] [Indent]
         public float scaleInDuration = 0.25f;
 
         [FoldoutGroup("On Show")]
@@ -50,31 +50,32 @@ namespace AS.Toolbox.UI
         public bool rewindChildTweensOnHide;
         [FoldoutGroup("On Hide")]
         public bool fadeOut;
-        [FoldoutGroup("On Hide"), ShowIf("fadeOut"), Indent]
+        [FoldoutGroup("On Hide")] [ShowIf("fadeOut")] [Indent]
         public float fadeOutDuration = 0.25f;
-        [FoldoutGroup("On Hide"), ShowIf("fadeOut"), Indent]
+        [FoldoutGroup("On Hide")] [ShowIf("fadeOut")] [Indent]
         public Ease fadeOutEase = Ease.InOutSine;
 
         [FoldoutGroup("On Hide")]
         public bool slideOut;
-        [FoldoutGroup("On Hide"), ShowIf("slideOut"), Indent]
+        [FoldoutGroup("On Hide")] [ShowIf("slideOut")] [Indent]
         public SlideDirection slideOutDirection;
-        [FoldoutGroup("On Hide"), ShowIf("slideOut"), Indent]
+        [FoldoutGroup("On Hide")] [ShowIf("slideOut")] [Indent]
         public Ease slideOutEase = Ease.InOutSine;
-        [FoldoutGroup("On Hide"), ShowIf("slideOut"), Indent]
+        [FoldoutGroup("On Hide")] [ShowIf("slideOut")] [Indent]
         public float slideOutDuration = 0.25f;
 
         [FoldoutGroup("On Hide")]
         public bool scaleOut;
-        [FoldoutGroup("On Hide"), ShowIf("scaleOut"), Indent]
+        [FoldoutGroup("On Hide")] [ShowIf("scaleOut")] [Indent]
         public float scaleOutDuration = 0.25f;
-        [FoldoutGroup("On Hide"), ShowIf("scaleOut"), Indent]
+        [FoldoutGroup("On Hide")] [ShowIf("scaleOut")] [Indent]
         public Ease scaleOutEase = Ease.InOutSine;
 
         [FoldoutGroup("On Hide")]
         public UnityEvent onHideEvents;
 
-        [Header("State"), SerializeField, ReadOnly]
+        [Header("State")]
+        [SerializeField] [ReadOnly]
         public bool isHidden;
 
         Canvas _canvas;
@@ -163,7 +164,7 @@ namespace AS.Toolbox.UI
         {
             if (!IsInitialized)
             {
-                Debug.Log("Delay show because not initialized yet", this);
+                //Debug.Log("Delay show because not initialized yet", this);
                 DOVirtual.DelayedCall(0.1f, Show);
                 return;
             }
