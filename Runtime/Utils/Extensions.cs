@@ -121,7 +121,19 @@ namespace AS.Toolbox.Utils
         #endregion
 
         #region Strings
-        public static string ToCurrencyString(this float value, bool isDoge) => $"{value:#,0.##}<sprite index={(isDoge ? 0 : 1)}>";
+        static string FormatCurrencyValue(float value) => value switch
+        {
+            >= 1000000 => (value / 1000000).ToString("N1") + "M",
+            >= 100000 => (value / 1000).ToString("N0") + "K",
+            >= 10000 => (value / 1000).ToString("N1") + "K",
+            >= 1000 => value.ToString("N0"),
+            >= 100 => value.ToString("N1"),
+            >= 10 => value.ToString("N2"),
+            _ => value.ToString("N3")
+        };
+
+        public static string ToCurrencyString(this float value, bool isDoge) =>
+            $"{FormatCurrencyValue(value)}<sprite index={(isDoge ? 0 : 1)}>";
         public static string ToCurrencyString(this double value, bool isDoge) => ((float)value).ToCurrencyString(isDoge);
 
         public static string ToTimeString(this float time) => $"{Mathf.FloorToInt(time / 60):0}:{Mathf.FloorToInt(time % 60):00}";
