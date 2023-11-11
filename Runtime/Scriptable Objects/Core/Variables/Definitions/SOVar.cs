@@ -64,33 +64,44 @@ namespace AS.Toolbox.ScriptableObjects
             get => value;
             set
             {
-#if UNITY_EDITOR // dont reset value for nothing on GUI refresh
-                if (EditorApplication.isPlayingOrWillChangePlaymode && this.value != null && this.value.Equals(value))
+                if (ShouldIgnoreSetValue(value))
                     return;
-#endif
+
                 if (isConstant)
-                {
-#if UNITY_EDITOR // constant value can be set only in editor when not playing
-                    if (!EditorApplication.isPlayingOrWillChangePlaymode)
-                    {
-                        previousValue = this.value;
-                        this.value = ProcessValue(value);
-                    }
+                    HandleConstantValue(value);
+                else
+                    UpdateValue(value);
+            }
+        }
+
+        bool ShouldIgnoreSetValue(T newVal)
+        {
+#if UNITY_EDITOR
+            return EditorApplication.isPlayingOrWillChangePlaymode && value != null && value.Equals(newVal);
 #endif
-                    if (Application.isPlaying && logOnChange)
-                        Debug.Log($"{this.TypeAndNameToString()} is constant and cannot be modified", this);
-                    return;
-                }
+            return false;
+        }
 
-                previousValue = this.value;
-                this.value = ProcessValue(value);
+        void HandleConstantValue(T newVal)
+        {
+#if UNITY_EDITOR
+            if (!EditorApplication.isPlayingOrWillChangePlaymode)
+                UpdateValue(newVal);
+#endif
+            if (Application.isPlaying && logOnChange)
+                Debug.Log($"{this.TypeAndNameToString()} is constant and cannot be modified", this);
+        }
 
-                if (Application.isPlaying)
-                {
-                    if (isStored)
-                        Save();
-                    OnChange();
-                }
+        void UpdateValue(T newVal)
+        {
+            previousValue = value;
+            value = ProcessValue(newVal);
+
+            if (Application.isPlaying)
+            {
+                if (isStored)
+                    Save();
+                OnChange();
             }
         }
 
