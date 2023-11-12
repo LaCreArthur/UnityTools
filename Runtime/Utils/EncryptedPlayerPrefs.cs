@@ -9,10 +9,10 @@ namespace AS.Toolbox.Utils
     public static class EncryptedPlayerPrefs
     {
         // Modify this key in this file :
-        const string PRIVATE_KEY = "8HDcZsdESTgoe6gzpvYe";
+        const string PRIVATE_KEY = "8TKcZsdESTgoe6gzpvYe";
 
         // Add some values to this array before using EncryptedPlayerPrefs
-        static readonly string[] Keys = { "hey", "hay", "hoy" };
+        static readonly string[] Keys = { "hey", "hay", "hoy", "huy" };
 
         static string Md5(string strToEncrypt)
         {
