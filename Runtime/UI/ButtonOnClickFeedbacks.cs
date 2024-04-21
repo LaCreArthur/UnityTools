@@ -27,7 +27,7 @@ namespace AS.Toolbox.UI
             if (sfx)
                 AudioSM.Instance.Play("click");
             if (haptic)
-                VibrationManager.HapticSelection();
+                Vibrations.HapticSelection();
             if (punchScale)
             {
                 transform.localScale = Vector3.one;

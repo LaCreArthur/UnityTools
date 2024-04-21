@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using AS.Toolbox.ScriptableObjects;
 using AS.Toolbox.Utils;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Audio;
 using Random = UnityEngine.Random;
@@ -10,55 +11,34 @@ namespace AS.Toolbox.Singletons.Audio
 {
     public class AudioSM : SingletonMono<AudioSM>
     {
-        [SerializeField]
-        AudioMixerGroup musicMixerGroup;
+        [SerializeField] AudioManagerSO audioManagerSO;
+        [SerializeField] [Required] BoolVar isAudioVar;
+        [SerializeField] AudioMixerGroup musicMixerGroup;
 
-        [SerializeField]
-        AudioMixerGroup sfxMixerGroup;
+        [SerializeField] AudioMixerGroup sfxMixerGroup;
 
-        [Header("Sounds"), Range(0.0f, 1.0f), SerializeField]
+        [Header("Sounds")]
+
+        [SerializeField] [Range(0.0f, 1.0f)]
         float soundVolume = 1.0f;
 
-        [SerializeField]
-        Sound[] sounds = Array.Empty<Sound>();
+        [SerializeField] Sound[] sounds = Array.Empty<Sound>();
 
-        [Header("Musics"), Range(0.0f, 1.0f), SerializeField]
+        [Header("Musics")]
+
+        [SerializeField] [Range(0.0f, 1.0f)]
         float musicVolume = 1.0f;
 
-        [SerializeField]
-        Sound[] musics = Array.Empty<Sound>();
-
-        [SerializeField]
-        bool musicAutoPlayStart;
-
-        [SerializeField]
-        bool musicAutoPlayRandomClip;
-
-        [SerializeField]
-        bool musicAutoPlayNext;
-
-        [SerializeField]
-        float musicFadeOutDuration;
-
-        [SerializeField]
-        AudioManagerSO audioManagerSO;
-
-        [SerializeField]
-        BoolVar isAudio;
+        [SerializeField] Sound[] musics = Array.Empty<Sound>();
+        [SerializeField] bool musicAutoPlayStart;
+        [SerializeField] bool musicAutoPlayRandomClip;
+        [SerializeField] bool musicAutoPlayNext;
+        [SerializeField] float musicFadeOutDuration;
 
         AudioSource _currentMusic;
 
-        void OnEnable()
-        {
-            if (isAudio != null)
-                isAudio.onChange.Add(SetAudio, this);
-        }
-
-        void OnDisable()
-        {
-            if (isAudio != null)
-                isAudio.onChange.Remove(SetAudio, this);
-        }
+        void OnEnable() => isAudioVar.onChange.Add(SetAudio, this);
+        void OnDisable() => isAudioVar.onChange.Remove(SetAudio, this);
 
         protected override void OnAwake()
         {
@@ -77,7 +57,7 @@ namespace AS.Toolbox.Singletons.Audio
 
         void PlayMusic(string music, int clipId = 0)
         {
-            if (isAudio != null && !isAudio.v)
+            if (isAudioVar != null && !isAudioVar.v)
                 return;
             if (_currentMusic && _currentMusic.isPlaying)
             {
@@ -85,14 +65,14 @@ namespace AS.Toolbox.Singletons.Audio
                 return;
             }
 
-            Sound m = Array.Find(musics, item => item.name == music);
+            var m = Array.Find(musics, item => item.name == music);
             if (m == null)
             {
                 Debug.LogWarning($"Play music: {music} not found!");
                 return;
             }
 
-            AudioClip clip = m.clips[clipId];
+            var clip = m.clips[clipId];
             _currentMusic = m.source;
             _currentMusic.clip = clip;
             _currentMusic.volume = m.volume * musicVolume;
@@ -113,7 +93,7 @@ namespace AS.Toolbox.Singletons.Audio
 
         IEnumerator FadeOutPlayNextMusic(string nextMusic)
         {
-            float elapsed = 0.0f;
+            var elapsed = 0.0f;
             while (elapsed <= musicFadeOutDuration)
             {
                 yield return new WaitForEndOfFrame();
@@ -129,7 +109,7 @@ namespace AS.Toolbox.Singletons.Audio
         {
             if (soundArray == null)
                 return; // scenes without audio manager are creating empty one
-            foreach (Sound s in soundArray)
+            foreach (var s in soundArray)
             {
                 s.source = gameObject.AddComponent<AudioSource>();
                 s.source.clip = s.clips.Count > 0 ? s.clips.GetRandom() : s.clips[0];
@@ -140,9 +120,9 @@ namespace AS.Toolbox.Singletons.Audio
 
         public void Play(string sound)
         {
-            if (isAudio != null && !isAudio.v)
+            if (isAudioVar != null && !isAudioVar.v)
                 return;
-            Sound s = Array.Find(sounds, item => item.name == sound);
+            var s = Array.Find(sounds, item => item.name == sound);
             if (s == null)
             {
                 Debug.LogWarning($"Play sound: {sound} not found!");
@@ -160,7 +140,7 @@ namespace AS.Toolbox.Singletons.Audio
 
         public void Stop(string sound)
         {
-            Sound s = Array.Find(sounds, item => item.name == sound);
+            var s = Array.Find(sounds, item => item.name == sound);
             if (s == null)
             {
                 Debug.LogWarning($"Stop sound: {sound} not found!");
@@ -172,13 +152,13 @@ namespace AS.Toolbox.Singletons.Audio
 
         public void SetAudio()
         {
-            if (isAudio.v)
+            if (isAudioVar.v)
             {
                 Play("audio");
                 AutoPlayMusic();
             }
 
-            AudioListener.pause = !isAudio.v;
+            AudioListener.pause = !isAudioVar.v;
         }
     }
 }
