@@ -128,8 +128,7 @@ namespace AS.Toolbox.Utils
             >= 10000 => (value / 1000).ToString("N1") + "K",
             >= 1000 => value.ToString("N0"),
             >= 100 => value.ToString("N1"),
-            >= 10 => value.ToString("N2"),
-            _ => value.ToString("N3")
+            _ => value.ToString("N2")
         };
 
         public static string ToCurrencyString(this float value, bool isDoge) =>
