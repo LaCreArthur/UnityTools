@@ -9,25 +9,16 @@ public static class VibrationManager
     static void Awake()
     {
         Debug.Log($"Setting haptics to {IsHaptic}");
-        SetHapticsActive();
+        HapticController.hapticsEnabled = IsHaptic;
     }
 
     public static void SetHaptics(bool v) => IsHaptic = v;
 
-    static void SetHapticsActive()
-    {
-        HapticController.hapticsEnabled = IsHaptic;
-        HapticPatterns.PlayPreset(HapticPatterns.PresetType.Success);
-    }
-
     public static void Vibrate() => HapticPatterns.PlayPreset(HapticPatterns.PresetType.Selection);
-
     public static void Haptic(HapticPatterns.PresetType type) => HapticPatterns.PlayPreset(type);
-
     public static void HapticSuccess() => HapticPatterns.PlayPreset(HapticPatterns.PresetType.Success);
 
     public static void HapticFailure() => HapticPatterns.PlayPreset(HapticPatterns.PresetType.Failure);
-
     public static void HapticSelection() => HapticPatterns.PlayPreset(HapticPatterns.PresetType.Selection);
 
     public static void HapticSoft() => HapticPatterns.PlayPreset(HapticPatterns.PresetType.SoftImpact);

@@ -78,8 +78,9 @@ namespace AS.Toolbox.ScriptableObjects
         {
 #if UNITY_EDITOR
             return EditorApplication.isPlayingOrWillChangePlaymode && value != null && value.Equals(newVal);
-#endif
+#else
             return false;
+#endif
         }
 
         void HandleConstantValue(T newVal)
