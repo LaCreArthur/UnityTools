@@ -35,7 +35,7 @@ namespace AS.Toolbox.Singletons
 
                 if (s_instance == null)
                 {
-                    s_instance = FindObjectOfType<T>();
+                    s_instance = FindAnyObjectByType<T>();
                     if (s_instance == null)
                     {
                         Type t = typeof(T);
