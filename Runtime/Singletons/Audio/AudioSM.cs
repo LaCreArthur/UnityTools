@@ -18,18 +18,18 @@ namespace AS.Toolbox.Singletons.Audio
         [SerializeField] AudioMixerGroup sfxMixerGroup;
 
         [Header("Sounds")]
-
         [SerializeField] [Range(0.0f, 1.0f)]
         float soundVolume = 1.0f;
 
-        [SerializeField] Sound[] sounds = Array.Empty<Sound>();
+        [AssetList(AutoPopulate = true, Path = "_Doge/Scriptable Objects/Sounds")]
+        [SerializeField] SoundSO[] sounds;
 
         [Header("Musics")]
-
         [SerializeField] [Range(0.0f, 1.0f)]
         float musicVolume = 1.0f;
 
-        [SerializeField] Sound[] musics = Array.Empty<Sound>();
+        [AssetList(AutoPopulate = true, Path = "_Doge/Scriptable Objects/Musics")]
+        [SerializeField] SoundSO[] musics;
         [SerializeField] bool musicAutoPlayStart;
         [SerializeField] bool musicAutoPlayRandomClip;
         [SerializeField] bool musicAutoPlayNext;
@@ -51,13 +51,13 @@ namespace AS.Toolbox.Singletons.Audio
 
         void AutoPlayMusic()
         {
-            if (musicAutoPlayStart && musics.Length > 0)
-                PlayMusic(musics[0].name, musicAutoPlayRandomClip ? Random.Range(0, musics[0].clips.Count) : 0);
+            if (musicAutoPlayStart && (musics.Length > 0))
+                PlayMusic(musics[0].name, musicAutoPlayRandomClip ? Random.Range(0, musics[0].clips.Length) : 0);
         }
 
         void PlayMusic(string music, int clipId = 0)
         {
-            if (isAudioVar != null && !isAudioVar.v)
+            if ((isAudioVar != null) && !isAudioVar.v)
                 return;
             if (_currentMusic && _currentMusic.isPlaying)
             {
@@ -65,14 +65,14 @@ namespace AS.Toolbox.Singletons.Audio
                 return;
             }
 
-            var m = Array.Find(musics, item => item.name == music);
+            SoundSO m = Array.Find(musics, item => item.name == music);
             if (m == null)
             {
                 Debug.LogWarning($"Play music: {music} not found!");
                 return;
             }
 
-            var clip = m.clips[clipId];
+            AudioClip clip = m.clips[clipId];
             _currentMusic = m.source;
             _currentMusic.clip = clip;
             _currentMusic.volume = m.volume * musicVolume;
@@ -88,12 +88,12 @@ namespace AS.Toolbox.Singletons.Audio
         {
             yield return new WaitForSeconds(length);
             clipId++;
-            PlayMusic(musics[mIndex].name, clipId % musics[mIndex].clips.Count);
+            PlayMusic(musics[mIndex].name, clipId % musics[mIndex].clips.Length);
         }
 
         IEnumerator FadeOutPlayNextMusic(string nextMusic)
         {
-            var elapsed = 0.0f;
+            float elapsed = 0.0f;
             while (elapsed <= musicFadeOutDuration)
             {
                 yield return new WaitForEndOfFrame();
@@ -105,14 +105,14 @@ namespace AS.Toolbox.Singletons.Audio
             PlayMusic(nextMusic);
         }
 
-        void InitSoundArray(Sound[] soundArray, bool isMusic)
+        void InitSoundArray(SoundSO[] soundArray, bool isMusic)
         {
             if (soundArray == null)
                 return; // scenes without audio manager are creating empty one
-            foreach (var s in soundArray)
+            foreach (SoundSO s in soundArray)
             {
                 s.source = gameObject.AddComponent<AudioSource>();
-                s.source.clip = s.clips.Count > 0 ? s.clips.GetRandom() : s.clips[0];
+                s.source.clip = s.clips.Length > 0 ? s.clips.GetRandom() : s.clips[0];
                 s.source.loop = s.loop;
                 s.source.outputAudioMixerGroup = isMusic ? musicMixerGroup : sfxMixerGroup;
             }
@@ -120,16 +120,16 @@ namespace AS.Toolbox.Singletons.Audio
 
         public void Play(string sound)
         {
-            if (isAudioVar != null && !isAudioVar.v)
+            if ((isAudioVar != null) && !isAudioVar.v)
                 return;
-            var s = Array.Find(sounds, item => item.name == sound);
+            SoundSO s = Array.Find(sounds, item => item.name == sound);
             if (s == null)
             {
                 Debug.LogWarning($"Play sound: {sound} not found!");
                 return;
             }
 
-            s.source.clip = s.clips.Count > 0 ? s.clips.GetRandom() : s.clips[0];
+            s.source.clip = s.clips.Length > 0 ? s.clips.GetRandom() : s.clips[0];
             s.source.volume = s.volume * (1f + Random.Range(-s.volumeVariance / 2f, s.volumeVariance / 2f)) * soundVolume;
             s.source.pitch = s.pitch * (1f + Random.Range(-s.pitchVariance / 2f, s.pitchVariance / 2f));
             if (s.loop)
@@ -140,7 +140,7 @@ namespace AS.Toolbox.Singletons.Audio
 
         public void Stop(string sound)
         {
-            var s = Array.Find(sounds, item => item.name == sound);
+            SoundSO s = Array.Find(sounds, item => item.name == sound);
             if (s == null)
             {
                 Debug.LogWarning($"Stop sound: {sound} not found!");
