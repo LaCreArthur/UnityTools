@@ -146,7 +146,7 @@ namespace AS.Toolbox.Utils
             int lastIndex = objString.LastIndexOf('(');
             return lastIndex >= 0 ? $"{objString[..lastIndex]}({typeString})" : objString;
         }
-        public static string TypeAndNameToString(this ScriptableObject so) => $"{so.GetType().Name} [<color=cyan>{so.name}</color>]";
+        public static string TypeAndNameToString(this ScriptableObject so) => $"{so.GetType().Name} [<color=#00FFFF>{so.name}</color>]";
         #endregion
     }
 }
