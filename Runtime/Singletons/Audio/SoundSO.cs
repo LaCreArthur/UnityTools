@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace AS.Toolbox.Singletons.Audio
 {
+    [AssetSelector]
     public class SoundSO : ScriptableObject
     {
         [ListDrawerSettings(ShowFoldout = false)]

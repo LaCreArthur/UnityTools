@@ -6,6 +6,6 @@ namespace AS.Toolbox.Singletons.Audio
     public class AudioManagerSO : ScriptableObject
     {
         public AudioSM audioSingleton;
-        public void Play(string sound) => audioSingleton.Play(sound);
+        public void Play(SoundSO s) => audioSingleton.Play(s);
     }
 }

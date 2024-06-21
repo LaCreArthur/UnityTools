@@ -25,7 +25,7 @@ namespace AS.Toolbox.UI
         {
             DOTween.Kill(transform);
             if (sfx)
-                AudioSM.Instance.Play("click");
+                AudioSM.Instance.Play(Sounds.Click);
             if (haptic)
                 Vibrations.HapticSelection();
             if (punchScale)

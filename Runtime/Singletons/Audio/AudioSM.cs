@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using AS.Toolbox.ScriptableObjects;
 using AS.Toolbox.Utils;
@@ -13,23 +12,16 @@ namespace AS.Toolbox.Singletons.Audio
     {
         [SerializeField] AudioManagerSO audioManagerSO;
         [SerializeField] [Required] BoolVar isAudioVar;
+        [SerializeField] SoundSO musics;
         [SerializeField] AudioMixerGroup musicMixerGroup;
-
         [SerializeField] AudioMixerGroup sfxMixerGroup;
 
-        [Header("Sounds")]
         [SerializeField] [Range(0.0f, 1.0f)]
-        float soundVolume = 1.0f;
+        float soundMasterVolume = 1.0f;
 
-        [AssetList(AutoPopulate = true, Path = "_Doge/Scriptable Objects/Sounds")]
-        [SerializeField] SoundSO[] sounds;
-
-        [Header("Musics")]
         [SerializeField] [Range(0.0f, 1.0f)]
-        float musicVolume = 1.0f;
+        float musicMasterVolume = 1.0f;
 
-        [AssetList(AutoPopulate = true, Path = "_Doge/Scriptable Objects/Musics")]
-        [SerializeField] SoundSO[] musics;
         [SerializeField] bool musicAutoPlayStart;
         [SerializeField] bool musicAutoPlayRandomClip;
         [SerializeField] bool musicAutoPlayNext;
@@ -44,93 +36,88 @@ namespace AS.Toolbox.Singletons.Audio
         {
             if (audioManagerSO != null)
                 audioManagerSO.audioSingleton = this;
-            InitSoundArray(sounds, false);
-            InitSoundArray(musics, true);
+            InitAudioSource(musics, true);
             AutoPlayMusic();
         }
 
         void AutoPlayMusic()
         {
-            if (musicAutoPlayStart && (musics.Length > 0))
-                PlayMusic(musics[0].name, musicAutoPlayRandomClip ? Random.Range(0, musics[0].clips.Length) : 0);
+            if (musicAutoPlayStart && (musics != null))
+                PlayMusic(musicAutoPlayRandomClip ? Random.Range(0, musics.clips.Length) : 0);
         }
 
-        void PlayMusic(string music, int clipId = 0)
+        void PlayMusic(int clipId = 0)
         {
             if ((isAudioVar != null) && !isAudioVar.v)
                 return;
             if (_currentMusic && _currentMusic.isPlaying)
             {
-                StartCoroutine(FadeOutPlayNextMusic(music));
+                StartCoroutine(FadeOutPlayNextMusic());
                 return;
             }
 
-            SoundSO m = Array.Find(musics, item => item.name == music);
-            if (m == null)
+            if (musics == null)
             {
-                Debug.LogWarning($"Play music: {music} not found!");
+                Debug.LogWarning("Musics is null!");
                 return;
             }
 
-            AudioClip clip = m.clips[clipId];
-            _currentMusic = m.source;
+            AudioClip clip = musics.clips[clipId];
+            _currentMusic = musics.source;
             _currentMusic.clip = clip;
-            _currentMusic.volume = m.volume * musicVolume;
+            _currentMusic.volume = musics.volume * musicMasterVolume;
             _currentMusic.pitch = 1;
             _currentMusic.Play();
 
             //Debug.Log($"Music {name} starts");
             if (musicAutoPlayNext)
-                StartCoroutine(MusicAutoPlayNext(clip.length, Array.IndexOf(musics, m), clipId));
+                StartCoroutine(MusicAutoPlayNext(clip.length, clipId));
         }
 
-        IEnumerator MusicAutoPlayNext(float length, int mIndex, int clipId)
+        IEnumerator MusicAutoPlayNext(float clipLength, int clipId)
         {
-            yield return new WaitForSeconds(length);
+            yield return new WaitForSeconds(clipLength);
             clipId++;
-            PlayMusic(musics[mIndex].name, clipId % musics[mIndex].clips.Length);
+            PlayMusic(clipId % musics.clips.Length);
         }
 
-        IEnumerator FadeOutPlayNextMusic(string nextMusic)
+        IEnumerator FadeOutPlayNextMusic()
         {
             float elapsed = 0.0f;
             while (elapsed <= musicFadeOutDuration)
             {
                 yield return new WaitForEndOfFrame();
                 elapsed += Time.deltaTime;
-                _currentMusic.volume = (musicFadeOutDuration - elapsed) / musicFadeOutDuration * musicVolume;
+                _currentMusic.volume = (musicFadeOutDuration - elapsed) / musicFadeOutDuration * musicMasterVolume;
             }
 
             _currentMusic.Stop();
-            PlayMusic(nextMusic);
+            PlayMusic(musicAutoPlayRandomClip ? Random.Range(0, musics.clips.Length) : 0);
         }
 
-        void InitSoundArray(SoundSO[] soundArray, bool isMusic)
+        void InitAudioSource(SoundSO s, bool isMusic = false)
         {
-            if (soundArray == null)
-                return; // scenes without audio manager are creating empty one
-            foreach (SoundSO s in soundArray)
-            {
-                s.source = gameObject.AddComponent<AudioSource>();
-                s.source.clip = s.clips.Length > 0 ? s.clips.GetRandom() : s.clips[0];
-                s.source.loop = s.loop;
-                s.source.outputAudioMixerGroup = isMusic ? musicMixerGroup : sfxMixerGroup;
-            }
+            s.source = gameObject.AddComponent<AudioSource>();
+            s.source.clip = s.clips.Length > 0 ? s.clips.GetRandom() : s.clips[0];
+            s.source.loop = s.loop;
+            s.source.outputAudioMixerGroup = isMusic ? musicMixerGroup : sfxMixerGroup;
         }
 
-        public void Play(string sound)
+        public void Play(SoundSO s)
         {
             if ((isAudioVar != null) && !isAudioVar.v)
                 return;
-            SoundSO s = Array.Find(sounds, item => item.name == sound);
             if (s == null)
             {
-                Debug.LogWarning($"Play sound: {sound} not found!");
+                Debug.LogWarning("Play sound: SoundSO is null!");
                 return;
             }
 
+            if (s.source == null)
+                InitAudioSource(s);
+
             s.source.clip = s.clips.Length > 0 ? s.clips.GetRandom() : s.clips[0];
-            s.source.volume = s.volume * (1f + Random.Range(-s.volumeVariance / 2f, s.volumeVariance / 2f)) * soundVolume;
+            s.source.volume = s.volume * (1f + Random.Range(-s.volumeVariance / 2f, s.volumeVariance / 2f)) * soundMasterVolume;
             s.source.pitch = s.pitch * (1f + Random.Range(-s.pitchVariance / 2f, s.pitchVariance / 2f));
             if (s.loop)
                 s.source.Play();
@@ -138,23 +125,22 @@ namespace AS.Toolbox.Singletons.Audio
                 s.source.PlayOneShot(s.source.clip);
         }
 
-        public void Stop(string sound)
+        public void Stop(SoundSO s)
         {
-            SoundSO s = Array.Find(sounds, item => item.name == sound);
             if (s == null)
             {
-                Debug.LogWarning($"Stop sound: {sound} not found!");
+                Debug.LogWarning("Stop sound: SoundSO is null!");
                 return;
             }
 
             s.source.Stop();
         }
 
-        public void SetAudio()
+        void SetAudio()
         {
             if (isAudioVar.v)
             {
-                Play("audio");
+                Play(Sounds.AudioEnabled);
                 AutoPlayMusic();
             }
 
