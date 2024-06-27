@@ -2,7 +2,7 @@
 
 namespace AS.Toolbox.Singletons.Audio
 {
-    public class Sounds : SingletonMono<Sounds>
+    public class SOSounds : SingletonMono<SOSounds>
     {
         [SerializeField] SoundSO asteroid;
         [SerializeField] SoundSO audioEnabled;

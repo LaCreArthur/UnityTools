@@ -10,7 +10,6 @@ namespace AS.Toolbox.Singletons.Audio
 {
     public class AudioSM : SingletonMono<AudioSM>
     {
-        [SerializeField] AudioManagerSO audioManagerSO;
         [SerializeField] [Required] BoolVar isAudioVar;
         [SerializeField] SoundSO musics;
         [SerializeField] AudioMixerGroup musicMixerGroup;
@@ -34,8 +33,6 @@ namespace AS.Toolbox.Singletons.Audio
 
         protected override void OnAwake()
         {
-            if (audioManagerSO != null)
-                audioManagerSO.audioSingleton = this;
             InitAudioSource(musics, true);
             AutoPlayMusic();
         }
@@ -95,17 +92,17 @@ namespace AS.Toolbox.Singletons.Audio
             PlayMusic(musicAutoPlayRandomClip ? Random.Range(0, musics.clips.Length) : 0);
         }
 
-        void InitAudioSource(SoundSO s, bool isMusic = false)
+        static void InitAudioSource(SoundSO s, bool isMusic = false)
         {
-            s.source = gameObject.AddComponent<AudioSource>();
+            s.source = Instance.gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clips.Length > 0 ? s.clips.GetRandom() : s.clips[0];
             s.source.loop = s.loop;
-            s.source.outputAudioMixerGroup = isMusic ? musicMixerGroup : sfxMixerGroup;
+            s.source.outputAudioMixerGroup = isMusic ? Instance.musicMixerGroup : Instance.sfxMixerGroup;
         }
 
-        public void Play(SoundSO s)
+        public static void Play(SoundSO s)
         {
-            if ((isAudioVar != null) && !isAudioVar.v)
+            if ((Instance.isAudioVar != null) && !Instance.isAudioVar.v)
                 return;
             if (s == null)
             {
@@ -117,7 +114,7 @@ namespace AS.Toolbox.Singletons.Audio
                 InitAudioSource(s);
 
             s.source.clip = s.clips.Length > 0 ? s.clips.GetRandom() : s.clips[0];
-            s.source.volume = s.volume * (1f + Random.Range(-s.volumeVariance / 2f, s.volumeVariance / 2f)) * soundMasterVolume;
+            s.source.volume = s.volume * (1f + Random.Range(-s.volumeVariance / 2f, s.volumeVariance / 2f)) * Instance.soundMasterVolume;
             s.source.pitch = s.pitch * (1f + Random.Range(-s.pitchVariance / 2f, s.pitchVariance / 2f));
             if (s.loop)
                 s.source.Play();
@@ -140,7 +137,7 @@ namespace AS.Toolbox.Singletons.Audio
         {
             if (isAudioVar.v)
             {
-                Play(Sounds.AudioEnabled);
+                Play(SOSounds.AudioEnabled);
                 AutoPlayMusic();
             }
 
