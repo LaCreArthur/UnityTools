@@ -9,9 +9,12 @@ namespace AS.Toolbox.ScriptableObjects
 {
     public class ReferencedCallbacks<T> : ReferencedCallbacksBase<UnityEvent<T>>
     {
-        [Space, SerializeField, InlineProperty, HideReferenceObjectPicker,
-         ListDrawerSettings(IsReadOnly = true, DefaultExpandedState = true),
-         OnInspectorGUI("RemoveNullLoadedRuntime")]
+        [Space]
+        [SerializeField]
+        [InlineProperty]
+        [HideReferenceObjectPicker]
+        [ListDrawerSettings(IsReadOnly = true, DefaultExpandedState = true)]
+        [OnInspectorGUI("RemoveNullLoadedRuntime")]
         List<ReferencedAction<T>> runtimeLoadedListeners = new List<ReferencedAction<T>>();
 
         void RemoveNullLoadedRuntime() => runtimeLoadedListeners?.RemoveAll(l => l.reference == null);
@@ -20,7 +23,7 @@ namespace AS.Toolbox.ScriptableObjects
         {
             // look in listeners if the listener already exists
             ReferencedAction<T> existingListener = runtimeLoadedListeners.Find(l => l.reference == listener);
-            if (existingListener?.callbacks == null || existingListener.reference == null)
+            if ((existingListener?.callbacks == null) || (existingListener.reference == null))
             {
                 existingListener = new ReferencedAction<T>(new List<Action<T>>
                     {
@@ -89,42 +92,57 @@ namespace AS.Toolbox.ScriptableObjects
     public class ReferencedCallbacksBase<T> where T : UnityEventBase
     {
         // persistent listeners is a list of UnityEvent 
-        [Space, SerializeField, InlineProperty, HideReferenceObjectPicker,
-         ListDrawerSettings(IsReadOnly = true, DefaultExpandedState = true),
-         OnInspectorGUI("RemoveNullPersistent")]
+        [Space]
+        [SerializeField]
+        [InlineProperty]
+        [HideReferenceObjectPicker]
+        [ListDrawerSettings(IsReadOnly = true, DefaultExpandedState = true)]
+        [OnInspectorGUI("RemoveNullPersistent")]
         protected List<ReferencedEvent<T>> persistentListeners = new List<ReferencedEvent<T>>();
 
         // runtime listeners is a list of 
-        [Space, SerializeField, InlineProperty, HideReferenceObjectPicker,
-         ListDrawerSettings(IsReadOnly = true, DefaultExpandedState = true),
-         OnInspectorGUI("RemoveNullRuntime")]
+        [Space]
+        [SerializeField]
+        [InlineProperty]
+        [HideReferenceObjectPicker]
+        [ListDrawerSettings(IsReadOnly = true, DefaultExpandedState = true)]
+        [OnInspectorGUI("RemoveNullRuntime")]
         protected List<ReferencedAction> runtimeListeners = new List<ReferencedAction>();
 
         void RemoveNullPersistent() => persistentListeners?.RemoveAll(l => l.reference == null);
 
         void RemoveNullRuntime() => runtimeListeners?.RemoveAll(l => l.reference == null);
 
-        public void Add(Action callback, Object listener)
+        public void Add(Action callback, Object listener, bool dontAddDuplicate = false)
         {
             // look in listeners if the listener already exists
             ReferencedAction existingListener = runtimeListeners.Find(l => l.reference == listener);
-            if (existingListener?.callbacks == null || existingListener.reference == null)
+            if ((existingListener?.callbacks == null) || (existingListener.reference == null))
             {
                 existingListener = new ReferencedAction(new List<Action>
                     {
                         callback
                     },
                     listener);
+
                 runtimeListeners.Add(existingListener);
             }
             else
+            {
+                if (dontAddDuplicate && existingListener.callbacks.Contains(callback))
+                    return;
                 existingListener.callbacks.Add(callback);
+            }
         }
 
         public void Remove(Action callback, Object listener)
         {
             ReferencedAction existingListener = runtimeListeners.Find(l => l.reference == listener);
             existingListener?.callbacks?.Remove(callback);
+            if (existingListener?.callbacks?.Count == 0)
+            {
+                runtimeListeners.Remove(existingListener);
+            }
         }
 
         public void RemoveAll(Func<ReferencedEvent<T>, bool> match)

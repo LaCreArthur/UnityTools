@@ -7,19 +7,26 @@ using Object = UnityEngine.Object;
 
 namespace AS.Toolbox.ScriptableObjects
 {
-    [CreateAssetMenu(menuName = "Scriptable Objects/Game State"), AssetSelector]
+    [AssetSelector]
+    [CreateAssetMenu(menuName = "Scriptable Objects/Game State")]
     public class GameStateSO : ScriptableObject
     {
         public List<GameStateSO> validNextStates = new List<GameStateSO>();
 
-        [FoldoutGroup("On Enter Listener")]
-        public bool logOnEnterCallbacks;
+        [FoldoutGroup("On Enter Listener")] public bool logOnEnterCallbacks;
 
-        [FoldoutGroup("On Exit Listener")]
-        public bool logOnExitCallbacks;
-        [FoldoutGroup("On Enter Listener"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullOnEnter")]
+        [FoldoutGroup("On Exit Listener")] public bool logOnExitCallbacks;
+        [FoldoutGroup("On Enter Listener")]
+        [HideLabel]
+        [InlineProperty]
+        [HideReferenceObjectPicker]
+        [OnInspectorGUI("RemoveNullOnEnter")]
         public ReferencedCallbacks OnEnter { get; private set; } = new ReferencedCallbacks();
-        [FoldoutGroup("On Exit Listener"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullOnExit")]
+        [FoldoutGroup("On Exit Listener")]
+        [HideLabel]
+        [InlineProperty]
+        [HideReferenceObjectPicker]
+        [OnInspectorGUI("RemoveNullOnExit")]
         public ReferencedCallbacks OnExit { get; private set; } = new ReferencedCallbacks();
 
         void RemoveNullOnEnter() => OnEnter.RemoveAll(l => l.reference == null);
@@ -41,9 +48,9 @@ namespace AS.Toolbox.ScriptableObjects
             }
         }
 
-        public void AddOnEnter(Action callback)
+        public void AddOnEnter(Action callback, bool dontAddDuplicate = false)
         {
-            if (OnEnter != null) OnEnter.Add(callback, (Object)callback.Target);
+            if (OnEnter != null) OnEnter.Add(callback, (Object)callback.Target, dontAddDuplicate);
             else Debug.Log($"{name} onEnter is null, cannot add callback", this);
         }
         public void AddOnExit(Action callback)
