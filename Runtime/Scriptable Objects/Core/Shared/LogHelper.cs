@@ -5,7 +5,7 @@ namespace AS.Toolbox.ScriptableObjects
 {
     public static class LogHelper
     {
-        public static string HeaderStr(string soName, string refName) => $"[<color=cyan>{soName}</color>] callback from <b>{refName}</b> ";
+        public static string HeaderStr(string soName, string refName) => $"[<color=#00FFFF>{soName}</color>] callback from <b>{refName}</b> ";
 
         static StringBuilder MethodStr(string typeName, string methodName) => new StringBuilder($" ~> {typeName}.{methodName}");
 
