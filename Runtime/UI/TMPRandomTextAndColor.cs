@@ -7,6 +7,7 @@ namespace AS.Toolbox.UI
     [RequireComponent(typeof(TMP_Text))]
     public class TMPRandomTextAndColor : MonoBehaviour
     {
+        public bool onEnable;
         public string[] queries;
         public Color[] colors;
 
@@ -16,6 +17,11 @@ namespace AS.Toolbox.UI
         {
             _text = GetComponent<TMP_Text>();
             SetRandomTextAndColor();
+        }
+
+        void OnEnable()
+        {
+            if (onEnable) SetRandomTextAndColor();
         }
 
         public void SetRandomTextAndColor()

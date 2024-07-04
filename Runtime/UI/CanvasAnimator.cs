@@ -1,16 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using AS.Toolbox.Utils;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace AS.Toolbox.UI
 {
-
-
-    [RequireComponent(typeof(Canvas))]
-    [RequireComponent(typeof(CanvasGroup))]
+    [RequireComponent(typeof(Canvas), typeof(CanvasGroup))]
     public class CanvasAnimator : MonoBehaviour
     {
         public enum SlideDirection { Left, Right, Up, Down }
@@ -20,7 +16,7 @@ namespace AS.Toolbox.UI
         public bool resetPosOnStart = true;
         public bool blockRaycastWhenVisible = true;
 
-        [FoldoutGroup("On Show")] public bool playChildTweensOnShow;
+
         [FoldoutGroup("On Show")] public bool fadeIn;
         [FoldoutGroup("On Show")] [ShowIf("fadeIn")] [Indent] public Ease fadeInEase = Ease.InOutSine;
         [FoldoutGroup("On Show")] [ShowIf("fadeIn")] [Indent] public float fadeInDuration = 0.25f;
@@ -28,34 +24,29 @@ namespace AS.Toolbox.UI
         [FoldoutGroup("On Show")] [ShowIf("slideIn")] [Indent] public SlideDirection slideInDirection;
         [FoldoutGroup("On Show")] [ShowIf("slideIn")] [Indent] public Ease slideInEase = Ease.InOutSine;
         [FoldoutGroup("On Show")] [ShowIf("slideIn")] [Indent] public float slideInDuration = 0.25f;
-        [FoldoutGroup("On Show")] [FoldoutGroup("On Show")] public bool scaleIn;
+        [FoldoutGroup("On Show")] public bool scaleIn;
         [FoldoutGroup("On Show")] [ShowIf("scaleIn")] [Indent] public Ease scaleInEase = Ease.InOutSine;
         [FoldoutGroup("On Show")] [ShowIf("scaleIn")] [Indent] public float scaleInDuration = 0.25f;
 
-        [FoldoutGroup("On Show")] public UnityEvent onShowEvents;
 
-        [FoldoutGroup("On Hide")] public bool rewindChildTweensOnHide;
         [FoldoutGroup("On Hide")] public bool fadeOut;
         [FoldoutGroup("On Hide")] [ShowIf("fadeOut")] [Indent] public float fadeOutDuration = 0.25f;
         [FoldoutGroup("On Hide")] [ShowIf("fadeOut")] [Indent] public Ease fadeOutEase = Ease.InOutSine;
-
         [FoldoutGroup("On Hide")] public bool slideOut;
         [FoldoutGroup("On Hide")] [ShowIf("slideOut")] [Indent] public SlideDirection slideOutDirection;
         [FoldoutGroup("On Hide")] [ShowIf("slideOut")] [Indent] public Ease slideOutEase = Ease.InOutSine;
         [FoldoutGroup("On Hide")] [ShowIf("slideOut")] [Indent] public float slideOutDuration = 0.25f;
-
         [FoldoutGroup("On Hide")] public bool scaleOut;
         [FoldoutGroup("On Hide")] [ShowIf("scaleOut")] [Indent] public float scaleOutDuration = 0.25f;
         [FoldoutGroup("On Hide")] [ShowIf("scaleOut")] [Indent] public Ease scaleOutEase = Ease.InOutSine;
 
-        [FoldoutGroup("On Hide")] public UnityEvent onHideEvents;
-
         [Header("State")]
         [SerializeField] [ReadOnly] public bool isHidden;
-
         Canvas _canvas;
         CanvasGroup _canvasGroup;
-        List<Tween> _childTweens;
+
+        public event Action onShow;
+        public event Action onHide;
 
         public bool IsInitialized { get; private set; }
 
@@ -70,7 +61,6 @@ namespace AS.Toolbox.UI
             if (resetPosOnStart)
                 transform.localPosition = Vector3.zero;
 
-            InitChildTweens();
 
             isHidden = true;
 
@@ -81,43 +71,13 @@ namespace AS.Toolbox.UI
                 _canvasGroup.alpha = 0;
                 _canvasGroup.blocksRaycasts = false;
                 _canvas.enabled = false;
-                // StartCoroutine(Coroutines.WaitForEndOfFrame(() => 
                 gameObject.SetActive(false);
-                // ));
             }
 
             IsInitialized = true;
         }
 
-        void InitChildTweens()
-        {
-            // don't search for tweens if not needed
-            if (!playChildTweensOnShow || !rewindChildTweensOnHide)
-                return;
 
-            // Init the list
-            _childTweens = new List<Tween>();
-
-            // get all DOTweenAnimation components in child
-            DOTweenAnimation[] tweenAnimations = GetComponentsInChildren<DOTweenAnimation>();
-
-            GameObject previousChild = null;
-            foreach (DOTweenAnimation anim in tweenAnimations)
-            {
-                // no need to add tweens if there is more than one DOTweenAnimation component on the same GO
-                // since anim.GetTweens() returns all the tweens
-                if (anim.gameObject == previousChild)
-                    continue;
-
-                // add the tweens of this animation to the list
-                _childTweens.AddRange(anim.GetTweens());
-
-                // keep track of previous GO to avoid duplicates
-                previousChild = anim.gameObject;
-
-                // Debug.Log($"{anim.gameObject.name} contains {anim.GetTweens().Count} tweens");
-            }
-        }
 
         [Button]
         public void Show()
@@ -126,7 +86,6 @@ namespace AS.Toolbox.UI
             {
                 //Debug.Log("Delay show because not initialized yet", this);
                 StartCoroutine(Coroutines.WaitForEndOfFrame(Show));
-                // DOVirtual.DelayedCall(0.1f, Show);
                 return;
             }
 
@@ -142,8 +101,6 @@ namespace AS.Toolbox.UI
 
             // DOTween.Kill(this); // kill the potential set inactive on awake
             DOTween.Kill(_canvasGroup);
-
-            if (playChildTweensOnShow) _childTweens.ForEach(tween => tween.Play());
 
             if (fadeIn)
                 _canvasGroup.DOFade(1f, slideInDuration).SetEase(slideInEase).SetUpdate(true);
@@ -162,7 +119,7 @@ namespace AS.Toolbox.UI
                 transform.DOScale(Vector3.one, scaleInDuration).SetEase(scaleInEase).SetUpdate(true);
             }
 
-            onShowEvents.Invoke();
+            onShow?.Invoke();
         }
 
         //todo: maybe not it responsibility
@@ -185,7 +142,6 @@ namespace AS.Toolbox.UI
             _canvasGroup.blocksRaycasts = false;
 
             DOTween.Kill(_canvasGroup);
-            if (rewindChildTweensOnHide) _childTweens.ForEach(tween => tween.Rewind());
 
             if (fadeOut)
                 _canvasGroup.DOFade(0f, fadeOutDuration).SetEase(fadeOutEase).SetUpdate(true).OnComplete(FinalizeHide);
@@ -203,7 +159,7 @@ namespace AS.Toolbox.UI
                 transform.DOScale(Vector3.zero, scaleOutDuration).SetEase(scaleOutEase).SetUpdate(true).OnComplete(FinalizeHide);
             }
 
-            onHideEvents.Invoke();
+            onHide?.Invoke();
 
             if (!slideOut && !fadeOut && !scaleOut)
                 FinalizeHide();
