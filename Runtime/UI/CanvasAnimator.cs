@@ -45,8 +45,8 @@ namespace AS.Toolbox.UI
         Canvas _canvas;
         CanvasGroup _canvasGroup;
 
-        public event Action onShow;
-        public event Action onHide;
+        public event Action OnShow;
+        public event Action OnHide;
 
         public bool IsInitialized { get; private set; }
 
@@ -119,7 +119,7 @@ namespace AS.Toolbox.UI
                 transform.DOScale(Vector3.one, scaleInDuration).SetEase(scaleInEase).SetUpdate(true);
             }
 
-            onShow?.Invoke();
+            OnShow?.Invoke();
         }
 
         //todo: maybe not it responsibility
@@ -159,7 +159,7 @@ namespace AS.Toolbox.UI
                 transform.DOScale(Vector3.zero, scaleOutDuration).SetEase(scaleOutEase).SetUpdate(true).OnComplete(FinalizeHide);
             }
 
-            onHide?.Invoke();
+            OnHide?.Invoke();
 
             if (!slideOut && !fadeOut && !scaleOut)
                 FinalizeHide();

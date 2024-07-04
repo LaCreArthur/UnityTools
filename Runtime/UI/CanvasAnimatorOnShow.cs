@@ -15,7 +15,7 @@ namespace AS.Toolbox.UI
             _canvasAnimator = GetComponent<CanvasAnimator>();
             if (onShowEvents != null)
             {
-                _canvasAnimator.onShow += onShowEvents.Invoke;
+                _canvasAnimator.OnShow += onShowEvents.Invoke;
             }
         }
     }

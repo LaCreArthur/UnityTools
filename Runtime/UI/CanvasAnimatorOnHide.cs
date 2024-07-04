@@ -15,7 +15,7 @@ namespace AS.Toolbox.UI
             _canvasAnimator = GetComponent<CanvasAnimator>();
             if (onHideEvents != null)
             {
-                _canvasAnimator.onHide += onHideEvents.Invoke;
+                _canvasAnimator.OnHide += onHideEvents.Invoke;
             }
         }
     }

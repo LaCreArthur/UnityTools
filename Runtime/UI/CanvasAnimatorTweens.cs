@@ -18,8 +18,8 @@ namespace AS.Toolbox.UI
             _canvasAnimator = GetComponent<CanvasAnimator>();
             InitChildTweens();
 
-            if (playChildTweensOnShow) _canvasAnimator.onShow += PlayTweens;
-            if (rewindChildTweensOnHide) _canvasAnimator.onHide += RewindTweens;
+            if (playChildTweensOnShow) _canvasAnimator.OnShow += PlayTweens;
+            if (rewindChildTweensOnHide) _canvasAnimator.OnHide += RewindTweens;
         }
 
         void InitChildTweens()
