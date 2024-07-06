@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -19,8 +20,9 @@ namespace AS.Toolbox.ScriptableObjects
 
         void RemoveNullLoadedRuntime() => runtimeLoadedListeners?.RemoveAll(l => l.reference == null);
 
-        public void Add(Action<T> callback, Object listener)
+        public void Add(Action<T> callback, bool dontAddDuplicate = false)
         {
+            var listener = (Object)callback.Target;
             // look in listeners if the listener already exists
             ReferencedAction<T> existingListener = runtimeLoadedListeners.Find(l => l.reference == listener);
             if ((existingListener?.callbacks == null) || (existingListener.reference == null))
@@ -33,7 +35,11 @@ namespace AS.Toolbox.ScriptableObjects
                 runtimeLoadedListeners.Add(existingListener);
             }
             else
+            {
+                if (dontAddDuplicate && existingListener.callbacks.Contains(callback))
+                    return;
                 existingListener.callbacks.Add(callback);
+            }
         }
 
         public void RemoveRuntimeEvents()
@@ -42,8 +48,9 @@ namespace AS.Toolbox.ScriptableObjects
             runtimeListeners.Clear();
         }
 
-        public void Remove(Action<T> callback, Object listener)
+        public void Remove(Action<T> callback)
         {
+            var listener = (Object)callback.Target;
             ReferencedAction<T> existingListener = runtimeLoadedListeners.Find(l => l.reference == listener);
             existingListener?.callbacks?.Remove(callback);
         }
@@ -113,8 +120,13 @@ namespace AS.Toolbox.ScriptableObjects
 
         void RemoveNullRuntime() => runtimeListeners?.RemoveAll(l => l.reference == null);
 
-        public void Add(Action callback, Object listener, bool dontAddDuplicate = false)
+        public void Add(Action callback, bool dontAddDuplicate = false, Object listener = null)
         {
+
+            if (listener == null)
+            {
+                listener = (Object)callback.Target;
+            }
             // look in listeners if the listener already exists
             ReferencedAction existingListener = runtimeListeners.Find(l => l.reference == listener);
             if ((existingListener?.callbacks == null) || (existingListener.reference == null))
@@ -135,8 +147,9 @@ namespace AS.Toolbox.ScriptableObjects
             }
         }
 
-        public void Remove(Action callback, Object listener)
+        public void Remove(Action callback)
         {
+            var listener = (Object)callback.Target;
             ReferencedAction existingListener = runtimeListeners.Find(l => l.reference == listener);
             existingListener?.callbacks?.Remove(callback);
             if (existingListener?.callbacks?.Count == 0)

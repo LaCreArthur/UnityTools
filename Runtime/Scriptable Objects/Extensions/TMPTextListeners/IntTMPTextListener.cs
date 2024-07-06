@@ -25,21 +25,21 @@ namespace AS.Toolbox.ScriptableObjects
         public bool isValueMultiplied;
         [ShowIf("isValueMultiplied")] public int multiple;
 
-        TMP_Text m_text;
+        TMP_Text _text;
 
         void Start()
         {
-            m_text = GetComponent<TMP_Text>();
-            if (autoUpdateOnChange) var.onChange.Add(SetText, this);
+            _text = GetComponent<TMP_Text>();
+            if (autoUpdateOnChange) var.AddOnChange(SetText);
             SetText();
         }
 
-        public void SetText()
+        void SetText()
         {
             int val = isValueOffset ? var.v + valueOffset :
                 isValueMultiplied ? var.v * multiple : var.v;
 
-            m_text.text = $"{prefix}{val}{suffix}";
+            _text.text = $"{prefix}{val}{suffix}";
         }
     }
 }

@@ -6,8 +6,7 @@ namespace AS.Toolbox.ScriptableObjects
     [ExecuteAlways]
     public abstract class VarListenerBase<T, TVariable> : MonoBehaviour where TVariable : SOVar<T>
     {
-        [SerializeField]
-        protected TVariable variable;
+        [SerializeField] protected TVariable variable;
 
         public bool callEventsOnStart;
         public UnityEvent<T> events;
@@ -25,13 +24,13 @@ namespace AS.Toolbox.ScriptableObjects
         void Subscribe()
         {
             if (variable != null)
-                variable.onChange?.Add(new ReferencedEvent<UnityEvent<T>>(events, this));
+                variable.AddOnChange(new ReferencedEvent<UnityEvent<T>>(events, this));
         }
 
         void Unsubscribe()
         {
             if (variable != null)
-                variable.onChange?.Remove(new ReferencedEvent<UnityEvent<T>>(events, this));
+                variable.RemoveOnChange(new ReferencedEvent<UnityEvent<T>>(events, this));
         }
     }
 }

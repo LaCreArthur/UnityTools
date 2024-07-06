@@ -15,11 +15,9 @@ namespace AS.Toolbox.Singletons.Audio
         [SerializeField] AudioMixerGroup musicMixerGroup;
         [SerializeField] AudioMixerGroup sfxMixerGroup;
 
-        [SerializeField] [Range(0.0f, 1.0f)]
-        float soundMasterVolume = 1.0f;
+        [SerializeField] [Range(0.0f, 1.0f)] float soundMasterVolume = 1.0f;
 
-        [SerializeField] [Range(0.0f, 1.0f)]
-        float musicMasterVolume = 1.0f;
+        [SerializeField] [Range(0.0f, 1.0f)] float musicMasterVolume = 1.0f;
 
         [SerializeField] bool musicAutoPlayStart;
         [SerializeField] bool musicAutoPlayRandomClip;
@@ -28,8 +26,8 @@ namespace AS.Toolbox.Singletons.Audio
 
         AudioSource _currentMusic;
 
-        void OnEnable() => isAudioVar.onChange.Add(SetAudio, this);
-        void OnDisable() => isAudioVar.onChange.Remove(SetAudio, this);
+        void OnEnable() => isAudioVar.AddOnChange(SetAudio);
+        void OnDisable() => isAudioVar.RemoveOnChange(SetAudio);
 
         protected override void OnAwake()
         {

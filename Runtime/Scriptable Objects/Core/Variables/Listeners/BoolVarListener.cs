@@ -10,13 +10,13 @@ namespace AS.Toolbox.ScriptableObjects
         protected override void OnEnable()
         {
             base.OnEnable();
-            variable.onChange.Add(OnVariableChanged, this);
+            variable.AddOnChange(OnVariableChanged);
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
-            variable.onChange.Remove(OnVariableChanged, this);
+            variable.RemoveOnChange(OnVariableChanged);
         }
 
         void OnVariableChanged(bool value)

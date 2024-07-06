@@ -15,17 +15,17 @@ namespace AS.Toolbox.ScriptableObjects
         [SerializeField] protected bool autoUpdateOnChange = true;
 
         [SerializeField] protected bool isValueOffset;
-        [ShowIf("isValueOffset"), SerializeField] protected float valueOffset;
+        [ShowIf("isValueOffset")] [SerializeField] protected float valueOffset;
 
         [SerializeField] protected bool isValueMultiplied;
-        [ShowIf("isValueMultiplied"), SerializeField] protected float multiple;
+        [ShowIf("isValueMultiplied")] [SerializeField] protected float multiple;
         [SerializeField] UnityEvent onValueChanged;
 
         protected TMP_Text text;
         void Start()
         {
             text = GetComponent<TMP_Text>();
-            if (autoUpdateOnChange) var.onChange.Add(SetTextInternal, this);
+            if (autoUpdateOnChange) var.AddOnChange(SetTextInternal);
             SetTextInternal();
         }
 

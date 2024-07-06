@@ -3,16 +3,18 @@ using AS.Toolbox.Utils;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
-using Object = UnityEngine.Object;
 
 namespace AS.Toolbox.ScriptableObjects
 {
     public abstract class LoadedSOEvent<T> : SOEventBase, ISOEvent<UnityEvent<T>>
     {
-        [TitleGroup("Debug"), SerializeField, InlineButton("RaiseWithTestValue")]
-        T testValue;
+        [TitleGroup("Debug")] [SerializeField] [InlineButton("RaiseWithTestValue")] T testValue;
 
-        [TitleGroup("Listener"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullElements")]
+        [TitleGroup("Listener")]
+        [HideLabel]
+        [InlineProperty]
+        [HideReferenceObjectPicker]
+        [OnInspectorGUI("RemoveNullElements")]
         public ReferencedCallbacks<T> listeners = new ReferencedCallbacks<T>();
 
         public void Add(ReferencedEvent<UnityEvent<T>> rEvent) => listeners.Add(rEvent);
@@ -22,8 +24,8 @@ namespace AS.Toolbox.ScriptableObjects
         public void RaiseWithTestValue() => Raise(testValue);
 
         void RemoveNullElements() => listeners.RemoveAll(l => l.reference == null);
-        public void Add(Action<T> action) => listeners.Add(action, (Object)action.Target);
-        public void Remove(Action<T> action) => listeners.Remove(action, (Object)action.Target);
+        public void Add(Action<T> action, bool dontAddDuplicate = false) => listeners.Add(action, dontAddDuplicate);
+        public void Remove(Action<T> action) => listeners.Remove(action);
 
         public void Raise(T value)
         {

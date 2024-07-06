@@ -3,7 +3,7 @@ using AS.Toolbox.Utils;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
+using UnityEngine.Events;
 
 namespace AS.Toolbox.ScriptableObjects
 {
@@ -23,8 +23,9 @@ namespace AS.Toolbox.ScriptableObjects
 
         void OnValidate() => OnEnable();
 
-        public void AddOnChange(Action callback) => onChange.Add(callback, (Object)callback.Target);
-        public void RemoveOnChange(Action callback) => onChange.Remove(callback, (Object)callback.Target);
+        public void AddOnChange(Action callback) => onChange.Add(callback);
+        public void RemoveOnChange(Action callback) => onChange.Remove(callback);
+
         public override string ToString() => value.ToString().Replace($"({value.GetType()})", "");
 
         public virtual void Save() {}
@@ -34,22 +35,22 @@ namespace AS.Toolbox.ScriptableObjects
             var t = default(T);
             return t;
         }
+        public void AddOnChange(Action<T> callback) => onChange.Add(callback);
+        public void AddOnChange(ReferencedEvent<UnityEvent<T>> callback) => onChange.Add(callback);
+        public void RemoveOnChange(Action<T> callback) => onChange.Remove(callback);
+        public void RemoveOnChange(ReferencedEvent<UnityEvent<T>> callback) => onChange.Remove(callback);
 
         #region Value
-        [TitleGroup("Values"), SerializeField, ReadOnly, PropertyOrder(0)]
-        protected T value;
 
-        [TitleGroup("Values"), SerializeField, ReadOnly, PropertyOrder(0)]
-        protected T previousValue;
+        [TitleGroup("Values")] [SerializeField] [ReadOnly] [PropertyOrder(0)] protected T value;
 
-        [TitleGroup("Values"), SerializeField, PropertyOrder(0)]
-        protected T initialValue;
+        [TitleGroup("Values")] [SerializeField] [ReadOnly] [PropertyOrder(0)] protected T previousValue;
 
-        [TitleGroup("Values"), SerializeField]
-        protected bool isConstant;
+        [TitleGroup("Values")] [SerializeField] [PropertyOrder(0)] protected T initialValue;
 
-        [TitleGroup("Values"), HideIf("isConstant"), SerializeField]
-        bool isStored;
+        [TitleGroup("Values")] [SerializeField] protected bool isConstant;
+
+        [TitleGroup("Values")] [HideIf("isConstant")] [SerializeField] bool isStored;
 
         public T InitialValue
         {
@@ -62,8 +63,7 @@ namespace AS.Toolbox.ScriptableObjects
         public T v
         {
             get => value;
-            set
-            {
+            set {
                 if (ShouldIgnoreSetValue(value))
                     return;
 
@@ -77,7 +77,7 @@ namespace AS.Toolbox.ScriptableObjects
         bool ShouldIgnoreSetValue(T newVal)
         {
 #if UNITY_EDITOR
-            return EditorApplication.isPlayingOrWillChangePlaymode && value != null && value.Equals(newVal);
+            return EditorApplication.isPlayingOrWillChangePlaymode && (value != null) && value.Equals(newVal);
 #else
             return false;
 #endif
@@ -107,25 +107,30 @@ namespace AS.Toolbox.ScriptableObjects
         }
 
         protected virtual T ProcessValue(T newVal) => newVal;
+
         #endregion
 
         #region Debug
-        [TitleGroup("Debug"), SerializeField, Delayed, OnValueChanged("SetValue"), InlineButton("SetValue", "Set")]
-        T newValue;
+
+        [TitleGroup("Debug")] [SerializeField] [Delayed] [OnValueChanged("SetValue")] [InlineButton("SetValue", "Set")] T newValue;
 
         // used for serialized unity event callback
         public virtual void SetValue(T newVal) => v = newVal;
 
-        [TitleGroup("Debug"), HideIf("isConstant"), SerializeField]
-        protected bool logOnChange;
+        [TitleGroup("Debug")] [HideIf("isConstant")] [SerializeField] protected bool logOnChange;
+
         #endregion
 
         #region OnChange
-        [FoldoutGroup("On Change"), HideIf("isConstant"), SerializeField]
-        bool logListeners;
 
-        [FoldoutGroup("On Change"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullElements")]
-        public ReferencedCallbacks<T> onChange = new ReferencedCallbacks<T>();
+        [FoldoutGroup("On Change")] [HideIf("isConstant")] [SerializeField] bool logListeners;
+
+        [FoldoutGroup("On Change")]
+        [HideLabel]
+        [InlineProperty]
+        [HideReferenceObjectPicker]
+        [OnInspectorGUI("RemoveNullElements")]
+        protected ReferencedCallbacks<T> onChange = new ReferencedCallbacks<T>();
 
         void RemoveNullElements() => onChange?.RemoveAll(c => c.reference == null);
 
@@ -136,9 +141,11 @@ namespace AS.Toolbox.ScriptableObjects
 
             onChange.Invoke(this, value, logListeners);
         }
+
         #endregion
 
         #region Create Asset
+
 #if UNITY_EDITOR
         public static bool IsCreating;
         public static bool IsNotCreating => !IsCreating;
@@ -154,6 +161,7 @@ namespace AS.Toolbox.ScriptableObjects
 
         public static void CancelCreate() => IsCreating = false;
 #endif
+
         #endregion
     }
 }

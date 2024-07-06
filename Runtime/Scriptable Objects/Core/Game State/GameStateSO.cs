@@ -50,12 +50,12 @@ namespace AS.Toolbox.ScriptableObjects
 
         public void AddOnEnter(Action callback, bool dontAddDuplicate = false)
         {
-            if (OnEnter != null) OnEnter.Add(callback, (Object)callback.Target, dontAddDuplicate);
+            if (OnEnter != null) OnEnter.Add(callback, dontAddDuplicate);
             else Debug.Log($"{name} onEnter is null, cannot add callback", this);
         }
         public void AddOnExit(Action callback)
         {
-            if (OnExit != null) OnExit.Add(callback, (Object)callback.Target);
+            if (OnExit != null) OnExit.Add(callback);
             else Debug.Log($"{name} onExit is null, cannot add callback", this);
         }
         public void AddOnEnter(UnityEvent uEvent, Object listener)
@@ -70,12 +70,12 @@ namespace AS.Toolbox.ScriptableObjects
         }
         public void RemoveOnEnter(Action callback)
         {
-            if (OnEnter != null) OnEnter.Remove(callback, (Object)callback.Target);
+            if (OnEnter != null) OnEnter.Remove(callback);
             else Debug.Log($"{name} onEnter is null, cannot remove callback", this);
         }
         public void RemoveOnExit(Action callback)
         {
-            if (OnExit != null) OnExit.Remove(callback, (Object)callback.Target);
+            if (OnExit != null) OnExit.Remove(callback);
             else Debug.Log($"{name} onExit is null, cannot remove callback", this);
         }
         public void RemoveOnEnter(UnityEvent uEvent, Object listener)
