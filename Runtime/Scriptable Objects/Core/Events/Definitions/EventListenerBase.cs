@@ -11,16 +11,12 @@ namespace AS.Toolbox.ScriptableObjects
         [SerializeField] protected TEvent eventSO;
         [SerializeField] protected TCallbacks callbacks;
 
-        protected void OnEnable() => AddListener();
-        protected void OnDisable() => RemoveListener();
-
-        protected void AddListener()
+        protected void OnEnable()
         {
             if (eventSO != null)
                 eventSO.Add(new ReferencedEvent<TCallbacks>(callbacks, this));
         }
-
-        protected void RemoveListener()
+        protected void OnDisable()
         {
             if (eventSO != null)
                 eventSO.Remove(new ReferencedEvent<TCallbacks>(callbacks, this));

@@ -15,22 +15,22 @@ namespace AS.Toolbox.ScriptableObjects
         [HideReferenceObjectPicker]
         [OnInspectorGUI("RemoveNullElements")]
         protected ReferencedCallbacks listeners = new ReferencedCallbacks();
-
         public void Add(ReferencedEvent<UnityEvent> rEvent) => listeners.Add(rEvent);
-
         public void Remove(ReferencedEvent<UnityEvent> rEvent) => listeners.Remove(rEvent);
-
         void RemoveNullElements() => listeners.RemoveAll(l => l.reference == null);
+
         public void Add(Action callback) => listeners.Add(callback);
+
         public void Remove(Action callback) => listeners.Remove(callback);
 
         [TitleGroup("Debug")]
         [Button]
         public void Raise()
         {
+#if UNITY_EDITOR
             if (logRaise)
                 Debug.Log($"{this.TypeAndNameToString()} has been raised");
-
+#endif
             listeners.Invoke(this, logListeners);
         }
     }

@@ -136,8 +136,10 @@ namespace AS.Toolbox.ScriptableObjects
 
         protected void OnChange()
         {
+#if UNITY_EDITOR
             if (logOnChange)
                 Debug.Log($"{this.TypeAndNameToString()} has changed to <color=yellow>{value.ToStringWithNoNamespace()}</color>", this);
+#endif
 
             onChange.Invoke(this, value, logListeners);
         }
