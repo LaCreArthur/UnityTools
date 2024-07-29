@@ -40,55 +40,17 @@ namespace AS.Toolbox.ScriptableObjects
             }
         }
 
-        public void AddOnEnter(Action callback, bool dontAddDuplicate = false)
-        {
-            if (OnEnter != null) OnEnter.Add(callback, dontAddDuplicate);
-            else Debug.Log($"{name} onEnter is null, cannot add callback", this);
-        }
-        public void AddOnExit(Action callback)
-        {
-            if (OnExit != null) OnExit.Add(callback);
-            else Debug.Log($"{name} onExit is null, cannot add callback", this);
-        }
-        public void AddOnEnter(UnityEvent uEvent, Object listener)
-        {
-            if (OnEnter != null) OnEnter.Add(uEvent, listener);
-            else Debug.Log($"{name} onEnter is null, cannot add callback", this);
-        }
-        public void AddOnExit(UnityEvent uEvent, Object listener)
-        {
-            if (OnExit != null) OnExit.Add(uEvent, listener);
-            else Debug.Log($"{name} onExit is null, cannot add callback", this);
-        }
-        public void RemoveOnEnter(Action callback)
-        {
-            if (OnEnter != null) OnEnter.Remove(callback);
-            else Debug.Log($"{name} onEnter is null, cannot remove callback", this);
-        }
-        public void RemoveOnExit(Action callback)
-        {
-            if (OnExit != null) OnExit.Remove(callback);
-            else Debug.Log($"{name} onExit is null, cannot remove callback", this);
-        }
-        public void RemoveOnEnter(UnityEvent uEvent, Object listener)
-        {
-            if (OnEnter != null) OnEnter.Remove(uEvent, listener);
-            else Debug.Log($"{name} onEnter is null, cannot remove callback", this);
-        }
-        public void RemoveOnExit(UnityEvent uEvent, Object listener)
-        {
-            if (OnExit != null) OnExit.Remove(uEvent, listener);
-            else Debug.Log($"{name} onExit is null, cannot remove callback", this);
-        }
-        public void RaiseOnEnter()
-        {
-            if (OnEnter != null) OnEnter.Invoke(this, logOnEnterCallbacks);
-            else Debug.Log($"{name} onEnter is null", this);
-        }
-        public void RaiseOnExit()
-        {
-            if (OnExit != null) OnExit.Invoke(this, logOnExitCallbacks);
-            else Debug.Log($"{name} onExit is null", this);
-        }
+        public void AddOnEnter(Action callback) => OnEnter?.Add(callback);
+        public void AddOnEnter(Action callback, Object listener) => OnEnter?.Add(callback, listener);
+        public void AddOnExit(Action callback) => OnExit?.Add(callback);
+        public void AddOnExit(Action callback, Object listener) => OnExit?.Add(callback, listener);
+        public void AddOnEnter(UnityEvent uEvent, Object listener) => OnEnter?.Add(uEvent, listener);
+        public void AddOnExit(UnityEvent uEvent, Object listener) => OnExit?.Add(uEvent, listener);
+        public void RemoveOnEnter(Action callback) => OnEnter?.Remove(callback);
+        public void RemoveOnExit(Action callback) => OnExit?.Remove(callback);
+        public void RemoveOnEnter(UnityEvent uEvent, Object listener) => OnEnter?.Remove(uEvent, listener);
+        public void RemoveOnExit(UnityEvent uEvent, Object listener) => OnExit?.Remove(uEvent, listener);
+        public void RaiseOnEnter() => OnEnter?.Invoke(this, logOnEnterCallbacks);
+        public void RaiseOnExit() => OnExit?.Invoke(this, logOnExitCallbacks);
     }
 }
