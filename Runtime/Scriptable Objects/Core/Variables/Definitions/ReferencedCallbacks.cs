@@ -9,17 +9,13 @@ namespace AS.Toolbox.ScriptableObjects
 {
     public class ReferencedCallbacks<T> : ReferencedCallbacksBase<UnityEvent<T>>
     {
-        [Space]
-        [SerializeField]
-        [InlineProperty]
-        [HideReferenceObjectPicker]
-        [ListDrawerSettings(IsReadOnly = true, DefaultExpandedState = true)]
-        [OnInspectorGUI("RemoveNullLoadedRuntime")]
+        [Space, SerializeField, InlineProperty, HideReferenceObjectPicker, ListDrawerSettings(IsReadOnly = true, DefaultExpandedState = true),
+         OnInspectorGUI("RemoveNullLoadedRuntime")]
         List<ReferencedAction<T>> runtimeLoadedListeners = new List<ReferencedAction<T>>();
 
         void RemoveNullLoadedRuntime() => runtimeLoadedListeners?.RemoveAll(l => l.reference == null);
 
-        public void Add(Action<T> callback, bool dontAddDuplicate = false)
+        internal void Add(Action<T> callback, bool dontAddDuplicate = false)
         {
             var listener = (Object)callback.Target;
             // look in listeners if the listener already exists
@@ -41,20 +37,20 @@ namespace AS.Toolbox.ScriptableObjects
             }
         }
 
-        public void RemoveRuntimeEvents()
+        internal void RemoveRuntimeEvents()
         {
             runtimeLoadedListeners.Clear();
             runtimeListeners.Clear();
         }
 
-        public void Remove(Action<T> callback)
+        internal void Remove(Action<T> callback)
         {
             var listener = (Object)callback.Target;
             ReferencedAction<T> existingListener = runtimeLoadedListeners.Find(l => l.reference == listener);
             existingListener?.callbacks?.Remove(callback);
         }
 
-        public void Invoke(ScriptableObject caller, T param, bool logListeners)
+        internal void Invoke(ScriptableObject caller, T param, bool logListeners)
         {
             foreach (ReferencedEvent<UnityEvent<T>> referencedEvent in persistentListeners)
             {
@@ -78,7 +74,7 @@ namespace AS.Toolbox.ScriptableObjects
 
     public class ReferencedCallbacks : ReferencedCallbacksBase<UnityEvent>
     {
-        public override void Invoke(ScriptableObject caller, bool logListeners)
+        internal override void Invoke(ScriptableObject caller, bool logListeners)
         {
             foreach (ReferencedEvent<UnityEvent> referencedEvent in persistentListeners)
             {
@@ -91,35 +87,26 @@ namespace AS.Toolbox.ScriptableObjects
             base.Invoke(caller, logListeners);
         }
 
-        public void Add(UnityEvent uEvent, Object listener) => Add(new ReferencedEvent<UnityEvent>(uEvent, listener));
-        public void Remove(UnityEvent uEvent, Object listener) => Remove(new ReferencedEvent<UnityEvent>(uEvent, listener));
+        internal void Add(UnityEvent uEvent, Object listener) => Add(new ReferencedEvent<UnityEvent>(uEvent, listener));
+        internal void Remove(UnityEvent uEvent, Object listener) => Remove(new ReferencedEvent<UnityEvent>(uEvent, listener));
     }
 
     public class ReferencedCallbacksBase<T> where T : UnityEventBase
     {
         // persistent listeners is a list of UnityEvent 
-        [Space]
-        [SerializeField]
-        [InlineProperty]
-        [HideReferenceObjectPicker]
-        [ListDrawerSettings(IsReadOnly = true, DefaultExpandedState = true)]
-        [OnInspectorGUI("RemoveNullPersistent")]
+        [Space, SerializeField, InlineProperty, HideReferenceObjectPicker, ListDrawerSettings(IsReadOnly = true, DefaultExpandedState = true),
+         OnInspectorGUI("RemoveNullPersistent")]
         protected List<ReferencedEvent<T>> persistentListeners = new List<ReferencedEvent<T>>();
 
         // runtime listeners is a list of 
-        [Space]
-        [SerializeField]
-        [InlineProperty]
-        [HideReferenceObjectPicker]
-        [ListDrawerSettings(IsReadOnly = true, DefaultExpandedState = true)]
-        [OnInspectorGUI("RemoveNullRuntime")]
+        [Space, SerializeField, InlineProperty, HideReferenceObjectPicker, ListDrawerSettings(IsReadOnly = true, DefaultExpandedState = true), OnInspectorGUI("RemoveNullRuntime")]
         protected List<ReferencedAction> runtimeListeners = new List<ReferencedAction>();
 
         void RemoveNullPersistent() => persistentListeners?.RemoveAll(l => l.reference == null);
 
         void RemoveNullRuntime() => runtimeListeners?.RemoveAll(l => l.reference == null);
 
-        public void Add(Action callback, bool dontAddDuplicate = false, Object listener = null)
+        internal void Add(Action callback, Object listener = null)
         {
 
             if (listener == null)
@@ -140,13 +127,11 @@ namespace AS.Toolbox.ScriptableObjects
             }
             else
             {
-                if (dontAddDuplicate && existingListener.callbacks.Contains(callback))
-                    return;
                 existingListener.callbacks.Add(callback);
             }
         }
 
-        public void Remove(Action callback)
+        internal void Remove(Action callback)
         {
             var listener = (Object)callback.Target;
             ReferencedAction existingListener = runtimeListeners.Find(l => l.reference == listener);
@@ -157,7 +142,7 @@ namespace AS.Toolbox.ScriptableObjects
             }
         }
 
-        public void RemoveAll(Func<ReferencedEvent<T>, bool> match)
+        internal void RemoveAll(Func<ReferencedEvent<T>, bool> match)
         {
             if (persistentListeners == null)
                 return;
@@ -169,13 +154,13 @@ namespace AS.Toolbox.ScriptableObjects
             }
         }
 
-        public void Add(ReferencedEvent<T> refAction)
+        internal void Add(ReferencedEvent<T> refAction)
         {
             persistentListeners ??= new List<ReferencedEvent<T>>();
             persistentListeners.Add(refAction);
         }
 
-        public void Remove(ReferencedEvent<T> refAction)
+        internal void Remove(ReferencedEvent<T> refAction)
         {
             if (persistentListeners == null)
                 return;
@@ -184,7 +169,7 @@ namespace AS.Toolbox.ScriptableObjects
             persistentListeners.Remove(listener);
         }
 
-        public virtual void Invoke(ScriptableObject caller, bool logListeners)
+        internal virtual void Invoke(ScriptableObject caller, bool logListeners)
         {
             foreach (ReferencedAction referencedAction in runtimeListeners)
             {
