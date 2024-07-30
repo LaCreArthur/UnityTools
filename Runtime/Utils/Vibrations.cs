@@ -12,13 +12,11 @@ namespace AS.Toolbox
             set {
                 s_isHaptic = value;
                 HapticController.hapticsEnabled = value;
-                Debug.Log($"Haptics set to {value}");
             }
         }
 
         [RuntimeInitializeOnLoadMethod]
         static void Awake() => HapticController.hapticsEnabled = IsHaptic;
-        public static void Vibrate() => HapticPatterns.PlayPreset(HapticPatterns.PresetType.Selection);
         public static void Haptic(HapticPatterns.PresetType type) => HapticPatterns.PlayPreset(type);
         public static void HapticSuccess() => HapticPatterns.PlayPreset(HapticPatterns.PresetType.Success);
 
