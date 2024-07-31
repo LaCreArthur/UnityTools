@@ -63,7 +63,10 @@ namespace AS.Toolbox.UI
 
 
             isHidden = true;
+        }
 
+        void Start()
+        {
             if (startVisible)
                 Show();
             else
