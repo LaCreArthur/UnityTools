@@ -10,7 +10,7 @@ namespace AS.Toolbox.ScriptableObjects
     public abstract class ReferencedEventBase<T>
     {
 
-        [HideReferenceObjectPicker] [ListDrawerSettings(DefaultExpandedState = true)] public readonly T callbacks;
+        [HideReferenceObjectPicker, ListDrawerSettings(DefaultExpandedState = true)] public readonly T callbacks;
         [HideLabel] public readonly Object reference;
 
         protected ReferencedEventBase(T callbacks, Object reference)
@@ -27,6 +27,16 @@ namespace AS.Toolbox.ScriptableObjects
         public void LogCallback(ScriptableObject so)
         {
 #if UNITY_EDITOR
+            if (so == null)
+            {
+                Debug.LogWarning("Trying to log callback from null ScriptableObject");
+                return;
+            }
+            if (reference == null)
+            {
+                Debug.LogWarning("Trying to log callback from null reference");
+                return;
+            }
             string header = LogHelper.HeaderStr(so.name, reference.name);
             callbacks.ForEach(c => LogHelper.LogMethodCall(c.Target, header, c.Method.Name));
 #endif
