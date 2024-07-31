@@ -28,7 +28,6 @@ namespace AS.Toolbox.UI
         [FoldoutGroup("On Show"), ShowIf("scaleIn"), Indent] public Ease scaleInEase = Ease.InOutSine;
         [FoldoutGroup("On Show"), ShowIf("scaleIn"), Indent] public float scaleInDuration = 0.25f;
 
-
         [FoldoutGroup("On Hide")] public bool fadeOut;
         [FoldoutGroup("On Hide"), ShowIf("fadeOut"), Indent] public float fadeOutDuration = 0.25f;
         [FoldoutGroup("On Hide"), ShowIf("fadeOut"), Indent] public Ease fadeOutEase = Ease.InOutSine;
@@ -42,13 +41,13 @@ namespace AS.Toolbox.UI
 
         [Header("State"), SerializeField, ReadOnly]
         public bool isHidden;
+
         Canvas _canvas;
         CanvasGroup _canvasGroup;
+        bool _isInitialized;
 
         public event Action OnShow;
         public event Action OnHide;
-
-        public bool IsInitialized { get; private set; }
 
         static float OutOfScreenWidth => Screen.width * 1.5f;
         static float OutOfScreenHeight => Screen.height * 1.5f;
@@ -61,12 +60,10 @@ namespace AS.Toolbox.UI
             if (resetPosOnStart)
                 transform.localPosition = Vector3.zero;
 
+            foreach (CanvasAnimatorComponent component in GetComponents<CanvasAnimatorComponent>())
+                component.Initialize();
 
             isHidden = true;
-        }
-
-        void Start()
-        {
             if (startVisible)
                 Show();
             else
@@ -77,15 +74,13 @@ namespace AS.Toolbox.UI
                 gameObject.SetActive(false);
             }
 
-            IsInitialized = true;
+            _isInitialized = true;
         }
-
-
 
         [Button]
         public void Show()
         {
-            if (!IsInitialized)
+            if (!_isInitialized)
             {
                 //Debug.Log("Delay show because not initialized yet", this);
                 StartCoroutine(Coroutines.WaitForEndOfFrame(Show));

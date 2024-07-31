@@ -1,24 +1,18 @@
 ﻿using AS.Toolbox.ScriptableObjects;
-using UnityEngine;
 
 namespace AS.Toolbox.UI
 {
-    [RequireComponent(typeof(CanvasAnimator))]
-    public class CanvasAnimatorState : MonoBehaviour
+    public class CanvasAnimatorState : CanvasAnimatorComponent
     {
         public GameStateSO associatedState;
 
-        CanvasAnimator _canvasAnimator;
-
-        void Awake()
+        public override void Initialize()
         {
-            _canvasAnimator = GetComponent<CanvasAnimator>();
             if (associatedState != null)
             {
-                associatedState.AddOnEnter(_canvasAnimator.Show);
-                associatedState.AddOnExit(_canvasAnimator.Hide);
+                associatedState.AddOnEnter(CanvasAnimator.Show);
+                associatedState.AddOnExit(CanvasAnimator.Hide);
             }
         }
     }
-
 }

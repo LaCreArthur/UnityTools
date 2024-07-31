@@ -4,28 +4,25 @@ using UnityEngine;
 
 namespace AS.Toolbox.UI
 {
-    [RequireComponent(typeof(CanvasAnimator))]
-    public class CanvasAnimatorTweens : MonoBehaviour
+    public class CanvasAnimatorTweens : CanvasAnimatorComponent
     {
         public bool playChildTweensOnShow;
         public bool rewindChildTweensOnHide;
 
-        CanvasAnimator _canvasAnimator;
         List<Tween> _childTweens;
 
-        void Awake()
+        public override void Initialize()
         {
-            _canvasAnimator = GetComponent<CanvasAnimator>();
             InitChildTweens();
 
-            if (playChildTweensOnShow) _canvasAnimator.OnShow += PlayTweens;
-            if (rewindChildTweensOnHide) _canvasAnimator.OnHide += RewindTweens;
+            if (playChildTweensOnShow) CanvasAnimator.OnShow += PlayTweens;
+            if (rewindChildTweensOnHide) CanvasAnimator.OnHide += RewindTweens;
         }
 
         void InitChildTweens()
         {
             // don't search for tweens if not needed
-            if (!playChildTweensOnShow || !rewindChildTweensOnHide) //todo: move this to a separate component
+            if (!playChildTweensOnShow || !rewindChildTweensOnHide)
                 return;
 
             // Init the list

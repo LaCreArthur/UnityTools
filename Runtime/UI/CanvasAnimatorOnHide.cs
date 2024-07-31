@@ -1,21 +1,16 @@
-using UnityEngine;
 using UnityEngine.Events;
 
 namespace AS.Toolbox.UI
 {
-    [RequireComponent(typeof(CanvasAnimator))]
-    public class CanvasAnimatorOnHide : MonoBehaviour
+    public class CanvasAnimatorOnHide : CanvasAnimatorComponent
     {
         public UnityEvent onHideEvents;
 
-        CanvasAnimator _canvasAnimator;
-
-        void Awake()
+        public override void Initialize()
         {
-            _canvasAnimator = GetComponent<CanvasAnimator>();
             if (onHideEvents != null)
             {
-                _canvasAnimator.OnHide += onHideEvents.Invoke;
+                CanvasAnimator.OnHide += onHideEvents.Invoke;
             }
         }
     }
