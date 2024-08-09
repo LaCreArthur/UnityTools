@@ -39,7 +39,8 @@ namespace AS.Toolbox.UI
         [FoldoutGroup("On Hide"), ShowIf("scaleOut"), Indent] public float scaleOutDuration = 0.25f;
         [FoldoutGroup("On Hide"), ShowIf("scaleOut"), Indent] public Ease scaleOutEase = Ease.InOutSine;
 
-        [Header("State"), SerializeField, ReadOnly]
+        [Header("State")]
+        [SerializeField] [ReadOnly]
         public bool isHidden;
 
         Canvas _canvas;
@@ -71,7 +72,8 @@ namespace AS.Toolbox.UI
                 _canvasGroup.alpha = 0;
                 _canvasGroup.blocksRaycasts = false;
                 _canvas.enabled = false;
-                gameObject.SetActive(false);
+                // delay the deactivation of the game object to allow subcomponents to initialize
+                DOVirtual.DelayedCall(0.1f, () => gameObject.SetActive(false));
             }
 
             _isInitialized = true;
@@ -101,7 +103,7 @@ namespace AS.Toolbox.UI
             DOTween.Kill(_canvasGroup);
 
             if (fadeIn)
-                _canvasGroup.DOFade(1f, slideInDuration).SetEase(slideInEase).SetUpdate(true);
+                _canvasGroup.DOFade(1f, fadeInDuration).SetEase(fadeInEase).SetUpdate(true);
             else
                 _canvasGroup.alpha = 1;
 
