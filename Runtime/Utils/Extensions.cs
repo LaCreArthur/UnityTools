@@ -10,7 +10,9 @@ namespace AS.Toolbox.Utils
     {
 
         #region Math
+
         public static float Normalize(this float x, float min, float max) => (x - min) / (max - min);
+
         #endregion
 
         public static bool CollidesWith(this LayerMask layerMask, int layer) => ((1 << layer) & layerMask) != 0;
@@ -34,6 +36,7 @@ namespace AS.Toolbox.Utils
             rectTransform.anchoredPosition = otherRectTransform.anchoredPosition;
         }
         #region Random
+
         public static T GetRandom<T>(this T[] array) => array[Random.Range(0, array.Length)];
 
         public static T GetRandom<T>(this List<T> list) => list[Random.Range(0, list.Count)];
@@ -55,9 +58,11 @@ namespace AS.Toolbox.Utils
                 (lst[k], lst[n]) = (lst[n], lst[k]);
             }
         }
+
         #endregion
 
         #region Component
+
         public static bool LazyGetComponent<T, C>(this C c, ref T component) where C : Component
         {
             if (component != null)
@@ -76,9 +81,11 @@ namespace AS.Toolbox.Utils
                 component = c.gameObject.AddComponent<T>();
             return component;
         }
+
         #endregion
 
         #region Arrays
+
         public static void MoveIndex(this ref int index, bool left, int maxIndex)
         {
             if (maxIndex < 1)
@@ -118,9 +125,11 @@ namespace AS.Toolbox.Utils
             ModIndex(ref index, arrayLength);
             return array[index];
         }
+
         #endregion
 
         #region Strings
+
         static string FormatCurrencyValue(float value) => value switch
         {
             >= 1000000 => (value / 1000000).ToString("N1") + "M",
@@ -131,13 +140,13 @@ namespace AS.Toolbox.Utils
             _ => value.ToString("N2")
         };
 
-        public static string ToCurrencyString(this float value, bool isDoge) =>
-            $"{FormatCurrencyValue(value)}<sprite index={(isDoge ? 0 : 1)}>";
+        public static string ToCurrencyString(this float value, bool isDoge, bool escapeForSprite = false) =>
+            $"{FormatCurrencyValue(value)}{(escapeForSprite ? "\n" : "")}<sprite index={(isDoge ? 0 : 1)}>";
         public static string ToCurrencyString(this double value, bool isDoge) => ((float)value).ToCurrencyString(isDoge);
 
         public static string ToTimeString(this float time) => $"{Mathf.FloorToInt(time / 60):0}:{Mathf.FloorToInt(time % 60):00}";
         public static string ToTimeString(this TimeSpan time, bool showZeroDay = false) =>
-            $"{(showZeroDay || time.TotalDays >= 1 ? $"{time.Days:D}D " : "")}{time.Hours:D2}:{time.Minutes:D2}:{time.Seconds:D2}";
+            $"{(showZeroDay || (time.TotalDays >= 1) ? $"{time.Days:D}D " : "")}{time.Hours:D2}:{time.Minutes:D2}:{time.Seconds:D2}";
 
         public static string ToStringWithNoNamespace<T>(this T obj)
         {
@@ -147,6 +156,7 @@ namespace AS.Toolbox.Utils
             return lastIndex >= 0 ? $"{objString[..lastIndex]}({typeString})" : objString;
         }
         public static string TypeAndNameToString(this ScriptableObject so) => $"{so.GetType().Name} [<color=#00FFFF>{so.name}</color>]";
+
         #endregion
     }
 }
