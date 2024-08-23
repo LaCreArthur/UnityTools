@@ -23,7 +23,10 @@ namespace AS.Toolbox.PrefabPool
 
             // if there is an inactive go available, respawn it
             if (_inactiveList.Count > 0)
+            {
                 data = _inactiveList.Dequeue();
+                data.instance.transform.SetParent(parent);
+            }
             else
             {
                 // instantiate a new go and add it to the list
