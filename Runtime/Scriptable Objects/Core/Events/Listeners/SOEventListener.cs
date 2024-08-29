@@ -3,5 +3,5 @@ using UnityEngine.Events;
 
 namespace AS.Toolbox.ScriptableObjects
 {
-    public class EventListener : EventListenerBase<SOEvent, UnityEvent> {}
+    public class SOEventListener : EventListenerBase<SOEvent, UnityEvent> {}
 }
