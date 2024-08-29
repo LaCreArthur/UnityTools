@@ -130,15 +130,29 @@ namespace AS.Toolbox.Utils
 
         #region Strings
 
-        static string FormatCurrencyValue(float value) => value switch
+        static string FormatCurrencyValue(float value)
         {
-            >= 1000000 => (value / 1000000).ToString("N1") + "M",
-            >= 100000 => (value / 1000).ToString("N0") + "K",
-            >= 10000 => (value / 1000).ToString("N1") + "K",
-            >= 1000 => value.ToString("N0"),
-            >= 100 => value.ToString("N1"),
-            _ => value.ToString("N2")
-        };
+            string formattedValue = value switch
+            {
+                >= 10000000 => (value / 1000000).ToString("N0") + "M",
+                >= 1000000 => (value / 1000000).ToString("N1") + "M",
+                >= 100000 => (value / 1000).ToString("N0") + "K",
+                >= 10000 => (value / 1000).ToString("N1") + "K",
+                >= 1000 => value.ToString("N0"),
+                >= 100 => value.ToString("N1"),
+                _ => value.ToString("N2")
+            };
+
+            // Remove trailing zeros if there are two or more at the end, but keep the first trailing zero if it exists
+            if (formattedValue.Contains("."))
+            {
+                formattedValue = formattedValue.TrimEnd('0');
+                if (formattedValue.Length - formattedValue.IndexOf('.') <= 2)
+                    formattedValue += '0';
+            }
+
+            return formattedValue;
+        }
 
         public static string ToCurrencyString(this float value, bool isDoge, bool escapeForSprite = false) =>
             $"{FormatCurrencyValue(value)}{(escapeForSprite ? "\n" : "")}<sprite index={(isDoge ? 0 : 1)}>";

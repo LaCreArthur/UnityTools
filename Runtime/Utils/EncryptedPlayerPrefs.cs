@@ -71,6 +71,7 @@ namespace AS.Toolbox.Utils
 
         public static void SetDouble(string key, double value)
         {
+            value = Math.Round(value, 2);
             byte[] storeBytes = BitConverter.GetBytes(value);
             int storeIntLow = BitConverter.ToInt32(storeBytes, 0);
             int storeIntHigh = BitConverter.ToInt32(storeBytes, 4);
