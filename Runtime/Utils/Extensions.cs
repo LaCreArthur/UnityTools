@@ -130,7 +130,7 @@ namespace AS.Toolbox.Utils
 
         #region Strings
 
-        static string FormatCurrencyValue(float value)
+        static string FormatCurrencyValue(float value, bool noDecimals = false)
         {
             string formattedValue = value switch
             {
@@ -139,8 +139,8 @@ namespace AS.Toolbox.Utils
                 >= 100000 => (value / 1000).ToString("N0") + "K",
                 >= 10000 => (value / 1000).ToString("N1") + "K",
                 >= 1000 => value.ToString("N0"),
-                >= 100 => value.ToString("N1"),
-                _ => value.ToString("N2")
+                >= 100 => noDecimals ? value.ToString("N0") : value.ToString("N1"),
+                _ => noDecimals ? value.ToString("N0") : value.ToString("N2")
             };
 
             // Remove trailing zeros if there are two or more at the end, but keep the first trailing zero if it exists
@@ -154,9 +154,9 @@ namespace AS.Toolbox.Utils
             return formattedValue;
         }
 
-        public static string ToCurrencyString(this float value, bool isDoge, bool escapeForSprite = false) =>
-            $"{FormatCurrencyValue(value)}{(escapeForSprite ? "\n" : "")}<sprite index={(isDoge ? 0 : 1)}>";
-        public static string ToCurrencyString(this double value, bool isDoge) => ((float)value).ToCurrencyString(isDoge);
+        public static string ToCurrencyString(this float value, bool isDoge, bool escapeForSprite = false, bool noDecimals = false) =>
+            $"{FormatCurrencyValue(value, noDecimals)}{(escapeForSprite ? "\n" : "")}<sprite index={(isDoge ? 0 : 1)}>";
+        public static string ToCurrencyString(this double value, bool isDoge, bool noDecimals = false) => ((float)value).ToCurrencyString(isDoge, noDecimals: noDecimals);
 
         public static string ToTimeString(this float time) => $"{Mathf.FloorToInt(time / 60):0}:{Mathf.FloorToInt(time % 60):00}";
         public static string ToTimeString(this TimeSpan time, bool showZeroDay = false) =>
