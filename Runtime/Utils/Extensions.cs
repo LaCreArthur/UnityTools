@@ -9,18 +9,12 @@ namespace AS.Toolbox.Utils
     public static class Extensions
     {
 
-        #region Math
-
-        public static float Normalize(this float x, float min, float max) => (x - min) / (max - min);
-
-        #endregion
-
         public static bool CollidesWith(this LayerMask layerMask, int layer) => ((1 << layer) & layerMask) != 0;
 
         public static List<T> Except<T>(this List<T> first, List<T> second)
         {
             var firstCopy = new List<T>(first);
-            foreach (T t in second)
+            foreach (var t in second)
             {
                 if (first.Contains(t))
                     firstCopy.Remove(t);
@@ -35,6 +29,13 @@ namespace AS.Toolbox.Utils
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, otherRectTransform.rect.size.y);
             rectTransform.anchoredPosition = otherRectTransform.anchoredPosition;
         }
+
+        #region Math
+
+        public static float Normalize(this float x, float min, float max) => (x - min) / (max - min);
+        public static float LinearTransformation(this float x, float a, float b) => a + x * (b - a);
+
+        #endregion
         #region Random
 
         public static T GetRandom<T>(this T[] array) => array[Random.Range(0, array.Length)];
