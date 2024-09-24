@@ -11,26 +11,28 @@ namespace AS.Toolbox.ScriptableObjects
         public bool callEventsOnStart;
         public UnityEvent<T> events;
 
+        void Awake()
+        {
+            if (variable != null)
+                variable.AddOnChange(new ReferencedEvent<UnityEvent<T>>(events, this));
+            OnAwake();
+        }
+
+
         void Start()
         {
             if (callEventsOnStart)
                 events.Invoke(variable.v);
         }
 
-        protected virtual void OnEnable() => Subscribe();
-
-        protected virtual void OnDisable() => Unsubscribe();
-
-        void Subscribe()
-        {
-            if (variable != null)
-                variable.AddOnChange(new ReferencedEvent<UnityEvent<T>>(events, this));
-        }
-
-        void Unsubscribe()
+        void OnDestroy()
         {
             if (variable != null)
                 variable.RemoveOnChange(new ReferencedEvent<UnityEvent<T>>(events, this));
+            OnOnDestroy();
         }
+
+        protected virtual void OnAwake() {}
+        protected virtual void OnOnDestroy() {}
     }
 }
