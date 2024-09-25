@@ -13,8 +13,7 @@ namespace AS.Toolbox.ScriptableObjects
 
         void Awake()
         {
-            if (variable != null)
-                variable.AddOnChange(new ReferencedEvent<UnityEvent<T>>(events, this));
+            variable?.AddOnChange(new ReferencedEvent<UnityEvent<T>>(events, this));
             OnAwake();
         }
 
@@ -27,8 +26,7 @@ namespace AS.Toolbox.ScriptableObjects
 
         void OnDestroy()
         {
-            if (variable != null)
-                variable.RemoveOnChange(new ReferencedEvent<UnityEvent<T>>(events, this));
+            variable?.RemoveOnChange(new ReferencedEvent<UnityEvent<T>>(events, this));
             OnOnDestroy();
         }
 

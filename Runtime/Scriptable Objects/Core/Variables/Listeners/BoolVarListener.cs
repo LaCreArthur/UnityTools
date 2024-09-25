@@ -7,9 +7,8 @@ namespace AS.Toolbox.ScriptableObjects
     {
         [SerializeField] UnityEvent onTrue, onFalse;
 
-        protected override void OnAwake() => variable.AddOnChange(OnVariableChanged);
-
-        protected override void OnOnDestroy() => variable.RemoveOnChange(OnVariableChanged);
+        protected override void OnAwake() => variable?.AddOnChange(OnVariableChanged);
+        protected override void OnOnDestroy() => variable?.RemoveOnChange(OnVariableChanged);
 
         void OnVariableChanged(bool value)
         {
