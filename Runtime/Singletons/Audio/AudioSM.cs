@@ -10,14 +10,14 @@ namespace AS.Toolbox.Singletons.Audio
 {
     public class AudioSM : SingletonMono<AudioSM>
     {
-        [SerializeField] [Required] BoolVar isAudioVar;
+        [SerializeField] [Required] FloatVar audioVolumeVar;
+        [SerializeField] [Required] FloatVar musicVolumeVar;
         [SerializeField] SoundSO musics;
         [SerializeField] AudioMixerGroup musicMixerGroup;
         [SerializeField] AudioMixerGroup sfxMixerGroup;
 
-        [SerializeField] [Range(0.0f, 1.0f)] float soundMasterVolume = 1.0f;
-
-        [SerializeField] [Range(0.0f, 1.0f)] float musicMasterVolume = 1.0f;
+        [SerializeField] [Range(0.0f, 1.0f)] float baseSoundVolume = .2f;
+        [SerializeField] [Range(0.0f, 1.0f)] float baseMusicVolume = .2f;
 
         [SerializeField] bool musicAutoPlayStart;
         [SerializeField] bool musicAutoPlayRandomClip;
@@ -25,6 +25,10 @@ namespace AS.Toolbox.Singletons.Audio
         [SerializeField] float musicFadeOutDuration;
 
         AudioSource _currentMusic;
+        float _soundVolume;
+        float _musicVolume;
+        bool _isAudio;
+        bool _isMusic;
 
         protected override void OnAwake()
         {
@@ -32,8 +36,11 @@ namespace AS.Toolbox.Singletons.Audio
             AutoPlayMusic();
         }
 
-        void OnEnable() => isAudioVar.AddOnChange(SetAudio);
-        void OnDisable() => isAudioVar.RemoveOnChange(SetAudio);
+        void OnEnable()
+        {
+            audioVolumeVar.AddOnChange(SetAudio);
+            musicVolumeVar.AddOnChange(SetMusic);
+        }
 
         void AutoPlayMusic()
         {
@@ -43,7 +50,7 @@ namespace AS.Toolbox.Singletons.Audio
 
         void PlayMusic(int clipId = 0)
         {
-            if ((isAudioVar != null) && !isAudioVar.v)
+            if (audioVolumeVar.v == 0)
                 return;
             if (_currentMusic && _currentMusic.isPlaying)
             {
@@ -60,7 +67,7 @@ namespace AS.Toolbox.Singletons.Audio
             var clip = musics.clips[clipId];
             _currentMusic = musics.source;
             _currentMusic.clip = clip;
-            _currentMusic.volume = musics.volume * musicMasterVolume;
+            _currentMusic.volume = musics.volume * _musicVolume;
             _currentMusic.pitch = 1;
             _currentMusic.Play();
 
@@ -83,7 +90,7 @@ namespace AS.Toolbox.Singletons.Audio
             {
                 yield return new WaitForEndOfFrame();
                 elapsed += Time.deltaTime;
-                _currentMusic.volume = (musicFadeOutDuration - elapsed) / musicFadeOutDuration * musicMasterVolume;
+                _currentMusic.volume = (musicFadeOutDuration - elapsed) / musicFadeOutDuration * _musicVolume;
             }
 
             _currentMusic.Stop();
@@ -100,7 +107,7 @@ namespace AS.Toolbox.Singletons.Audio
 
         public static void Play(SoundSO s)
         {
-            if ((Instance.isAudioVar != null) && !Instance.isAudioVar.v)
+            if (!Instance._isAudio)
                 return;
             if (s == null)
             {
@@ -112,7 +119,7 @@ namespace AS.Toolbox.Singletons.Audio
                 InitAudioSource(s);
 
             s.source.clip = s.clips.Length > 0 ? s.clips.GetRandom() : s.clips[0];
-            s.source.volume = s.volume * (1f + Random.Range(-s.volumeVariance / 2f, s.volumeVariance / 2f)) * Instance.soundMasterVolume;
+            s.source.volume = s.volume * (1f + Random.Range(-s.volumeVariance / 2f, s.volumeVariance / 2f)) * Instance._soundVolume;
             s.source.pitch = s.pitch * (1f + Random.Range(-s.pitchVariance / 2f, s.pitchVariance / 2f));
             if (s.loop)
                 s.source.Play();
@@ -133,13 +140,32 @@ namespace AS.Toolbox.Singletons.Audio
 
         void SetAudio()
         {
-            if (isAudioVar.v)
+            if (audioVolumeVar == null)
+            {
+                Debug.LogWarning("SetAudio: AudioVolumeVar is null!", this);
+                return;
+            }
+            if ((audioVolumeVar.v > 0) && !_isAudio)
             {
                 Play(SOSounds.AudioEnabled);
+            }
+            _isAudio = audioVolumeVar.v > 0;
+            _soundVolume = audioVolumeVar.v * baseSoundVolume;
+        }
+
+        void SetMusic()
+        {
+            if (musicVolumeVar == null)
+            {
+                Debug.LogWarning("SetMusic: MusicVolumeVar is null!", this);
+                return;
+            }
+            if ((musicVolumeVar.v > 0) && !_isMusic)
+            {
                 AutoPlayMusic();
             }
-
-            AudioListener.pause = !isAudioVar.v;
+            _isMusic = musicVolumeVar.v > 0;
+            _musicVolume = musicVolumeVar.v * baseMusicVolume;
         }
     }
 }
