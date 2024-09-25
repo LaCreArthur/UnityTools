@@ -61,7 +61,7 @@ namespace AS.Toolbox.UI
             if (resetPosOnStart)
                 transform.localPosition = Vector3.zero;
 
-            foreach (CanvasAnimatorComponent component in GetComponents<CanvasAnimatorComponent>())
+            foreach (var component in GetComponents<CanvasAnimatorComponent>())
                 component.Initialize();
 
             isHidden = true;

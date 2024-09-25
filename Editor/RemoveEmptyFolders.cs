@@ -32,7 +32,7 @@ public class RemoveEmptyFolders : Editor
         {
             FindEmptyFoldersRecursively(subFolder, emptyFolders);
 
-            if (Directory.GetFiles(subFolder).Length == 0 && Directory.GetDirectories(subFolder).Length == 0)
+            if ((Directory.GetFiles(subFolder).Length == 0) && (Directory.GetDirectories(subFolder).Length == 0))
             {
                 string assetPath = subFolder.Replace(Application.dataPath, "Assets");
                 emptyFolders.Add(assetPath);

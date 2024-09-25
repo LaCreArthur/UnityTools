@@ -32,7 +32,7 @@ namespace AS.Toolbox.UI
             DOTweenAnimation[] tweenAnimations = GetComponentsInChildren<DOTweenAnimation>();
 
             GameObject previousChild = null;
-            foreach (DOTweenAnimation anim in tweenAnimations)
+            foreach (var anim in tweenAnimations)
             {
                 // no need to add tweens if there is more than one DOTweenAnimation component on the same GO
                 // since anim.GetTweens() returns all the tweens

@@ -11,7 +11,7 @@ namespace AS.Toolbox.ScriptableObjects
 
         public static void LogMethodCall(object target, string header, string methodName, object t = null)
         {
-            StringBuilder methodCall = MethodStr(target.GetType().Name, methodName);
+            var methodCall = MethodStr(target.GetType().Name, methodName);
             methodCall.Append(t != null ? LP(t).P() : "()");
             DebugLogMethodCall(methodCall, header, target as Object);
         }
@@ -19,7 +19,7 @@ namespace AS.Toolbox.ScriptableObjects
 #if UNITY_EDITOR
         public static void LogMethodCall(PersistentCall p, string header, object t = null)
         {
-            StringBuilder methodCall = MethodStr(p.GetTarget().GetType().Name, p.MethodName());
+            var methodCall = MethodStr(p.GetTarget().GetType().Name, p.MethodName());
             methodCall.Append(p.IsDynamicParams() ? LP(t).P() : p.GetParams().P());
             DebugLogMethodCall(methodCall, header, p.GetTarget());
         }

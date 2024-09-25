@@ -114,7 +114,7 @@ namespace AS.Toolbox.ScriptableObjects
                 listener = (Object)callback.Target;
             }
             // look in listeners if the listener already exists
-            ReferencedAction existingListener = runtimeListeners.Find(l => l.reference == listener);
+            var existingListener = runtimeListeners.Find(l => l.reference == listener);
             if ((existingListener?.callbacks == null) || (existingListener.reference == null))
             {
                 existingListener = new ReferencedAction(new List<Action>
@@ -134,7 +134,7 @@ namespace AS.Toolbox.ScriptableObjects
         internal void Remove(Action callback)
         {
             var listener = (Object)callback.Target;
-            ReferencedAction existingListener = runtimeListeners.Find(l => l.reference == listener);
+            var existingListener = runtimeListeners.Find(l => l.reference == listener);
             existingListener?.callbacks?.Remove(callback);
             if (existingListener?.callbacks?.Count == 0)
             {
@@ -171,7 +171,7 @@ namespace AS.Toolbox.ScriptableObjects
 
         internal virtual void Invoke(ScriptableObject caller, bool logListeners)
         {
-            foreach (ReferencedAction referencedAction in runtimeListeners)
+            foreach (var referencedAction in runtimeListeners)
             {
                 if (logListeners)
                     referencedAction.LogCallback(caller);

@@ -12,8 +12,8 @@ namespace AS.Toolbox.PrefabPool
 
     public class PrefabPool
     {
-        Dictionary<GameObject, PoolableInstances> _activeList = new Dictionary<GameObject, PoolableInstances>();
-        Queue<PoolableInstances> _inactiveList = new Queue<PoolableInstances>();
+        readonly Dictionary<GameObject, PoolableInstances> _activeList = new Dictionary<GameObject, PoolableInstances>();
+        readonly Queue<PoolableInstances> _inactiveList = new Queue<PoolableInstances>();
 
         public bool UseRectTransform { get; }
 
@@ -30,7 +30,7 @@ namespace AS.Toolbox.PrefabPool
             else
             {
                 // instantiate a new go and add it to the list
-                GameObject newGO = Object.Instantiate(prefab, parent);
+                var newGO = Object.Instantiate(prefab, parent);
                 data = new PoolableInstances
                 {
                     instance = newGO,
@@ -38,7 +38,7 @@ namespace AS.Toolbox.PrefabPool
                 };
             }
 
-            GameObject spawnedGO = data.instance;
+            var spawnedGO = data.instance;
             spawnedGO.SetActive(true);
             if (UseRectTransform)
                 spawnedGO.GetComponent<RectTransform>().anchoredPosition = position;
@@ -46,7 +46,7 @@ namespace AS.Toolbox.PrefabPool
                 spawnedGO.transform.position = position;
             spawnedGO.transform.rotation = rotation;
 
-            foreach (IPoolableComponent pc in data.poolableComponents)
+            foreach (var pc in data.poolableComponents)
                 pc.OnSpawn();
             _activeList.Add(spawnedGO, data);
             return spawnedGO;
@@ -60,9 +60,9 @@ namespace AS.Toolbox.PrefabPool
                 return false;
             }
 
-            PoolableInstances data = _activeList[objToDespawn];
+            var data = _activeList[objToDespawn];
 
-            foreach (IPoolableComponent pc in data.poolableComponents)
+            foreach (var pc in data.poolableComponents)
                 pc.OnDespawn();
 
             data.instance.SetActive(false);
@@ -73,9 +73,9 @@ namespace AS.Toolbox.PrefabPool
 
         public void AddInstances(Component[] components)
         {
-            foreach (Component co in components)
+            foreach (var co in components)
             {
-                GameObject go = co.gameObject;
+                var go = co.gameObject;
                 var data = new PoolableInstances
                 {
                     instance = go,

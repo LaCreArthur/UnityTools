@@ -24,11 +24,11 @@ namespace AS.Toolbox.Editor
         static void SelectScebeGameObjects()
         {
             //Get the current scene and all top-level GameObjects in the scene hierarchy
-            Scene currentScene = SceneManager.GetActiveScene();
+            var currentScene = SceneManager.GetActiveScene();
             s_objectsWithDeadLinks = new List<Object>();
 
             GameObject[] currentObjects = currentScene.GetRootGameObjects();
-            foreach (GameObject currentObject in currentObjects)
+            foreach (var currentObject in currentObjects)
                 CheckNullComponent(currentObject);
             if (s_objectsWithDeadLinks.Count > 0)
             {
@@ -45,8 +45,8 @@ namespace AS.Toolbox.Editor
             Transform[] transforms = g.GetComponentsInChildren<Transform>(includeInactive: true);
             for (int i = 0; i < transforms.Length; i++)
             {
-                GameObject currentGameObject = transforms[i].gameObject;
-                foreach (Component component in currentGameObject.GetComponents<Component>())
+                var currentGameObject = transforms[i].gameObject;
+                foreach (var component in currentGameObject.GetComponents<Component>())
                     //If the component is null, that means it's a missing script!
                 {
                     if (component == null)

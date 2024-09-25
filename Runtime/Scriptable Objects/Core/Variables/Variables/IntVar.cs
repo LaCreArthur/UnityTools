@@ -21,6 +21,7 @@ namespace AS.Toolbox.ScriptableObjects
 
 
         #region Operators Overloads
+
         public static IntVar operator ++(IntVar a)
         {
             a.v++;
@@ -68,6 +69,7 @@ namespace AS.Toolbox.ScriptableObjects
             res.v = a.v / b.v;
             return res;
         }
+
         #endregion
     }
 }

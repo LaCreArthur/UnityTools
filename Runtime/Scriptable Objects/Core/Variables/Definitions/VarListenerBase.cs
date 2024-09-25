@@ -17,6 +17,7 @@ namespace AS.Toolbox.ScriptableObjects
             OnAwake();
         }
 
+        protected virtual void OnAwake() {}
 
         void Start()
         {
@@ -29,8 +30,6 @@ namespace AS.Toolbox.ScriptableObjects
             variable?.RemoveOnChange(new ReferencedEvent<UnityEvent<T>>(events, this));
             OnOnDestroy();
         }
-
-        protected virtual void OnAwake() {}
         protected virtual void OnOnDestroy() {}
     }
 }

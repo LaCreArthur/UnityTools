@@ -6,8 +6,8 @@ namespace AS.Toolbox.PrefabPool
 {
     public static class PrefabPoolingSystem
     {
-        static Dictionary<GameObject, PrefabPool> s_prefabToPoolMap = new Dictionary<GameObject, PrefabPool>();
-        static Dictionary<GameObject, PrefabPool> s_goToPoolMap = new Dictionary<GameObject, PrefabPool>();
+        static readonly Dictionary<GameObject, PrefabPool> s_prefabToPoolMap = new Dictionary<GameObject, PrefabPool>();
+        static readonly Dictionary<GameObject, PrefabPool> s_goToPoolMap = new Dictionary<GameObject, PrefabPool>();
 
         /// <summary>
         ///     Use this method when loading a new scene, because all refs to pooled instances will be null
@@ -48,7 +48,7 @@ namespace AS.Toolbox.PrefabPool
 
         public static void PopulateWithInstances(GameObject prefab, GameObject root)
         {
-            PrefabPool pool = GetOrCreatePool(prefab);
+            var pool = GetOrCreatePool(prefab);
             var poolableComponent = prefab.GetComponent<IPoolableComponent>();
             Component[] childrenComponents = root.GetComponentsInChildren(poolableComponent.GetType(), true);
 
@@ -64,9 +64,9 @@ namespace AS.Toolbox.PrefabPool
         /// <returns>the spawned instance</returns>
         public static GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent = null)
         {
-            PrefabPool pool = GetOrCreatePool(prefab);
+            var pool = GetOrCreatePool(prefab);
 
-            GameObject go = pool.Spawn(prefab, position, rotation, parent);
+            var go = pool.Spawn(prefab, position, rotation, parent);
             s_goToPoolMap.Add(go, pool);
             return go;
         }
@@ -98,7 +98,7 @@ namespace AS.Toolbox.PrefabPool
         /// <returns>returns true if the object was successfully despawned</returns>
         public static bool Despawn(GameObject obj)
         {
-            if (obj == null || !obj.activeSelf)
+            if ((obj == null) || !obj.activeSelf)
                 return false;
 
             if (!s_goToPoolMap.ContainsKey(obj))
@@ -107,7 +107,7 @@ namespace AS.Toolbox.PrefabPool
                 return false;
             }
 
-            PrefabPool pool = s_goToPoolMap[obj];
+            var pool = s_goToPoolMap[obj];
 
             if (pool.Despawn(obj))
             {

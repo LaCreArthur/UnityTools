@@ -22,7 +22,7 @@ namespace AS.Toolbox.Editor
                 while (!string.IsNullOrEmpty(path))
                 {
                     // break the while loop if at root folder
-                    if (path == "Assets" || path == "ProjectSettings" || path == "Library") break;
+                    if ((path == "Assets") || (path == "ProjectSettings") || (path == "Library")) break;
                     // Find all Preset assets in this folder.
                     string[] presetGuids = AssetDatabase.FindAssets("t:Preset",
                         new[] { path });

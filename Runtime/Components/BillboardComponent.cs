@@ -9,7 +9,7 @@ public class BillboardComponent : MonoBehaviour
     public Vector3 rotationOffset;
     Camera _camera;
 
-    void Start() => _camera = customCam && cam != null ? cam : Camera.main;
+    void Start() => _camera = customCam && (cam != null) ? cam : Camera.main;
 
     //Orient the camera after all movement is completed this frame to avoid jitter
     void LateUpdate()

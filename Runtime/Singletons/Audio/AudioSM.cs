@@ -26,14 +26,14 @@ namespace AS.Toolbox.Singletons.Audio
 
         AudioSource _currentMusic;
 
-        void OnEnable() => isAudioVar.AddOnChange(SetAudio);
-        void OnDisable() => isAudioVar.RemoveOnChange(SetAudio);
-
         protected override void OnAwake()
         {
             InitAudioSource(musics, true);
             AutoPlayMusic();
         }
+
+        void OnEnable() => isAudioVar.AddOnChange(SetAudio);
+        void OnDisable() => isAudioVar.RemoveOnChange(SetAudio);
 
         void AutoPlayMusic()
         {
@@ -57,7 +57,7 @@ namespace AS.Toolbox.Singletons.Audio
                 return;
             }
 
-            AudioClip clip = musics.clips[clipId];
+            var clip = musics.clips[clipId];
             _currentMusic = musics.source;
             _currentMusic.clip = clip;
             _currentMusic.volume = musics.volume * musicMasterVolume;

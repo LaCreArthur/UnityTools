@@ -21,9 +21,9 @@ namespace AS.Toolbox.Editor
 
                 for (int i = selection.Length - 1; i >= 0; --i)
                 {
-                    GameObject selected = selection[i];
+                    var selected = selection[i];
                     PrefabUtility.GetPrefabAssetType(prefab);
-                    PrefabAssetType prefabType = PrefabUtility.GetPrefabAssetType(prefab);
+                    var prefabType = PrefabUtility.GetPrefabAssetType(prefab);
                     GameObject newObject;
 
                     if (prefabType != PrefabAssetType.NotAPrefab)
