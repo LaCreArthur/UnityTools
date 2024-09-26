@@ -150,7 +150,6 @@ namespace AS.Toolbox.Singletons.Audio
                 Play(SOSounds.AudioEnabled);
             }
             _isAudio = audioVolumeVar.v > 0;
-            Debug.Log($"is audio:{_isAudio}, volume:{audioVolumeVar.v}");
             _soundVolume = audioVolumeVar.v * baseSoundVolume;
         }
 
@@ -166,7 +165,6 @@ namespace AS.Toolbox.Singletons.Audio
                 AutoPlayMusic();
             }
             _isMusic = musicVolumeVar.v > 0;
-            Debug.Log($"is music:{_isMusic}, volume:{musicVolumeVar.v}");
             _musicVolume = musicVolumeVar.v * baseMusicVolume;
         }
     }
