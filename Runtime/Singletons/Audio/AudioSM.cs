@@ -166,6 +166,10 @@ namespace AS.Toolbox.Singletons.Audio
             }
             _isMusic = musicVolumeVar.v > 0;
             _musicVolume = musicVolumeVar.v * baseMusicVolume;
+            if (_currentMusic != null)
+            {
+                _currentMusic.volume = musics.volume * _musicVolume;
+            }
         }
     }
 }
