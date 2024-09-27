@@ -131,7 +131,7 @@ namespace AS.Toolbox.Utils
 
         #region Strings
 
-        static string FormatCurrencyValue(float value, bool noDecimals = false)
+        public static string FormatCurrencyValue(this float value, bool noDecimals = false)
         {
             string formattedValue = value switch
             {
