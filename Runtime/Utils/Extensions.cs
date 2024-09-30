@@ -131,7 +131,7 @@ namespace AS.Toolbox.Utils
 
         #region Strings
 
-        public static string FormatCurrencyValue(this float value, bool noDecimals = false)
+        static string FormatCurrencyValue(this float value, bool noDecimals = false)
         {
             string formattedValue = value switch
             {
@@ -156,7 +156,7 @@ namespace AS.Toolbox.Utils
         }
 
         public static string ToCurrencyString(this float value, bool isDoge, bool escapeForSprite = false, bool noDecimals = false) =>
-            $"{FormatCurrencyValue(value, noDecimals)}{(escapeForSprite ? "\n" : "")}<sprite index={(isDoge ? 0 : 1)}>";
+            $"<sprite index={(isDoge ? 0 : 1)}>{(escapeForSprite ? "\n" : " ")}{FormatCurrencyValue(value, noDecimals)}";
         public static string ToCurrencyString(this double value, bool isDoge, bool noDecimals = false) => ((float)value).ToCurrencyString(isDoge, noDecimals: noDecimals);
 
         public static string ToTimeString(this float time) => $"{Mathf.FloorToInt(time / 60):0}:{Mathf.FloorToInt(time % 60):00}";
