@@ -159,7 +159,30 @@ namespace AS.Toolbox.Utils
             $"<sprite index={(isDoge ? 0 : 1)}>{(escapeForSprite ? "\n" : " ")}{FormatCurrencyValue(value, noDecimals)}";
         public static string ToCurrencyString(this double value, bool isDoge, bool noDecimals = false) => ((float)value).ToCurrencyString(isDoge, noDecimals: noDecimals);
 
-        public static string ToTimeString(this float time) => $"{Mathf.FloorToInt(time / 60):0}:{Mathf.FloorToInt(time % 60):00}";
+        public static string ToDurationString(this float seconds)
+        {
+            int totalSeconds = Mathf.FloorToInt(seconds);
+            int days = totalSeconds / 86400;
+            int hours = totalSeconds % 86400 / 3600;
+            int minutes = totalSeconds % 3600 / 60;
+            int secs = totalSeconds % 60;
+
+            if (days > 0)
+            {
+                return $"{days} day{(days != 1 ? "s" : "")} {(hours > 0 ? $"{hours}h" : "")}";
+            }
+            if (hours > 0)
+            {
+                return $"{hours}h {(minutes > 0 ? $"{minutes}m" : "")}";
+            }
+            if (minutes > 0)
+            {
+                return $"{minutes}m {(secs > 0 ? $"{secs}s" : "")}";
+            }
+            return $"{secs}s";
+        }
+
+        public static string ToTimeString(this float minutes) => $"{Mathf.FloorToInt(minutes / 60):0}:{Mathf.FloorToInt(minutes % 60):00}";
         public static string ToTimeString(this TimeSpan time, bool showZeroDay = false) =>
             $"{(showZeroDay || (time.TotalDays >= 1) ? $"{time.Days:D}D " : "")}{time.Hours:D2}:{time.Minutes:D2}:{time.Seconds:D2}";
 
