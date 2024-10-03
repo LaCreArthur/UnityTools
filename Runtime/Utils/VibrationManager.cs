@@ -8,6 +8,5 @@ public class VibrationManager : MonoBehaviour
     [SerializeField, Required] BoolVar isHapticVar;
     void Awake() => OnHapticChange();
     void OnEnable() => isHapticVar.AddOnChange(OnHapticChange);
-    void OnDisable() => isHapticVar.RemoveOnChange(OnHapticChange);
     void OnHapticChange() => Vibrations.IsHaptic = isHapticVar.v;
 }
