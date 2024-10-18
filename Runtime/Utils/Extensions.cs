@@ -131,7 +131,7 @@ namespace AS.Toolbox.Utils
 
         #region Strings
 
-        static string FormatCurrencyValue(this float value, bool noDecimals = false)
+        public static string FormatCurrencyValue(this float value, bool noDecimals = false)
         {
             string formattedValue = value switch
             {
@@ -141,7 +141,7 @@ namespace AS.Toolbox.Utils
                 >= 10000 => (value / 1000).ToString("N1") + "K",
                 >= 1000 => value.ToString("N0"),
                 >= 100 => noDecimals ? value.ToString("N0") : value.ToString("N1"),
-                _ => noDecimals ? value.ToString("N0") : value.ToString("N2")
+                _ => noDecimals ? value.ToString("N0") : value.ToString("N2"),
             };
 
             // Remove trailing zeros if there are two or more at the end, but keep the first trailing zero if it exists
@@ -184,7 +184,7 @@ namespace AS.Toolbox.Utils
 
         public static string ToTimeString(this float minutes) => $"{Mathf.FloorToInt(minutes / 60):0}:{Mathf.FloorToInt(minutes % 60):00}";
         public static string ToTimeString(this TimeSpan time, bool showZeroDay = false) =>
-            $"{(showZeroDay || (time.TotalDays >= 1) ? $"{time.Days:D}D " : "")}{time.Hours:D2}:{time.Minutes:D2}:{time.Seconds:D2}";
+            $"{(showZeroDay || time.TotalDays >= 1 ? $"{time.Days:D}D " : "")}{time.Hours:D2}:{time.Minutes:D2}:{time.Seconds:D2}";
 
         public static string ToStringWithNoNamespace<T>(this T obj)
         {
