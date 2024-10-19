@@ -159,7 +159,7 @@ namespace AS.Toolbox.Utils
             $"<sprite index={(isDoge ? 0 : 1)}>{(escapeForSprite ? "\n" : " ")}{FormatCurrencyValue(value, noDecimals)}";
         public static string ToCurrencyString(this double value, bool isDoge, bool noDecimals = false) => ((float)value).ToCurrencyString(isDoge, noDecimals: noDecimals);
 
-        public static string ToDurationString(this int seconds, bool forceShowHours = true, bool forceShowMinutes = true, bool forceShowSeconds = true)
+        public static string ToDurationString(this int seconds, bool showThreeUnits = false)
         {
             int totalSeconds = Mathf.FloorToInt(seconds);
             int days = totalSeconds / 86400;
@@ -169,13 +169,13 @@ namespace AS.Toolbox.Utils
 
             if (days > 0)
             {
-                return $"{days} day{(days != 1 ? "s" : "")} {(hours > 0 || forceShowHours ? $"{hours}h" : "")}";
+                return $"{days} day{(days != 1 ? "s" : "")} {hours} {(showThreeUnits ? $"{minutes}m " : "")}";
             }
-            if (hours > 0 || forceShowHours)
+            if (hours > 0 || showThreeUnits)
             {
-                return $"{hours}h {(minutes > 0 || forceShowMinutes ? $"{minutes}m" : "")} {(forceShowSeconds ? $" {(secs > 0 ? $"{secs}s" : "")}" : "")}";
+                return $"{hours}h {minutes}m {(showThreeUnits ? $"{secs}s" : "")}";
             }
-            if (minutes > 0 || forceShowMinutes)
+            if (minutes > 0)
             {
                 return $"{minutes}m {secs}s";
             }
