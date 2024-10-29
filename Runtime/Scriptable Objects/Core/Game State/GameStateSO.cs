@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 
 namespace AS.Toolbox.ScriptableObjects
 {
-    [AssetSelector, CreateAssetMenu(menuName = "Scriptable Objects/Game State")]
+    [AssetSelector] [CreateAssetMenu(menuName = "Scriptable Objects/Game State")]
     public class GameStateSO : ScriptableObject
     {
         public List<GameStateSO> validNextStates = new List<GameStateSO>();
@@ -15,10 +15,10 @@ namespace AS.Toolbox.ScriptableObjects
         [FoldoutGroup("On Enter Listener")] public bool logOnEnterCallbacks;
         [FoldoutGroup("On Exit Listener")] public bool logOnExitCallbacks;
 
-        [FoldoutGroup("On Enter Listener"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullOnEnter")]
+        [FoldoutGroup("On Enter Listener")] [HideLabel] [InlineProperty] [HideReferenceObjectPicker] [OnInspectorGUI("RemoveNullOnEnter")]
         public ReferencedCallbacks OnEnter { get; private set; } = new ReferencedCallbacks();
 
-        [FoldoutGroup("On Exit Listener"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullOnExit")]
+        [FoldoutGroup("On Exit Listener")] [HideLabel] [InlineProperty] [HideReferenceObjectPicker] [OnInspectorGUI("RemoveNullOnExit")]
         public ReferencedCallbacks OnExit { get; private set; } = new ReferencedCallbacks();
 
         void RemoveNullOnEnter() => OnEnter.RemoveAll(l => l.reference == null);
@@ -50,7 +50,7 @@ namespace AS.Toolbox.ScriptableObjects
         public void RemoveOnExit(Action callback) => OnExit?.Remove(callback);
         public void RemoveOnEnter(UnityEvent uEvent, Object listener) => OnEnter?.Remove(uEvent, listener);
         public void RemoveOnExit(UnityEvent uEvent, Object listener) => OnExit?.Remove(uEvent, listener);
-        public void RaiseOnEnter() => OnEnter?.Invoke(this, logOnEnterCallbacks);
-        public void RaiseOnExit() => OnExit?.Invoke(this, logOnExitCallbacks);
+        public void RaiseOnEnter() => OnEnter?.Invoke(this, logOnEnterCallbacks, true);
+        public void RaiseOnExit() => OnExit?.Invoke(this, logOnExitCallbacks, false);
     }
 }

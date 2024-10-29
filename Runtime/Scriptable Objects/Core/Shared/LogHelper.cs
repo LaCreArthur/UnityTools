@@ -1,17 +1,19 @@
 ﻿using System.Text;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace AS.Toolbox.ScriptableObjects
 {
     public static class LogHelper
     {
-        public static string HeaderStr(string soName, string refName) => $"[<color=#00FFFF>{soName}</color>] callback from <b>{refName}</b> ";
+        public static string HeaderStr(string soName, [CanBeNull] string refName, bool? onEnter = false) =>
+            $"[<color=#00FFFF>{soName}</color>] {(onEnter != null ? onEnter.Value ? "OnEnter" : "OnExit" : "")} callback from <b>{refName ?? "?"}</b> ";
 
-        static StringBuilder MethodStr(string typeName, string methodName) => new StringBuilder($" ~> {typeName}.{methodName}");
+        static StringBuilder MethodStr([CanBeNull] string typeName, string methodName) => new StringBuilder($" ~> {typeName ?? "?"}.{methodName}");
 
-        public static void LogMethodCall(object target, string header, string methodName, object t = null)
+        public static void LogMethodCall([CanBeNull] object target, string header, string methodName, object t = null)
         {
-            var methodCall = MethodStr(target.GetType().Name, methodName);
+            var methodCall = MethodStr(target?.GetType().Name, methodName);
             methodCall.Append(t != null ? LP(t).P() : "()");
             DebugLogMethodCall(methodCall, header, target as Object);
         }
