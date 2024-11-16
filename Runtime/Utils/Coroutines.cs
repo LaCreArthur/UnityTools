@@ -18,4 +18,5 @@ namespace AS.Toolbox.Utils
             callback?.Invoke();
         }
     }
+
 }
