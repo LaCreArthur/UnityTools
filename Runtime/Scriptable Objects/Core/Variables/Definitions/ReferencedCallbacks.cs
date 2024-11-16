@@ -13,20 +13,26 @@ namespace AS.Toolbox.ScriptableObjects
         [OnInspectorGUI("RemoveNullLoadedRuntime")]
         List<ReferencedAction<T>> runtimeLoadedListeners = new List<ReferencedAction<T>>();
 
-        void RemoveNullLoadedRuntime() => runtimeLoadedListeners?.RemoveAll(l => l.reference == null);
+        void RemoveNullLoadedRuntime() => runtimeLoadedListeners?.RemoveAll(l => l.reference == null && !l.isStatic);
 
         internal void Add(Action<T> callback, bool dontAddDuplicate = false)
         {
-            var listener = (Object)callback.Target;
-            // look in listeners if the listener already exists
-            ReferencedAction<T> existingListener = runtimeLoadedListeners.Find(l => l.reference == listener);
-            if (existingListener?.callbacks == null || existingListener.reference == null)
+            // Handle static methods differently
+            bool isStatic = callback.Target == null;
+            Object listener = isStatic ? null : (Object)callback.Target;
+
+            // Look for existing listener based on reference or static status
+            ReferencedAction<T> existingListener = runtimeLoadedListeners.Find(l =>
+                isStatic && l.isStatic || !isStatic && l.reference == listener);
+
+            if (existingListener?.callbacks == null || !isStatic && existingListener.reference == null)
             {
                 existingListener = new ReferencedAction<T>(new List<Action<T>>
                     {
-                        callback,
+                        callback
                     },
-                    listener);
+                    listener,
+                    isStatic);
                 runtimeLoadedListeners.Add(existingListener);
             }
             else
@@ -45,9 +51,19 @@ namespace AS.Toolbox.ScriptableObjects
 
         internal void Remove(Action<T> callback)
         {
-            var listener = (Object)callback.Target;
-            ReferencedAction<T> existingListener = runtimeLoadedListeners.Find(l => l.reference == listener);
+            bool isStatic = callback.Target == null;
+            Object listener = isStatic ? null : (Object)callback.Target;
+
+            ReferencedAction<T> existingListener = runtimeLoadedListeners.Find(l =>
+                isStatic && l.isStatic || !isStatic && l.reference == listener);
+
             existingListener?.callbacks?.Remove(callback);
+
+            // Clean up empty listeners
+            if (existingListener?.callbacks?.Count == 0)
+            {
+                runtimeLoadedListeners.Remove(existingListener);
+            }
         }
 
         internal void Invoke(ScriptableObject caller, T param, bool logListeners)
@@ -115,12 +131,12 @@ namespace AS.Toolbox.ScriptableObjects
                 listener = (Object)callback.Target;
             }
             // look in listeners if the listener already exists
-            var existingListener = runtimeListeners.Find(l => l.reference == listener);
+            ReferencedAction existingListener = runtimeListeners.Find(l => l.reference == listener);
             if (existingListener?.callbacks == null || existingListener.reference == null)
             {
                 existingListener = new ReferencedAction(new List<Action>
                     {
-                        callback,
+                        callback
                     },
                     listener);
 
@@ -135,7 +151,7 @@ namespace AS.Toolbox.ScriptableObjects
         internal void Remove(Action callback)
         {
             var listener = (Object)callback.Target;
-            var existingListener = runtimeListeners.Find(l => l.reference == listener);
+            ReferencedAction existingListener = runtimeListeners.Find(l => l.reference == listener);
             existingListener?.callbacks?.Remove(callback);
             if (existingListener?.callbacks?.Count == 0)
             {
@@ -172,7 +188,7 @@ namespace AS.Toolbox.ScriptableObjects
 
         internal virtual void Invoke(ScriptableObject caller, bool logListeners, bool? onEnter = null)
         {
-            foreach (var referencedAction in runtimeListeners)
+            foreach (ReferencedAction referencedAction in runtimeListeners)
             {
                 if (logListeners)
                     referencedAction.LogCallback(caller, onEnter);
