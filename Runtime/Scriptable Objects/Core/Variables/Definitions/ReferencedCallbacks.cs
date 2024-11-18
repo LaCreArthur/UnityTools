@@ -18,8 +18,9 @@ namespace AS.Toolbox.ScriptableObjects
         internal void Add(Action<T> callback, bool dontAddDuplicate = false)
         {
             // Handle static methods differently
-            bool isStatic = callback.Target == null;
-            Object listener = isStatic ? null : (Object)callback.Target;
+            Object listener = null;
+            if (callback.Target is Object target) listener = target;
+            bool isStatic = listener == null;
 
             // Look for existing listener based on reference or static status
             ReferencedAction<T> existingListener = runtimeLoadedListeners.Find(l =>
@@ -29,7 +30,7 @@ namespace AS.Toolbox.ScriptableObjects
             {
                 existingListener = new ReferencedAction<T>(new List<Action<T>>
                     {
-                        callback
+                        callback,
                     },
                     listener,
                     isStatic);
@@ -51,8 +52,9 @@ namespace AS.Toolbox.ScriptableObjects
 
         internal void Remove(Action<T> callback)
         {
-            bool isStatic = callback.Target == null;
-            Object listener = isStatic ? null : (Object)callback.Target;
+            Object listener = null;
+            if (callback.Target is Object target) listener = target;
+            bool isStatic = listener == null;
 
             ReferencedAction<T> existingListener = runtimeLoadedListeners.Find(l =>
                 isStatic && l.isStatic || !isStatic && l.reference == listener);
@@ -114,45 +116,54 @@ namespace AS.Toolbox.ScriptableObjects
         [OnInspectorGUI("RemoveNullPersistent")]
         protected List<ReferencedEvent<T>> persistentListeners = new List<ReferencedEvent<T>>();
 
-        // runtime listeners is a list of 
         [Space] [SerializeField] [InlineProperty] [HideReferenceObjectPicker] [ListDrawerSettings(IsReadOnly = true, DefaultExpandedState = true)]
         [OnInspectorGUI("RemoveNullRuntime")]
         protected List<ReferencedAction> runtimeListeners = new List<ReferencedAction>();
 
         void RemoveNullPersistent() => persistentListeners?.RemoveAll(l => l.reference == null);
 
-        void RemoveNullRuntime() => runtimeListeners?.RemoveAll(l => l.reference == null);
+        void RemoveNullRuntime() => runtimeListeners?.RemoveAll(l => l.reference == null && !l.isStatic);
 
-        internal void Add(Action callback, Object listener = null)
+        internal void Add(Action callback, Object listener = null, bool dontAddDuplicate = false)
         {
+            if (listener == null && callback.Target is Object target)
+                listener = target;
+            bool isStatic = listener == null;
 
-            if (listener == null)
-            {
-                listener = (Object)callback.Target;
-            }
-            // look in listeners if the listener already exists
-            ReferencedAction existingListener = runtimeListeners.Find(l => l.reference == listener);
-            if (existingListener?.callbacks == null || existingListener.reference == null)
+            // Look for existing listener based on reference or static status
+            ReferencedAction existingListener = runtimeListeners.Find(l =>
+                isStatic && l.isStatic || !isStatic && l.reference == listener);
+
+            if (existingListener?.callbacks == null || !isStatic && existingListener.reference == null)
             {
                 existingListener = new ReferencedAction(new List<Action>
                     {
-                        callback
+                        callback,
                     },
-                    listener);
-
+                    listener,
+                    isStatic);
                 runtimeListeners.Add(existingListener);
             }
             else
             {
+                if (dontAddDuplicate && existingListener.callbacks.Contains(callback))
+                    return;
                 existingListener.callbacks.Add(callback);
             }
         }
 
         internal void Remove(Action callback)
         {
-            var listener = (Object)callback.Target;
-            ReferencedAction existingListener = runtimeListeners.Find(l => l.reference == listener);
+            Object listener = null;
+            if (callback.Target is Object target) listener = target;
+            bool isStatic = listener == null;
+
+            ReferencedAction existingListener = runtimeListeners.Find(l =>
+                isStatic && l.isStatic || !isStatic && l.reference == listener);
+
             existingListener?.callbacks?.Remove(callback);
+
+            // Clean up empty listeners
             if (existingListener?.callbacks?.Count == 0)
             {
                 runtimeListeners.Remove(existingListener);

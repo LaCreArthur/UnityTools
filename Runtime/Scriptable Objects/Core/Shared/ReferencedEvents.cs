@@ -9,7 +9,6 @@ namespace AS.Toolbox.ScriptableObjects
 {
     public abstract class ReferencedEventBase<T>
     {
-
         [HideReferenceObjectPicker] [ListDrawerSettings(DefaultExpandedState = true)] public readonly T callbacks;
         public readonly bool isStatic;
         [HideLabel] public readonly Object reference;
@@ -24,7 +23,7 @@ namespace AS.Toolbox.ScriptableObjects
 
     public class ReferencedAction : ReferencedEventBase<List<Action>>
     {
-        public ReferencedAction(List<Action> callbacks, Object reference) : base(callbacks, reference) {}
+        public ReferencedAction(List<Action> callbacks, Object reference, bool isStatic = false) : base(callbacks, reference, isStatic) {}
 
         public void LogCallback(ScriptableObject so, bool? onEnter = null)
         {

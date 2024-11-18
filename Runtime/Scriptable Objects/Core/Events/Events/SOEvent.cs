@@ -19,7 +19,7 @@ namespace AS.Toolbox.ScriptableObjects
         public void Remove(ReferencedEvent<UnityEvent> rEvent) => listeners.Remove(rEvent);
         void RemoveNullElements() => listeners.RemoveAll(l => l.reference == null);
 
-        public void Add(Action callback) => listeners.Add(callback);
+        public void Add(Action callback, bool dontAddDuplicate = false) => listeners.Add(callback, null, dontAddDuplicate);
 
         public void Remove(Action callback) => listeners.Remove(callback);
 
