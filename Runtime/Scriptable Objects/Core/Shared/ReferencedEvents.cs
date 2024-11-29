@@ -10,7 +10,6 @@ namespace AS.Toolbox.ScriptableObjects
     public abstract class ReferencedEventBase<T>
     {
         [HideReferenceObjectPicker] [ListDrawerSettings(DefaultExpandedState = true)] public readonly T callbacks;
-        public readonly bool isStatic;
         [HideLabel] public readonly Object reference;
 
         protected ReferencedEventBase(T callbacks, Object reference, bool isStatic = false)
@@ -19,6 +18,7 @@ namespace AS.Toolbox.ScriptableObjects
             this.callbacks = callbacks;
             this.isStatic = isStatic;
         }
+        public bool isStatic { get; private set; }
     }
 
     public class ReferencedAction : ReferencedEventBase<List<Action>>
