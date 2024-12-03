@@ -23,13 +23,6 @@ namespace AS.Toolbox.Utils
             return firstCopy;
         }
 
-        public static void SetSizeWithCurrentAnchors(this RectTransform rectTransform, RectTransform otherRectTransform)
-        {
-            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, otherRectTransform.rect.size.x);
-            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, otherRectTransform.rect.size.y);
-            rectTransform.anchoredPosition = otherRectTransform.anchoredPosition;
-        }
-
         #region UI
 
         /// <summary>
