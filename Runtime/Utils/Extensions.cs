@@ -14,7 +14,7 @@ namespace AS.Toolbox.Utils
         public static List<T> Except<T>(this List<T> first, List<T> second)
         {
             var firstCopy = new List<T>(first);
-            foreach (var t in second)
+            foreach (T t in second)
             {
                 if (first.Contains(t))
                     firstCopy.Remove(t);
@@ -30,12 +30,50 @@ namespace AS.Toolbox.Utils
             rectTransform.anchoredPosition = otherRectTransform.anchoredPosition;
         }
 
+        #region UI
+
+        /// <summary>
+        ///     Sets this RectTransform's position to match another's, with an option to center align. They must be in the same
+        ///     root Canvas.
+        /// </summary>
+        /// <param name="target">The RectTransform to match position from.</param>
+        /// <param name="centerAlign">
+        ///     If true, aligns the center of this RectTransform with the center of 'target'. If false,
+        ///     aligns pivots.
+        /// </param>
+        public static void MatchPosition(this RectTransform rt, RectTransform target, bool centerAlign = false)
+        {
+            if (target == null)
+            {
+                Debug.LogError("One or both RectTransforms are null.");
+                return;
+            }
+
+            if (centerAlign)
+            {
+                // Calculate the offset from pivot to center for both RectTransforms
+                var rtOffset = new Vector2(rt.rect.width * (0.5f - rt.pivot.x), rt.rect.height * (0.5f - rt.pivot.y));
+                var targetOffset = new Vector2(target.rect.width * (0.5f - target.pivot.x), target.rect.height * (0.5f - target.pivot.y));
+
+                // Set position to align centers
+                rt.position = target.position + (Vector3)(targetOffset - rtOffset);
+            }
+            else
+            {
+                // Just match pivot positions
+                rt.position = target.position;
+            }
+        }
+
+        #endregion
+
         #region Math
 
         public static float Normalize(this float x, float min, float max) => (x - min) / (max - min);
         public static float LinearTransformation(this float x, float a, float b) => a + x * (b - a);
 
         #endregion
+
         #region Random
 
         public static T GetRandom<T>(this T[] array) => array[Random.Range(0, array.Length)];
