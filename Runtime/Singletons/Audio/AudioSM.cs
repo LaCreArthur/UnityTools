@@ -72,7 +72,7 @@ namespace AS.Toolbox.Singletons.Audio
             _currentMusic.pitch = 1;
             _currentMusic.Play();
 
-            Debug.Log($"Music {name} starts");
+            Debug.Log($"Music {clip.name} starts");
             if (musicAutoPlayNext)
                 StartCoroutine(WaitForEndAndPlayNextTrack(clip.length, clipId));
         }
