@@ -27,7 +27,6 @@ namespace AS.Toolbox.ScriptableObjects
 
         public void LogCallback(ScriptableObject so, bool? onEnter = null)
         {
-#if UNITY_EDITOR
             if (so == null)
             {
                 Debug.LogWarning("Trying to log callback from null ScriptableObject");
@@ -35,7 +34,6 @@ namespace AS.Toolbox.ScriptableObjects
             }
             string header = LogHelper.HeaderStr(so.name, reference?.name, onEnter);
             callbacks.ForEach(c => LogHelper.LogMethodCall(c.Target, header, c.Method.Name));
-#endif
         }
     }
 
@@ -45,10 +43,8 @@ namespace AS.Toolbox.ScriptableObjects
 
         public void LogCallback(ScriptableObject so, T t = default(T))
         {
-#if UNITY_EDITOR
             string header = LogHelper.HeaderStr(so.name, reference.name);
             callbacks.ForEach(c => LogHelper.LogMethodCall(c.Target, header, c.Method.Name, t));
-#endif
         }
     }
 
@@ -58,9 +54,11 @@ namespace AS.Toolbox.ScriptableObjects
 
         public void LogCallback(ScriptableObject so, object t, bool? onEnter = null)
         {
-#if UNITY_EDITOR
             string header = LogHelper.HeaderStr(so.name, reference.name, onEnter);
-            UnityEventHelper.GetPersistentCalls("events", reference).ForEach(c => LogHelper.LogMethodCall(c, header, t));
+#if UNITY_EDITOR
+            UnityEditorEventHelper.GetPersistentCalls("events", reference).ForEach(c => LogHelper.EditorLogMethodCall(c, header, t));
+#else
+            Debug.Log(header);
 #endif
         }
     }

@@ -13,19 +13,19 @@ namespace AS.Toolbox.ScriptableObjects
 
         public static void LogMethodCall([CanBeNull] object target, string header, string methodName, object t = null)
         {
-            var methodCall = MethodStr(target?.GetType().Name, methodName);
+            StringBuilder methodCall = MethodStr(target?.GetType().Name, methodName);
             methodCall.Append(t != null ? LP(t).P() : "()");
             DebugLogMethodCall(methodCall, header, target as Object);
         }
 
-#if UNITY_EDITOR
-        public static void LogMethodCall(PersistentCall p, string header, object t = null)
+        #if UNITY_EDITOR
+        public static void EditorLogMethodCall(EditorPersistentCall p, string header, object t = null)
         {
-            var methodCall = MethodStr(p.GetTarget().GetType().Name, p.MethodName());
+            StringBuilder methodCall = MethodStr(p.GetTarget().GetType().Name, p.MethodName());
             methodCall.Append(p.IsDynamicParams() ? LP(t).P() : p.GetParams().P());
             DebugLogMethodCall(methodCall, header, p.GetTarget());
         }
-#endif
+        #endif
 
         static void DebugLogMethodCall(StringBuilder mc, string h, Object t) => Debug.Log(mc.Insert(0, h), t);
 

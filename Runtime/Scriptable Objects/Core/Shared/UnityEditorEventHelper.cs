@@ -7,24 +7,24 @@ using UnityEngine.Events;
 
 namespace AS.Toolbox.ScriptableObjects
 {
-    public static class UnityEventHelper
+    public static class UnityEditorEventHelper
     {
         /// <summary>
         ///     Get all persistent calls for debug purposes.
         /// </summary>
         /// <param name="srcObj">the Unity Object on which is the UnityEvent</param>
         /// <returns></returns>
-        public static List<PersistentCall> GetPersistentCalls(string srcEventName, Object srcObj)
+        public static List<EditorPersistentCall> GetPersistentCalls(string srcEventName, Object srcObj)
         {
             var src = new SerializedObject(srcObj);
-            var srcCalls = src.FindProperty($"{srcEventName}.m_PersistentCalls.m_Calls");
-            var calls = new List<PersistentCall>();
+            SerializedProperty srcCalls = src.FindProperty($"{srcEventName}.m_PersistentCalls.m_Calls");
+            var calls = new List<EditorPersistentCall>();
             if (srcCalls == null)
                 return calls;
             for (int srcIndex = 0; srcIndex < srcCalls.arraySize; srcIndex++)
             {
-                var srcCallProperty = srcCalls.GetArrayElementAtIndex(srcIndex);
-                var srcCall = new PersistentCall(srcCallProperty, "{srcEventName}");
+                SerializedProperty srcCallProperty = srcCalls.GetArrayElementAtIndex(srcIndex);
+                var srcCall = new EditorPersistentCall(srcCallProperty, "{srcEventName}");
                 calls.Add(srcCall);
             }
 
@@ -32,7 +32,7 @@ namespace AS.Toolbox.ScriptableObjects
         }
     }
 
-    public readonly struct PersistentCall
+    public readonly struct EditorPersistentCall
     {
         readonly SerializedProperty _target;
         readonly SerializedProperty _methodName;
@@ -45,7 +45,7 @@ namespace AS.Toolbox.ScriptableObjects
         readonly SerializedProperty _stringArg;
         readonly SerializedProperty _boolArg;
 
-        internal PersistentCall(in SerializedProperty callProperty, in string propertyPathBase)
+        internal EditorPersistentCall(in SerializedProperty callProperty, in string propertyPathBase)
         {
             _target = callProperty?.FindPropertyRelative("m_Target");
             _methodName = callProperty?.FindPropertyRelative("m_MethodName");
