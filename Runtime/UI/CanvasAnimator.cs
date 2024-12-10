@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using AS.Toolbox.Utils;
 using DG.Tweening;
 using Sirenix.OdinInspector;
@@ -72,11 +73,17 @@ namespace AS.Toolbox.UI
                 _canvasGroup.alpha = 0;
                 _canvasGroup.blocksRaycasts = false;
                 _canvas.enabled = false;
-                // delay the deactivation of the game object to allow subcomponents to initialize
-                CoroutineRunner.WaitForFrames(3, () => gameObject.SetActive(false));
             }
 
             _isInitialized = true;
+        }
+
+        IEnumerator Start()
+        {
+            if (startVisible) yield break;
+            yield return new WaitForEndOfFrame();
+            // delaying the disabling to allow children to awake and check if not already shown by now
+            if (isHidden) gameObject.SetActive(false);
         }
 
         [Button]
