@@ -9,6 +9,7 @@ namespace AS.Toolbox.Utils
     public class CoroutineRunner : SingletonMono<CoroutineRunner>
     {
         public static void WaitForEndOfFrame(Action callback) => Instance.StartCoroutine(Coroutines.WaitForEndOfFrame(callback));
+        public static void WaitForFrames(int frames, Action callback) => Instance.StartCoroutine(Coroutines.WaitForFrames(frames, callback));
         public static void WaitForSecond(float time, Action callback) => Instance.StartCoroutine(Coroutines.WaitForSecond(time, callback));
     }
 }
