@@ -61,7 +61,7 @@ namespace AS.Toolbox.UI
             if (resetPosOnStart)
                 transform.localPosition = Vector3.zero;
 
-            foreach (var component in GetComponents<CanvasAnimatorComponent>())
+            foreach (CanvasAnimatorComponent component in GetComponents<CanvasAnimatorComponent>())
                 component.Initialize();
 
             isHidden = true;
@@ -73,7 +73,7 @@ namespace AS.Toolbox.UI
                 _canvasGroup.blocksRaycasts = false;
                 _canvas.enabled = false;
                 // delay the deactivation of the game object to allow subcomponents to initialize
-                StartCoroutine(Coroutines.WaitForEndOfFrame(() => gameObject.SetActive(false))); //todo: check if introducing errors
+                CoroutineRunner.WaitForFrames(3, () => gameObject.SetActive(false));
             }
 
             _isInitialized = true;
