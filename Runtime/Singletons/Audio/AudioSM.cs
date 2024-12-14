@@ -30,6 +30,8 @@ namespace AS.Toolbox.Singletons.Audio
         float _musicVolume;
         bool _isAudio;
         bool _isMusic;
+        Coroutine _musicFadeOutCoroutine;
+        Coroutine _musicWaitNextCoroutine;
 
         protected override void OnAwake()
         {
@@ -55,7 +57,10 @@ namespace AS.Toolbox.Singletons.Audio
                 return;
             if (_currentMusic && _currentMusic.isPlaying)
             {
-                StartCoroutine(FadeOutAndPlayNextTrack(clipId));
+                Debug.Log($"PlayMusic: {musics.clips[clipId].name}, but {_currentMusic.clip.name} is playing. Fading out...");
+                if (_musicFadeOutCoroutine != null)
+                    StopCoroutine(_musicFadeOutCoroutine);
+                _musicFadeOutCoroutine = StartCoroutine(FadeOutAndPlayNextClip(clipId));
                 return;
             }
 
@@ -72,19 +77,23 @@ namespace AS.Toolbox.Singletons.Audio
             _currentMusic.pitch = 1;
             _currentMusic.Play();
 
-            Debug.Log($"Music {clip.name} starts");
+            Debug.Log($"PlayMusic: {clip.name}, play");
             if (musicAutoPlayNext)
-                StartCoroutine(WaitForEndAndPlayNextTrack(clip.length, clipId));
+            {
+                if (_musicWaitNextCoroutine != null)
+                    StopCoroutine(_musicWaitNextCoroutine);
+                _musicWaitNextCoroutine = StartCoroutine(WaitForEndAndPlayNextClip(clip.length, clipId));
+            }
         }
 
-        IEnumerator WaitForEndAndPlayNextTrack(float clipLength, int clipId)
+        IEnumerator WaitForEndAndPlayNextClip(float clipLength, int clipId)
         {
+            Debug.Log($"WaitForEndAndPlayNextTrack: waiting for {clipLength / 60f:F0}:{clipLength % 60f:F0}, play");
             yield return new WaitForSeconds(clipLength);
-            clipId++;
-            PlayMusic(clipId % musics.clips.Length);
+            PlayMusic(++clipId % musics.clips.Length);
         }
 
-        IEnumerator FadeOutAndPlayNextTrack(int clipId = 0)
+        IEnumerator FadeOutAndPlayNextClip(int nextClipId)
         {
             float elapsed = 0.0f;
             while (elapsed <= musicFadeOutDuration)
@@ -95,7 +104,7 @@ namespace AS.Toolbox.Singletons.Audio
             }
 
             _currentMusic.Stop();
-            PlayMusic(clipId);
+            PlayMusic(nextClipId);
         }
 
         static void InitAudioSource(SoundSO s, bool isMusic = false)
