@@ -77,7 +77,6 @@ namespace AS.Toolbox.Singletons.Audio
             _currentMusic.pitch = 1;
             _currentMusic.Play();
 
-            Debug.Log($"PlayMusic: {clip.name}, play");
             if (musicAutoPlayNext)
             {
                 if (_musicWaitNextCoroutine != null)
@@ -88,7 +87,6 @@ namespace AS.Toolbox.Singletons.Audio
 
         IEnumerator WaitForEndAndPlayNextClip(float clipLength, int clipId)
         {
-            Debug.Log($"WaitForEndAndPlayNextTrack: waiting for {clipLength / 60f:F0}:{clipLength % 60f:F0}, play");
             yield return new WaitForSeconds(clipLength);
             PlayMusic(++clipId % musics.clips.Length);
         }
