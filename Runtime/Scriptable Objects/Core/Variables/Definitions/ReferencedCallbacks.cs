@@ -121,8 +121,13 @@ namespace AS.Toolbox.ScriptableObjects
         protected List<ReferencedAction> runtimeListeners = new List<ReferencedAction>();
 
         void RemoveNullPersistent() => persistentListeners?.RemoveAll(l => l.reference == null);
-
         void RemoveNullRuntime() => runtimeListeners?.RemoveAll(l => l.reference == null && !l.isStatic);
+
+        public void RemoveAll()
+        {
+            persistentListeners.Clear();
+            runtimeListeners.Clear();
+        }
 
         internal void Add(Action callback, Object listener = null, bool dontAddDuplicate = false)
         {
