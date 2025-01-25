@@ -150,7 +150,7 @@ namespace AS.Toolbox.Singletons.Audio
         {
             if (sfxVolumeVar.v > 0 && !_isAudio)
             {
-                Play(SOSounds.AudioEnabled);
+                Play(Sounds.AudioEnabled);
             }
             _isAudio = sfxVolumeVar.v > 0;
             _soundVolume = sfxVolumeVar.v * baseSfxVolume;
