@@ -34,6 +34,11 @@ namespace AS.Toolbox.ScriptableObjects
             SetText();
         }
 
+        void OnDestroy()
+        {
+            if (autoUpdateOnChange) var.RemoveOnChange(SetText);
+        }
+
         void SetText()
         {
             int val = isValueOffset ? var.v + valueOffset :

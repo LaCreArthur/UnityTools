@@ -7,7 +7,12 @@ using UnityEngine;
 public class VibrationManager : SingletonMono<VibrationManager>
 {
     [SerializeField] [Required] BoolVar isHapticVar;
-    void OnEnable() => isHapticVar.AddOnChange(OnHapticChange);
-    void Start() => OnHapticChange();
+    void Start()
+    {
+        OnHapticChange();
+        isHapticVar.AddOnChange(OnHapticChange);
+    }
+
+    void OnDestroy() => isHapticVar?.RemoveOnChange(OnHapticChange);
     void OnHapticChange() => Vibrations.IsHaptic = isHapticVar.v;
 }

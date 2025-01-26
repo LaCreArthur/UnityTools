@@ -29,6 +29,11 @@ namespace AS.Toolbox.ScriptableObjects
             SetTextInternal();
         }
 
+        void OnDestroy()
+        {
+            if (autoUpdateOnChange) var.RemoveOnChange(SetTextInternal);
+        }
+
         void SetTextInternal()
         {
             SetText();

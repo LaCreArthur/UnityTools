@@ -10,14 +10,18 @@ namespace AS.Toolbox.ScriptableObjects
         [SerializeField] string suffix;
         [SerializeField] bool autoUpdateOnChange = true;
         TMP_Text _tmp;
-        [SerializeField, Required, AssetsOnly] ISOVariable variable;
+        [SerializeField] [Required] [AssetsOnly] ISOVariable variable;
 
         void Start()
         {
             _tmp = GetComponent<TMP_Text>();
-            if ((variable != null) && autoUpdateOnChange)
-                variable.AddOnChange(SetText);
+            if (autoUpdateOnChange) variable.AddOnChange(SetText);
             SetText();
+        }
+
+        void OnDestroy()
+        {
+            if (autoUpdateOnChange) variable.RemoveOnChange(SetText);
         }
 
         void SetText() => _tmp.text = $"{prefix}{variable.ToString()}{suffix}";
