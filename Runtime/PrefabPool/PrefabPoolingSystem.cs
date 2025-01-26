@@ -48,7 +48,7 @@ namespace AS.Toolbox.PrefabPool
 
         public static void PopulateWithInstances(GameObject prefab, GameObject root)
         {
-            var pool = GetOrCreatePool(prefab);
+            PrefabPool pool = GetOrCreatePool(prefab);
             var poolableComponent = prefab.GetComponent<IPoolableComponent>();
             Component[] childrenComponents = root.GetComponentsInChildren(poolableComponent.GetType(), true);
 
@@ -64,9 +64,9 @@ namespace AS.Toolbox.PrefabPool
         /// <returns>the spawned instance</returns>
         public static GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent = null)
         {
-            var pool = GetOrCreatePool(prefab);
+            PrefabPool pool = GetOrCreatePool(prefab);
 
-            var go = pool.Spawn(prefab, position, rotation, parent);
+            GameObject go = pool.Spawn(prefab, position, rotation, parent);
             s_goToPoolMap.Add(go, pool);
             return go;
         }
@@ -98,16 +98,14 @@ namespace AS.Toolbox.PrefabPool
         /// <returns>returns true if the object was successfully despawned</returns>
         public static bool Despawn(GameObject obj)
         {
-            if ((obj == null) || !obj.activeSelf)
+            if (obj == null || !obj.activeSelf)
                 return false;
 
-            if (!s_goToPoolMap.ContainsKey(obj))
+            if (!s_goToPoolMap.TryGetValue(obj, out PrefabPool pool))
             {
                 Debug.LogError($"Object {obj.name} not managed by pool system!", obj);
                 return false;
             }
-
-            var pool = s_goToPoolMap[obj];
 
             if (pool.Despawn(obj))
             {
