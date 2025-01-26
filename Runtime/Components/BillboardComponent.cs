@@ -3,18 +3,17 @@ using UnityEngine;
 
 public class BillboardComponent : MonoBehaviour
 {
-    public bool customCam;
-    [ShowIf("customCam")]
-    public Camera cam;
+    public bool useCustomCam;
+    [ShowIf("useCustomCam")]
+    public Camera customCam;
     public Vector3 rotationOffset;
     Camera _camera;
-
-    void Start() => _camera = customCam && (cam != null) ? cam : Camera.main;
+    Camera Cam => _camera ??= useCustomCam && customCam != null ? customCam : Camera.main;
 
     //Orient the camera after all movement is completed this frame to avoid jitter
     void LateUpdate()
     {
-        var rotation = _camera.transform.rotation;
+        Quaternion rotation = Cam.transform.rotation;
         transform.LookAt(transform.position + rotation * Vector3.forward,
             rotation * Vector3.up);
 
