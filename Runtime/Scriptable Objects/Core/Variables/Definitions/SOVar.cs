@@ -8,7 +8,7 @@ using UnityEngine.Events;
 namespace AS.Toolbox.ScriptableObjects
 {
     [AssetSelector]
-    public class SOVar<T> : ScriptableObject, ISOVariable, IStorable<T>
+    public class SOVar<T> : ScriptableObject, ISOVariable
     {
 
         protected virtual void OnEnable()
@@ -77,7 +77,7 @@ namespace AS.Toolbox.ScriptableObjects
         bool ShouldIgnoreSetValue(T newVal)
         {
 #if UNITY_EDITOR
-            return EditorApplication.isPlayingOrWillChangePlaymode && (value != null) && value.Equals(newVal);
+            return EditorApplication.isPlayingOrWillChangePlaymode && value != null && value.Equals(newVal);
 #else
             return false;
 #endif
