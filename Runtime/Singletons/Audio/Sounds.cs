@@ -19,7 +19,6 @@ namespace AS.Toolbox.Singletons.Audio
         [SerializeField] SoundSO unlock;
         [SerializeField] SoundSO whale;
         [SerializeField] SoundSO wow;
-        [SerializeField] SoundSO musique;
 
         public static SoundSO Asteroid => Instance.asteroid;
         public static SoundSO AudioEnabled => Instance.audioEnabled;
@@ -36,6 +35,5 @@ namespace AS.Toolbox.Singletons.Audio
         public static SoundSO Unlock => Instance.unlock;
         public static SoundSO Whale => Instance.whale;
         public static SoundSO Wow => Instance.wow;
-        public static SoundSO Musique => Instance.musique;
     }
 }
