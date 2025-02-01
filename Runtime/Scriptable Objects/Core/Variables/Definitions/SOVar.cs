@@ -27,6 +27,7 @@ namespace AS.Toolbox.ScriptableObjects
         public void RemoveOnChange(Action callback) => onChange.Remove(callback);
 
         public override string ToString() => value.ToString().Replace($"({value.GetType()})", "");
+        public void RemoveAllOnChange() => onChange.RemoveAll();
 
         public virtual void Save() {}
 
