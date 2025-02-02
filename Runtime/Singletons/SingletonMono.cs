@@ -54,7 +54,7 @@ namespace AS.Toolbox.Singletons
                 s_instance = this as T;
                 Init();
             }
-            Debug.Log($"SingletonMono {typeof(T).Name} awake.");
+            // Debug.Log($"SingletonMono {typeof(T).Name} awake.");
         }
 
         protected virtual void OnAwake() {}
@@ -65,7 +65,7 @@ namespace AS.Toolbox.Singletons
             {
                 s_instance = null;
                 _isDestroyed = true;
-                Debug.Log($"SingletonMono {typeof(T).Name} destroyed.");
+                // Debug.Log($"SingletonMono {typeof(T).Name} destroyed.");
             }
         }
 
