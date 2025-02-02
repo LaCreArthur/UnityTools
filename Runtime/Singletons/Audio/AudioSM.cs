@@ -45,10 +45,10 @@ namespace AS.Toolbox.Singletons.Audio
             musicVolumeVar.AddOnChange(OnMusicVolumeChange);
         }
 
-        void OnDestroy()
+        void OnDisable()
         {
-            sfxVolumeVar?.RemoveOnChange(OnSfxVolumeChange);
-            musicVolumeVar?.RemoveOnChange(OnMusicVolumeChange);
+            sfxVolumeVar.RemoveOnChange(OnSfxVolumeChange);
+            musicVolumeVar.RemoveOnChange(OnMusicVolumeChange);
         }
 
         void StartAutoPlayMusic()
