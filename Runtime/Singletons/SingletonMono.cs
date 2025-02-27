@@ -24,7 +24,6 @@ namespace AS.Toolbox.Singletons
                 {
                     if (_isDestroyed)
                     {
-                        Debug.Log($"SingletonMono {typeof(T).Name} destroyed. Returning null.");
                         return null;
                     }
                     s_instance = FindAnyObjectByType<T>();
@@ -54,10 +53,7 @@ namespace AS.Toolbox.Singletons
                 s_instance = this as T;
                 Init();
             }
-            // Debug.Log($"SingletonMono {typeof(T).Name} awake.");
         }
-
-        protected virtual void OnAwake() {}
 
         void OnDestroy()
         {
@@ -65,9 +61,10 @@ namespace AS.Toolbox.Singletons
             {
                 s_instance = null;
                 _isDestroyed = true;
-                // Debug.Log($"SingletonMono {typeof(T).Name} destroyed.");
             }
         }
+
+        protected virtual void OnAwake() {}
 
         void Init()
         {
