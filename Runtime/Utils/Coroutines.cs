@@ -26,6 +26,12 @@ namespace AS.Toolbox.Utils
             yield return new WaitForSeconds(time);
             callback?.Invoke();
         }
+
+        public static IEnumerator WaitForSecondRealtime(float time, Action callback)
+        {
+            yield return new WaitForSecondsRealtime(time);
+            callback?.Invoke();
+        }
     }
 
 }

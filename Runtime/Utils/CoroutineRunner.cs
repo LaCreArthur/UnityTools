@@ -12,5 +12,7 @@ namespace AS.Toolbox.Utils
         public static Coroutine WaitForEndOfFrame(Action callback) => Instance.StartCoroutine(Coroutines.WaitForEndOfFrame(callback));
         public static Coroutine WaitForFrames(int frames, Action callback) => Instance.StartCoroutine(Coroutines.WaitForFrames(frames, callback));
         public static Coroutine WaitForSecond(float time, Action callback) => Instance.StartCoroutine(Coroutines.WaitForSecond(time, callback));
+        public static Coroutine WaitForSecondRealtime(float time, Action callback) => Instance.StartCoroutine(Coroutines.WaitForSecondRealtime(time, callback));
+        public static void Stop(Coroutine coroutine) => Instance.StopCoroutine(coroutine);
     }
 }
