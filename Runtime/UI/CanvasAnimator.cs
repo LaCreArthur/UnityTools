@@ -91,7 +91,7 @@ namespace AS.Toolbox.UI
         {
             if (!_isInitialized)
             {
-                //Debug.Log("Delay show because not initialized yet", this);
+                if (!gameObject.activeSelf) gameObject.SetActive(true);
                 StartCoroutine(Coroutines.WaitForEndOfFrame(Show));
                 return;
             }
