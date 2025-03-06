@@ -6,8 +6,7 @@ namespace AS.Toolbox.Singletons
     public abstract class SingletonMono<T> : MonoBehaviour where T : SingletonMono<T>
     {
         static T s_instance;
-        static bool _isDestroyed;
-        bool _isAwoken;
+        bool _isInit;
 
         public static T Instance
         {
@@ -19,13 +18,9 @@ namespace AS.Toolbox.Singletons
                     return null;
                 }
 #endif
-
                 if (s_instance == null)
                 {
-                    if (_isDestroyed)
-                    {
-                        return null;
-                    }
+                    Debug.LogWarning($"SingletonMB \"{typeof(T).Name}\" instance is null. Attempting to find or create one.");
                     s_instance = FindAnyObjectByType<T>();
                     if (s_instance == null)
                     {
@@ -55,24 +50,14 @@ namespace AS.Toolbox.Singletons
             }
         }
 
-        void OnDestroy()
-        {
-            if (s_instance == this)
-            {
-                s_instance = null;
-                _isDestroyed = true;
-            }
-        }
-
         protected virtual void OnAwake() {}
 
         void Init()
         {
-            if (_isAwoken)
+            if (_isInit)
                 return;
 
-            _isAwoken = true;
-            _isDestroyed = false;
+            _isInit = true;
             DontDestroyOnLoad(transform.root.gameObject);
             OnAwake();
         }
