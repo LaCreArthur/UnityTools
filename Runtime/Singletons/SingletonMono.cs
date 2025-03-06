@@ -20,10 +20,10 @@ namespace AS.Toolbox.Singletons
 #endif
                 if (s_instance == null)
                 {
-                    Debug.LogWarning($"SingletonMB \"{typeof(T).Name}\" instance is null. Attempting to find or create one.");
                     s_instance = FindAnyObjectByType<T>();
                     if (s_instance == null)
                     {
+                        Debug.LogWarning($"SingletonMB \"{typeof(T).Name}\" instance not found. Creating one.");
                         Type t = typeof(T);
                         s_instance = new GameObject(t.Name, t).GetComponent<T>();
                     }
