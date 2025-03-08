@@ -6,6 +6,7 @@ namespace AS.Toolbox.Singletons
     public abstract class SingletonMono<T> : MonoBehaviour where T : SingletonMono<T>
     {
         static T s_instance;
+        static bool s_isQuitting; // Tracks if the application is quitting
         bool _isInit;
 
         public static T Instance
@@ -18,6 +19,12 @@ namespace AS.Toolbox.Singletons
                     return null;
                 }
 #endif
+                if (s_isQuitting)
+                {
+                    Debug.LogWarning($"Trying to access \"{typeof(T).Name}\" instance while application is quitting. Returning null.");
+                    return null;
+                }
+
                 if (s_instance == null)
                 {
                     s_instance = FindAnyObjectByType<T>();
@@ -47,6 +54,14 @@ namespace AS.Toolbox.Singletons
             {
                 s_instance = this as T;
                 Init();
+            }
+        }
+
+        protected virtual void OnDestroy()
+        {
+            if (s_instance != null && s_instance == this)
+            {
+                s_isQuitting = true;
             }
         }
 
