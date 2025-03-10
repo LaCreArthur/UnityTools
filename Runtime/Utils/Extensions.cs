@@ -62,8 +62,51 @@ namespace AS.Toolbox.Utils
 
         #region Math
 
-        public static float Normalize(this float x, float min, float max) => (x - min) / (max - min);
-        public static float LinearTransformation(this float x, float a, float b) => a + x * (b - a);
+        /// <summary>
+        ///     Normalizes a value from the original range [a, b] to the range [0, 1].
+        /// </summary>
+        /// <param name="x">The value to normalize.</param>
+        /// <param name="a">The minimum value of the original range.</param>
+        /// <param name="b">The maximum value of the original range.</param>
+        /// <param name="clamp">If true, clamps the result to [0, 1] if x is outside [a, b]. If false, allows extrapolation.</param>
+        /// <returns>The normalized value in the range [0, 1], or a value outside [0, 1] if extrapolation is allowed.</returns>
+        public static float Normalize(this float x, float a, float b, bool clamp = false)
+        {
+            if (a == b)
+            {
+                Debug.LogWarning("The range [a, b] is invalid because b equals a, which would cause division by zero.");
+                return 0f;
+            }
+
+            float normalized = (x - a) / (b - a);
+
+            // Clamp the result to [0, 1] if requested
+            if (clamp)
+            {
+                normalized = Math.Clamp(normalized, 0f, 1f);
+            }
+
+            return normalized;
+        }
+
+        /// <summary>
+        ///     Performs a linear transformation to map a value from the range [0, 1] to a new range [a, b].
+        /// </summary>
+        /// <param name="x">The value to transform, typically in the range [0, 1].</param>
+        /// <param name="a">The minimum value of the target range.</param>
+        /// <param name="b">The maximum value of the target range.</param>
+        /// <param name="clamp">If true, clamps x to [0, 1] before transformation. If false, allows extrapolation.</param>
+        /// <returns>The transformed value in the range [a, b], or a value outside [a, b] if extrapolation is allowed.</returns>
+        public static float LinearTransformation(this float x, float a, float b, bool clamp = false)
+        {
+            // Clamp x to [0, 1] if requested
+            if (clamp)
+            {
+                x = Math.Clamp(x, 0f, 1f);
+            }
+
+            return a + x * (b - a);
+        }
 
         #endregion
 
