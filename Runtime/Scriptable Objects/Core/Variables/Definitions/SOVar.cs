@@ -10,7 +10,6 @@ namespace AS.Toolbox.ScriptableObjects
     [AssetSelector]
     public class SOVar<T> : ScriptableObject, ISOVariable
     {
-
         protected virtual void OnEnable()
         {
 #if UNITY_EDITOR // dont load if not on playmode
