@@ -21,7 +21,7 @@ namespace AS.Toolbox.Singletons
 #endif
                 if (s_isQuitting)
                 {
-                    Debug.LogWarning($"Trying to access \"{typeof(T).Name}\" instance while application is quitting. Returning null.");
+                    //  Debug.LogWarning($"Trying to access \"{typeof(T).Name}\" instance while application is quitting. Returning null.");
                     return null;
                 }
 
@@ -44,10 +44,10 @@ namespace AS.Toolbox.Singletons
 
         void Awake()
         {
-            if (s_instance != null && s_instance != this)
+            if ((s_instance != null) && (s_instance != this))
             {
-                Debug.LogWarning($"An instance of \"{typeof(T).Name}\" already exists. Destroying duplicate one.",
-                    s_instance.gameObject);
+                // Debug.LogWarning($"An instance of \"{typeof(T).Name}\" already exists. Destroying duplicate one.",
+                //     s_instance.gameObject);
                 Destroy(this);
             }
             else
@@ -59,7 +59,7 @@ namespace AS.Toolbox.Singletons
 
         protected virtual void OnDestroy()
         {
-            if (s_instance != null && s_instance == this)
+            if ((s_instance != null) && (s_instance == this))
             {
                 s_isQuitting = true;
             }
