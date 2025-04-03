@@ -1,5 +1,4 @@
-using Interhaptics.Core;
-using Interhaptics.Utils;
+using Lofelt.NiceVibrations;
 using UnityEngine;
 
 namespace AS.Toolbox
@@ -12,34 +11,21 @@ namespace AS.Toolbox
             get => s_isHaptic;
             set {
                 s_isHaptic = value;
-                HAR.SetGlobalIntensity(value ? 1 : 0);
+                HapticController.hapticsEnabled = value;
             }
         }
 
         [RuntimeInitializeOnLoadMethod]
-        static void Awake()
-        {
-            if (HAR.Init())
-            {
-                Debug.Log("Haptic and Audio Reactive initialized");
-                IsHaptic = true;
-            }
-            else
-            {
-                Debug.LogWarning("Haptic and Audio Reactive failed to initialize");
-                IsHaptic = false;
-            }
-            HAR.PlayConstant(0.5, 0.5);
-        }
+        static void Awake() => HapticController.hapticsEnabled = IsHaptic;
 
-        public static void Haptic(HapticPreset.PresetType type) => HapticPreset.Play(type);
-        public static void HapticSuccess() => HapticPreset.Play(HapticPreset.PresetType.Success);
-        public static void HapticFailure() => HapticPreset.Play(HapticPreset.PresetType.Failure);
-        public static void HapticSelection() => HapticPreset.Play(HapticPreset.PresetType.Selection);
-        public static void HapticSoft() => HapticPreset.Play(HapticPreset.PresetType.Soft);
-        public static void HapticLight() => HapticPreset.Play(HapticPreset.PresetType.Light);
-        public static void HapticMedium() => HapticPreset.Play(HapticPreset.PresetType.Medium);
-        public static void HapticHeavy() => HapticPreset.Play(HapticPreset.PresetType.Heavy);
-        public static void HapticRigid() => HapticPreset.Play(HapticPreset.PresetType.Rigid);
+        public static void Haptic(HapticPatterns.PresetType type) => HapticPatterns.PlayPreset(type);
+        public static void HapticSuccess() => HapticPatterns.PlayPreset(HapticPatterns.PresetType.Success);
+        public static void HapticFailure() => HapticPatterns.PlayPreset(HapticPatterns.PresetType.Failure);
+        public static void HapticSelection() => HapticPatterns.PlayPreset(HapticPatterns.PresetType.Selection);
+        public static void HapticSoft() => HapticPatterns.PlayPreset(HapticPatterns.PresetType.SoftImpact);
+        public static void HapticLight() => HapticPatterns.PlayPreset(HapticPatterns.PresetType.LightImpact);
+        public static void HapticMedium() => HapticPatterns.PlayPreset(HapticPatterns.PresetType.MediumImpact);
+        public static void HapticHeavy() => HapticPatterns.PlayPreset(HapticPatterns.PresetType.HeavyImpact);
     }
+
 }
