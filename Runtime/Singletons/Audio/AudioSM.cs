@@ -10,6 +10,11 @@ namespace AS.Toolbox.Singletons.Audio
 {
     public class AudioSM : SingletonMono<AudioSM>
     {
+        static float s_soundVolume;
+        static float s_musicVolume;
+        static bool s_isAudio;
+        static bool s_isMusic;
+
         [Header("SFX")]
         [SerializeField] [Required] FloatVar sfxVolumeVar;
         [SerializeField] AudioMixerGroup sfxMixerGroup;
@@ -26,23 +31,17 @@ namespace AS.Toolbox.Singletons.Audio
         [SerializeField] float musicFadeOutDuration;
 
         AudioSource _currentMusic;
-        float _soundVolume;
-        float _musicVolume;
-        bool _isAudio;
-        bool _isMusic;
         Coroutine _musicFadeOutCoroutine;
         Coroutine _musicWaitNextCoroutine;
 
-        protected override void OnAwake()
-        {
-            InitAudioSource(musics, true);
-            StartAutoPlayMusic();
-        }
+        protected override void OnAwake() => InitAudioSource(musics, true);
 
         void OnEnable()
         {
             sfxVolumeVar.AddOnChange(OnSfxVolumeChange);
             musicVolumeVar.AddOnChange(OnMusicVolumeChange);
+            OnSfxVolumeChange();
+            OnMusicVolumeChange();
         }
 
         void OnDisable()
@@ -63,7 +62,7 @@ namespace AS.Toolbox.Singletons.Audio
                 return;
             if (_currentMusic && _currentMusic.isPlaying)
             {
-                Debug.Log($"PlayMusic: {musics.clips[clipId].name}, but {_currentMusic.clip.name} is playing. Fading out...");
+                Debug.Log($"[Audio] PlayMusic: {_currentMusic.clip.name} is playing. Fading out...");
                 if (_musicFadeOutCoroutine != null)
                     StopCoroutine(_musicFadeOutCoroutine);
                 _musicFadeOutCoroutine = StartCoroutine(FadeOutAndPlayNextClip(clipId));
@@ -72,16 +71,17 @@ namespace AS.Toolbox.Singletons.Audio
 
             if (musics == null)
             {
-                Debug.LogWarning("Musics is null!");
+                Debug.LogWarning("[Audio] PlayMusic: Musics is null!");
                 return;
             }
 
             AudioClip clip = musics.clips[clipId];
             _currentMusic = musics.source;
             _currentMusic.clip = clip;
-            _currentMusic.volume = musics.volume * _musicVolume;
+            _currentMusic.volume = musics.volume * s_musicVolume;
             _currentMusic.pitch = 1;
             _currentMusic.Play();
+            Debug.Log($"[Audio] PlayMusic: Playing {clip.name}");
 
             if (musicAutoPlayNext)
             {
@@ -100,11 +100,12 @@ namespace AS.Toolbox.Singletons.Audio
         IEnumerator FadeOutAndPlayNextClip(int nextClipId)
         {
             float elapsed = 0.0f;
+            Debug.Log($"[Audio] Fading Out: {_currentMusic.name}");
             while (elapsed <= musicFadeOutDuration)
             {
                 yield return new WaitForEndOfFrame();
                 elapsed += Time.deltaTime;
-                _currentMusic.volume = (musicFadeOutDuration - elapsed) / musicFadeOutDuration * _musicVolume;
+                _currentMusic.volume = (musicFadeOutDuration - elapsed) / musicFadeOutDuration * s_musicVolume;
             }
 
             _currentMusic.Stop();
@@ -121,7 +122,7 @@ namespace AS.Toolbox.Singletons.Audio
 
         public static void Play(SoundSO s)
         {
-            if (!Instance._isAudio || Instance.sfxVolumeVar.v == 0)
+            if (!s_isAudio || Instance.sfxVolumeVar.v == 0)
                 return;
             if (s == null)
             {
@@ -133,7 +134,7 @@ namespace AS.Toolbox.Singletons.Audio
                 InitAudioSource(s);
 
             s.source.clip = s.clips.Length > 0 ? s.clips.GetRandom() : s.clips[0];
-            s.source.volume = s.volume * (1f + Random.Range(-s.volumeVariance / 2f, s.volumeVariance / 2f)) * Instance._soundVolume;
+            s.source.volume = s.volume * (1f + Random.Range(-s.volumeVariance / 2f, s.volumeVariance / 2f)) * s_soundVolume;
             s.source.pitch = s.pitch * (1f + Random.Range(-s.pitchVariance / 2f, s.pitchVariance / 2f));
             if (s.loop)
                 s.source.Play();
@@ -154,25 +155,28 @@ namespace AS.Toolbox.Singletons.Audio
 
         void OnSfxVolumeChange()
         {
-            if (sfxVolumeVar.v > 0 && !_isAudio)
+            if (sfxVolumeVar.v > 0 && !s_isAudio)
             {
                 Play(Sounds.AudioEnabled);
             }
-            _isAudio = sfxVolumeVar.v > 0;
-            _soundVolume = sfxVolumeVar.v * baseSfxVolume;
+            s_isAudio = sfxVolumeVar.v > 0;
+            s_soundVolume = sfxVolumeVar.v * baseSfxVolume;
         }
 
         void OnMusicVolumeChange()
         {
-            if (musicVolumeVar.v > 0 && !_isMusic)
+            if (musicVolumeVar.v > 0 && !s_isMusic)
             {
                 StartAutoPlayMusic();
             }
-            _isMusic = musicVolumeVar.v > 0;
-            _musicVolume = musicVolumeVar.v * baseMusicVolume;
+            s_isMusic = musicVolumeVar.v > 0;
+            s_musicVolume = musicVolumeVar.v * baseMusicVolume;
             if (_currentMusic != null)
             {
-                _currentMusic.volume = musics.volume * _musicVolume;
+                if (s_isMusic)
+                    _currentMusic.volume = musics.volume * s_musicVolume;
+                else
+                    _currentMusic = null;
             }
         }
     }
