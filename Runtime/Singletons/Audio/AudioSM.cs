@@ -40,6 +40,9 @@ namespace AS.Toolbox.Singletons.Audio
         {
             sfxVolumeVar.AddOnChange(OnSfxVolumeChange);
             musicVolumeVar.AddOnChange(OnMusicVolumeChange);
+            // Initialize boolean values before calling OnChange methods to avoid playing sounds on start
+            s_isAudio = sfxVolumeVar.v > 0;
+            s_isMusic = musicVolumeVar.v > 0;
             OnSfxVolumeChange();
             OnMusicVolumeChange();
         }
@@ -126,13 +129,14 @@ namespace AS.Toolbox.Singletons.Audio
                 return;
             if (s == null)
             {
-                Debug.LogWarning("Play sound: SoundSO is null!");
+                Debug.LogWarning("[Audio] Play sound: SoundSO is null!");
                 return;
             }
 
             if (s.source == null)
                 InitAudioSource(s);
 
+            Debug.Log($"[Audio] Play sound: {s.source.clip.name}");
             s.source.clip = s.clips.Length > 0 ? s.clips.GetRandom() : s.clips[0];
             s.source.volume = s.volume * (1f + Random.Range(-s.volumeVariance / 2f, s.volumeVariance / 2f)) * s_soundVolume;
             s.source.pitch = s.pitch * (1f + Random.Range(-s.pitchVariance / 2f, s.pitchVariance / 2f));
@@ -152,23 +156,21 @@ namespace AS.Toolbox.Singletons.Audio
 
             s.source.Stop();
         }
-
         void OnSfxVolumeChange()
         {
-            if (sfxVolumeVar.v > 0 && !s_isAudio)
+            bool isSwitchingToEnabled = sfxVolumeVar.v > 0 && !s_isAudio;
+            s_isAudio = sfxVolumeVar.v > 0;
+            s_soundVolume = sfxVolumeVar.v * baseSfxVolume;
+            if (isSwitchingToEnabled)
             {
                 Play(Sounds.AudioEnabled);
             }
-            s_isAudio = sfxVolumeVar.v > 0;
-            s_soundVolume = sfxVolumeVar.v * baseSfxVolume;
         }
+
 
         void OnMusicVolumeChange()
         {
-            if (musicVolumeVar.v > 0 && !s_isMusic)
-            {
-                StartAutoPlayMusic();
-            }
+            bool isSwitchingToEnabled = musicVolumeVar.v > 0 && !s_isMusic;
             s_isMusic = musicVolumeVar.v > 0;
             s_musicVolume = musicVolumeVar.v * baseMusicVolume;
             if (_currentMusic != null)
@@ -177,6 +179,10 @@ namespace AS.Toolbox.Singletons.Audio
                     _currentMusic.volume = musics.volume * s_musicVolume;
                 else
                     _currentMusic = null;
+            }
+            if (isSwitchingToEnabled)
+            {
+                StartAutoPlayMusic();
             }
         }
     }
