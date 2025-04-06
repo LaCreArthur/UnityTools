@@ -40,9 +40,8 @@ namespace AS.Toolbox.Singletons.Audio
         {
             sfxVolumeVar.AddOnChange(OnSfxVolumeChange);
             musicVolumeVar.AddOnChange(OnMusicVolumeChange);
-            // Initialize boolean values before calling OnChange methods to avoid playing sounds on start
+            // Initialize s_isAudio before calling OnSfxVolumeChange to avoid playing sounds on start
             s_isAudio = sfxVolumeVar.v > 0;
-            s_isMusic = musicVolumeVar.v > 0;
             OnSfxVolumeChange();
             OnMusicVolumeChange();
         }
@@ -173,12 +172,16 @@ namespace AS.Toolbox.Singletons.Audio
             bool isSwitchingToEnabled = musicVolumeVar.v > 0 && !s_isMusic;
             s_isMusic = musicVolumeVar.v > 0;
             s_musicVolume = musicVolumeVar.v * baseMusicVolume;
+            Debug.Log($"[Audio] OnMusicVolumeChange: isSwitchingToEnabled={isSwitchingToEnabled} musicVolumeVar={musicVolumeVar.v} s_isMusic={s_isMusic}");
             if (_currentMusic != null)
             {
                 if (s_isMusic)
                     _currentMusic.volume = musics.volume * s_musicVolume;
                 else
+                {
+                    _currentMusic.Stop();
                     _currentMusic = null;
+                }
             }
             if (isSwitchingToEnabled)
             {
