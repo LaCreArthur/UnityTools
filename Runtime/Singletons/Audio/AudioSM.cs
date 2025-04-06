@@ -10,6 +10,8 @@ namespace AS.Toolbox.Singletons.Audio
 {
     public class AudioSM : SingletonMono<AudioSM>
     {
+
+        static readonly bool IsLog = false;
         static float s_soundVolume;
         static float s_musicVolume;
         static bool s_isAudio;
@@ -64,7 +66,7 @@ namespace AS.Toolbox.Singletons.Audio
                 return;
             if (_currentMusic && _currentMusic.isPlaying)
             {
-                Debug.Log($"[Audio] PlayMusic: {_currentMusic.clip.name} is playing. Fading out...");
+                if (IsLog) Debug.Log($"[Audio] PlayMusic: {_currentMusic.clip.name} is playing. Fading out...");
                 if (_musicFadeOutCoroutine != null)
                     StopCoroutine(_musicFadeOutCoroutine);
                 _musicFadeOutCoroutine = StartCoroutine(FadeOutAndPlayNextClip(clipId));
@@ -73,7 +75,7 @@ namespace AS.Toolbox.Singletons.Audio
 
             if (musics == null)
             {
-                Debug.LogWarning("[Audio] PlayMusic: Musics is null!");
+                if (IsLog) Debug.LogWarning("[Audio] PlayMusic: Musics is null!");
                 return;
             }
 
@@ -83,7 +85,7 @@ namespace AS.Toolbox.Singletons.Audio
             _currentMusic.volume = musics.volume * s_musicVolume;
             _currentMusic.pitch = 1;
             _currentMusic.Play();
-            Debug.Log($"[Audio] PlayMusic: Playing {clip.name}");
+            if (IsLog) Debug.Log($"[Audio] PlayMusic: Playing {clip.name}");
 
             if (musicAutoPlayNext)
             {
@@ -102,7 +104,7 @@ namespace AS.Toolbox.Singletons.Audio
         IEnumerator FadeOutAndPlayNextClip(int nextClipId)
         {
             float elapsed = 0.0f;
-            Debug.Log($"[Audio] Fading Out: {_currentMusic.name}");
+            if (IsLog) Debug.Log($"[Audio] Fading Out: {_currentMusic.name}");
             while (elapsed <= musicFadeOutDuration)
             {
                 yield return new WaitForEndOfFrame();
@@ -128,14 +130,14 @@ namespace AS.Toolbox.Singletons.Audio
                 return;
             if (s == null)
             {
-                Debug.LogWarning("[Audio] Play sound: SoundSO is null!");
+                if (IsLog) Debug.LogWarning("[Audio] Play sound: SoundSO is null!");
                 return;
             }
 
             if (s.source == null)
                 InitAudioSource(s);
 
-            Debug.Log($"[Audio] Play sound: {s.source.clip.name}");
+            if (IsLog) Debug.Log($"[Audio] Play sound: {s.source.clip.name}");
             s.source.clip = s.clips.Length > 0 ? s.clips.GetRandom() : s.clips[0];
             s.source.volume = s.volume * (1f + Random.Range(-s.volumeVariance / 2f, s.volumeVariance / 2f)) * s_soundVolume;
             s.source.pitch = s.pitch * (1f + Random.Range(-s.pitchVariance / 2f, s.pitchVariance / 2f));
@@ -149,7 +151,7 @@ namespace AS.Toolbox.Singletons.Audio
         {
             if (s == null)
             {
-                Debug.LogWarning("Stop sound: SoundSO is null!");
+                if (IsLog) Debug.LogWarning("Stop sound: SoundSO is null!");
                 return;
             }
 
@@ -172,7 +174,7 @@ namespace AS.Toolbox.Singletons.Audio
             bool isSwitchingToEnabled = musicVolumeVar.v > 0 && !s_isMusic;
             s_isMusic = musicVolumeVar.v > 0;
             s_musicVolume = musicVolumeVar.v * baseMusicVolume;
-            Debug.Log($"[Audio] OnMusicVolumeChange: isSwitchingToEnabled={isSwitchingToEnabled} musicVolumeVar={musicVolumeVar.v} s_isMusic={s_isMusic}");
+            if (IsLog) Debug.Log($"[Audio] OnMusicVolumeChange: isSwitchingToEnabled={isSwitchingToEnabled} musicVolumeVar={musicVolumeVar.v} s_isMusic={s_isMusic}");
             if (_currentMusic != null)
             {
                 if (s_isMusic)
