@@ -13,7 +13,7 @@ using UnityEngine;
 ///     Uses reflection extensively and incorporates delays between captures
 ///     to ensure correct resolution rendering for each screenshot.
 /// </summary>
-public class Screenshotter
+public static class Screenshotter
 {
     // List of target resolutions (Portrait Mode)
     static readonly List<ScreenshotResolution> TargetResolutions = new List<ScreenshotResolution>
