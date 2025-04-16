@@ -6,6 +6,7 @@ namespace AS.Toolbox.Singletons.Audio
     {
         [SerializeField] SoundSO audioEnabled;
         [SerializeField] SoundSO buildingUpgrade;
+        [SerializeField] SoundSO zoneUnlocked;
         [SerializeField] SoundSO click;
         [SerializeField] SoundSO crash;
         [SerializeField] SoundSO flap;
@@ -25,6 +26,7 @@ namespace AS.Toolbox.Singletons.Audio
         public static SoundSO Crash => Instance.crash;
         public static SoundSO Repair => Instance.repair;
         public static SoundSO BuildingUpgrade => Instance.buildingUpgrade;
+        public static SoundSO ZoneUnlocked => Instance.zoneUnlocked;
         public static SoundSO HelmetLost => Instance.helmetLost;
     }
 }
