@@ -15,7 +15,10 @@ namespace AS.Toolbox.Singletons.Audio
         [SerializeField] SoundSO swipe;
         [SerializeField] SoundSO takeoff;
         [SerializeField] SoundSO bark;
-        [SerializeField] SoundSO unlock;
+        [SerializeField] SoundSO notification;
+        [SerializeField] SoundSO win;
+        [SerializeField] SoundSO lost;
+        [SerializeField] SoundSO newMeme;
 
         public static SoundSO AudioEnabled => Instance.audioEnabled;
         public static SoundSO BuildingUpgrade => Instance.buildingUpgrade;
@@ -28,6 +31,10 @@ namespace AS.Toolbox.Singletons.Audio
         public static SoundSO Swipe => Instance.swipe;
         public static SoundSO Takeoff => Instance.takeoff;
         public static SoundSO Bark => Instance.bark;
-        public static SoundSO Unlock => Instance.unlock;
+        public static SoundSO Notification => Instance.notification;
+        public static SoundSO Win => Instance.win;
+        public static SoundSO Lost => Instance.lost;
+        public static SoundSO NewMeme => Instance.newMeme;
+        
     }
 }
