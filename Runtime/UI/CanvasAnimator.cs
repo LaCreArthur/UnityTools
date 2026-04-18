@@ -110,20 +110,20 @@ namespace AS.Toolbox.UI
             DOTween.Kill(_canvasGroup);
 
             if (fadeIn)
-                _canvasGroup.DOFade(1f, fadeInDuration).SetEase(fadeInEase).SetUpdate(true);
+                _canvasGroup.DOFade(1f, fadeInDuration).SetEase(fadeInEase).SetUpdate(true).SetLink(gameObject);
             else
                 _canvasGroup.alpha = 1;
 
             if (slideIn)
             {
                 transform.localPosition = GetSlideDirection();
-                transform.DOLocalMove(Vector3.zero, slideInDuration).SetEase(slideInEase).SetUpdate(true);
+                transform.DOLocalMove(Vector3.zero, slideInDuration).SetEase(slideInEase).SetUpdate(true).SetLink(gameObject);
             }
 
             if (scaleIn)
             {
                 transform.localScale = Vector3.zero;
-                transform.DOScale(Vector3.one, scaleInDuration).SetEase(scaleInEase).SetUpdate(true);
+                transform.DOScale(Vector3.one, scaleInDuration).SetEase(scaleInEase).SetUpdate(true).SetLink(gameObject);
             }
 
             OnShow?.Invoke();
@@ -151,19 +151,20 @@ namespace AS.Toolbox.UI
             DOTween.Kill(_canvasGroup);
 
             if (fadeOut)
-                _canvasGroup.DOFade(0f, fadeOutDuration).SetEase(fadeOutEase).SetUpdate(true).OnComplete(FinalizeHide);
+                _canvasGroup.DOFade(0f, fadeOutDuration).SetEase(fadeOutEase).SetUpdate(true).SetLink(gameObject).OnComplete(FinalizeHide);
             if (slideOut)
             {
                 transform.DOLocalMove(GetSlideDirection(), slideOutDuration)
                     .SetEase(slideOutEase)
                     .SetUpdate(true)
+                    .SetLink(gameObject)
                     .OnComplete(FinalizeHide);
             }
 
             if (scaleOut)
             {
                 transform.localScale = Vector3.one;
-                transform.DOScale(Vector3.zero, scaleOutDuration).SetEase(scaleOutEase).SetUpdate(true).OnComplete(FinalizeHide);
+                transform.DOScale(Vector3.zero, scaleOutDuration).SetEase(scaleOutEase).SetUpdate(true).SetLink(gameObject).OnComplete(FinalizeHide);
             }
 
             OnHide?.Invoke();

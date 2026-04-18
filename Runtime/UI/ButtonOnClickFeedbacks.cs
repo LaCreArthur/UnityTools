@@ -33,7 +33,12 @@ namespace AS.Toolbox.UI
                 transform.localScale = Vector3.one;
                 transform.DOPunchScale(Vector3.one * punchScaleAmount, 0.5f, 6, 0.6f)
                     .SetEase(Ease.OutQuad)
-                    .OnComplete(() => transform.localScale = Vector3.one);
+                    .SetLink(gameObject)
+                    .OnComplete(() =>
+                    {
+                        if (this == null) return;
+                        transform.localScale = Vector3.one;
+                    });
             }
 
             if (spine)
@@ -41,7 +46,12 @@ namespace AS.Toolbox.UI
                 transform.localScale = Vector3.one;
                 transform.DOPunchRotation(Vector3.forward * 45f, 0.5f, 6, 0.6f)
                     .SetEase(Ease.OutQuad)
-                    .OnComplete(() => transform.localRotation = Quaternion.identity);
+                    .SetLink(gameObject)
+                    .OnComplete(() =>
+                    {
+                        if (this == null) return;
+                        transform.localRotation = Quaternion.identity;
+                    });
             }
         }
     }
