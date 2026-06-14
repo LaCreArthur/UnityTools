@@ -39,12 +39,12 @@ namespace AS.Toolbox.PrefabPool
             }
 
             var spawnedGO = data.instance;
-            spawnedGO.SetActive(true);
             if (UseRectTransform)
                 spawnedGO.GetComponent<RectTransform>().anchoredPosition = position;
             else
                 spawnedGO.transform.position = position;
             spawnedGO.transform.rotation = rotation;
+            spawnedGO.SetActive(true);
 
             foreach (var pc in data.poolableComponents)
                 pc.OnSpawn();
