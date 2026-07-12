@@ -9,6 +9,9 @@ namespace AS.Toolbox.PrefabPool
         static readonly Dictionary<GameObject, PrefabPool> s_prefabToPoolMap = new Dictionary<GameObject, PrefabPool>();
         static readonly Dictionary<GameObject, PrefabPool> s_goToPoolMap = new Dictionary<GameObject, PrefabPool>();
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void Initialize() => Reset();
+
         /// <summary>
         ///     Use this method when loading a new scene, because all refs to pooled instances will be null
         /// </summary>
@@ -50,6 +53,11 @@ namespace AS.Toolbox.PrefabPool
         {
             PrefabPool pool = GetOrCreatePool(prefab);
             var poolableComponent = prefab.GetComponent<IPoolableComponent>();
+            if (poolableComponent == null)
+            {
+                Debug.LogError($"Prefab {prefab.name} has no component implementing {nameof(IPoolableComponent)}.", prefab);
+                return;
+            }
             Component[] childrenComponents = root.GetComponentsInChildren(poolableComponent.GetType(), true);
 
             // Debug.Log($"Adding {childrenComponents.Length} GOs to pool {pool}");

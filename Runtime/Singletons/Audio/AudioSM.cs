@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using AS.Toolbox.ScriptableObjects;
 using AS.Toolbox.Utils;
 using Sirenix.OdinInspector;
@@ -35,8 +36,13 @@ namespace AS.Toolbox.Singletons.Audio
         AudioSource _currentMusic;
         Coroutine _musicFadeOutCoroutine;
         Coroutine _musicWaitNextCoroutine;
+        readonly Dictionary<SoundSO, AudioSource> _sources = new Dictionary<SoundSO, AudioSource>();
 
-        protected override void OnAwake() => InitAudioSource(musics, true);
+        protected override void OnAwake()
+        {
+            if (musics != null)
+                GetOrCreateAudioSource(musics, true);
+        }
 
         void OnEnable()
         {
@@ -80,7 +86,7 @@ namespace AS.Toolbox.Singletons.Audio
             }
 
             AudioClip clip = musics.clips[clipId];
-            _currentMusic = musics.source;
+            _currentMusic = GetOrCreateAudioSource(musics, true);
             _currentMusic.clip = clip;
             _currentMusic.volume = musics.volume * s_musicVolume;
             _currentMusic.pitch = 1;
@@ -116,15 +122,21 @@ namespace AS.Toolbox.Singletons.Audio
             PlayMusic(nextClipId);
         }
 
-        static void InitAudioSource(SoundSO s, bool isMusic = false)
+        static AudioSource GetOrCreateAudioSource(SoundSO s, bool isMusic = false)
         {
-            s.source = Instance.gameObject.AddComponent<AudioSource>();
+            AudioSM instance = Instance;
+            if (instance._sources.TryGetValue(s, out AudioSource source) && source != null)
+                return source;
+
+            source = instance.gameObject.AddComponent<AudioSource>();
             if (s.clips == null || s.clips.Length == 0)
                 Debug.LogWarning($"[Audio] InitAudioSource: {s.name} has no clips!");
             else
-                s.source.clip = s.clips.GetRandom();
-            s.source.loop = s.loop;
-            s.source.outputAudioMixerGroup = isMusic ? Instance.musicMixerGroup : Instance.sfxMixerGroup;
+                source.clip = s.clips.GetRandom();
+            source.loop = s.loop;
+            source.outputAudioMixerGroup = isMusic ? instance.musicMixerGroup : instance.sfxMixerGroup;
+            instance._sources[s] = source;
+            return source;
         }
 
         public static void Play(SoundSO s)
@@ -137,23 +149,21 @@ namespace AS.Toolbox.Singletons.Audio
                 return;
             }
 
-            if (s.source == null)
-                InitAudioSource(s);
-
             if (s.clips == null || s.clips.Length == 0)
             {
                 Debug.LogWarning($"[Audio] Play sound: {s.name} has no clips!");
                 return;
             }
 
-            if (IsLog) Debug.Log($"[Audio] Play sound: {s.source.clip.name}");
-            s.source.clip = s.clips.GetRandom();
-            s.source.volume = s.volume * (1f + Random.Range(-s.volumeVariance / 2f, s.volumeVariance / 2f)) * s_soundVolume;
-            s.source.pitch = s.pitch * (1f + Random.Range(-s.pitchVariance / 2f, s.pitchVariance / 2f));
+            AudioSource source = GetOrCreateAudioSource(s);
+            source.clip = s.clips.GetRandom();
+            if (IsLog) Debug.Log($"[Audio] Play sound: {source.clip.name}");
+            source.volume = s.volume * (1f + Random.Range(-s.volumeVariance / 2f, s.volumeVariance / 2f)) * s_soundVolume;
+            source.pitch = s.pitch * (1f + Random.Range(-s.pitchVariance / 2f, s.pitchVariance / 2f));
             if (s.loop)
-                s.source.Play();
+                source.Play();
             else
-                s.source.PlayOneShot(s.source.clip);
+                source.PlayOneShot(source.clip);
         }
 
         public void Stop(SoundSO s)
@@ -164,7 +174,8 @@ namespace AS.Toolbox.Singletons.Audio
                 return;
             }
 
-            s.source.Stop();
+            if (_sources.TryGetValue(s, out AudioSource source) && source != null)
+                source.Stop();
         }
         void OnSfxVolumeChange()
         {

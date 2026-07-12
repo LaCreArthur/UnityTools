@@ -7,6 +7,7 @@ using Object = UnityEngine.Object;
 
 namespace AS.Toolbox.ScriptableObjects
 {
+    [Serializable]
     public abstract class ReferencedEventBase<T>
     {
         [HideReferenceObjectPicker] [ListDrawerSettings(DefaultExpandedState = true)] public readonly T callbacks;
@@ -48,6 +49,7 @@ namespace AS.Toolbox.ScriptableObjects
         }
     }
 
+    [Serializable]
     public class ReferencedEvent<T> : ReferencedEventBase<T> where T : UnityEventBase
     {
         public ReferencedEvent(T callbacks, Object reference) : base(callbacks, reference) {}

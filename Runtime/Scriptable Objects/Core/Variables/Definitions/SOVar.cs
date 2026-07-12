@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AS.Toolbox.Utils;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -77,10 +78,9 @@ namespace AS.Toolbox.ScriptableObjects
         bool ShouldIgnoreSetValue(T newVal)
         {
 #if UNITY_EDITOR
-            return EditorApplication.isPlayingOrWillChangePlaymode && value != null && value.Equals(newVal);
-#else
-            return false;
+            if (!EditorApplication.isPlayingOrWillChangePlaymode) return false;
 #endif
+            return EqualityComparer<T>.Default.Equals(value, newVal);
         }
 
         void HandleConstantValue(T newVal)

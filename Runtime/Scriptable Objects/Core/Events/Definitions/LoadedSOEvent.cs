@@ -29,8 +29,10 @@ namespace AS.Toolbox.ScriptableObjects
 
         public void Raise(T value)
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
             if (logRaise)
                 Debug.Log($"{this.TypeAndNameToString()} has been raise with <color=yellow>{value}</color>");
+#endif
 
             listeners.Invoke(this, value, logListeners);
         }

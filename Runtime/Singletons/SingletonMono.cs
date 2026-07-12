@@ -3,11 +3,33 @@ using UnityEngine;
 
 namespace AS.Toolbox.Singletons
 {
+    static class SingletonResetRegistry
+    {
+        static readonly System.Collections.Generic.List<Action> Resetters = new System.Collections.Generic.List<Action>();
+
+        internal static void Register(Action reset) => Resetters.Add(reset);
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void ResetAll()
+        {
+            for (int i = 0; i < Resetters.Count; i++)
+                Resetters[i].Invoke();
+        }
+    }
+
     public abstract class SingletonMono<T> : MonoBehaviour where T : SingletonMono<T>
     {
         static T s_instance;
         static bool s_isQuitting; // Tracks if the application is quitting
         bool _isInit;
+
+        static SingletonMono() => SingletonResetRegistry.Register(ResetStatics);
+
+        static void ResetStatics()
+        {
+            s_instance = null;
+            s_isQuitting = false;
+        }
 
         public static T Instance
         {
@@ -61,9 +83,11 @@ namespace AS.Toolbox.Singletons
         {
             if ((s_instance != null) && (s_instance == this))
             {
-                s_isQuitting = true;
+                s_instance = null;
             }
         }
+
+        void OnApplicationQuit() => s_isQuitting = true;
 
         protected virtual void OnAwake() {}
 

@@ -75,11 +75,16 @@ namespace AS.Toolbox.PrefabPool
         {
             foreach (var co in components)
             {
+                if (co is not IPoolableComponent poolableComponent)
+                {
+                    Debug.LogError($"Component {co} does not implement {nameof(IPoolableComponent)}.", co);
+                    continue;
+                }
                 var go = co.gameObject;
                 var data = new PoolableInstances
                 {
                     instance = go,
-                    poolableComponents = new[] { co as IPoolableComponent }
+                    poolableComponents = new[] { poolableComponent }
                 };
                 go.SetActive(false);
                 _activeList.Remove(go);
