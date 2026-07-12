@@ -89,6 +89,11 @@ namespace AS.Toolbox.ScriptableObjects
                 for (int i = 0; i < runtimeLoadedListeners.Count; i++)
                 {
                     ReferencedAction<T> referencedAction = runtimeLoadedListeners[i];
+                    if (referencedAction?.callbacks == null)
+                    {
+                        Debug.LogError($"[Callbacks] null runtime listener on '{caller?.name}' — skipped. Likely stale serialized data; report this asset.");
+                        continue;
+                    }
                     if (logListeners)
                         referencedAction.LogCallback(caller, param);
 
@@ -117,6 +122,11 @@ namespace AS.Toolbox.ScriptableObjects
                 for (int i = 0; i < persistentListeners.Count; i++)
                 {
                     ReferencedEvent<UnityEvent> referencedEvent = persistentListeners[i];
+                    if (referencedEvent?.callbacks == null)
+                    {
+                        Debug.LogError($"[Callbacks] null persistent listener on '{caller?.name}' (owner: {(referencedEvent?.reference ? referencedEvent.reference.name : "null")}) — skipped. Likely stale serialized data; report this asset.");
+                        continue;
+                    }
                     if (logListeners)
                         referencedEvent.LogCallback(caller, null, onEnter);
 
@@ -270,6 +280,11 @@ namespace AS.Toolbox.ScriptableObjects
                 for (int i = 0; i < runtimeListeners.Count; i++)
                 {
                     ReferencedAction referencedAction = runtimeListeners[i];
+                    if (referencedAction?.callbacks == null)
+                    {
+                        Debug.LogError($"[Callbacks] null runtime listener on '{caller?.name}' — skipped. Likely stale serialized data; report this asset.");
+                        continue;
+                    }
                     if (logListeners)
                         referencedAction.LogCallback(caller, onEnter);
 
