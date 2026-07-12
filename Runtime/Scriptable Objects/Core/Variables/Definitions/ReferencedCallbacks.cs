@@ -7,7 +7,6 @@ using Object = UnityEngine.Object;
 
 namespace AS.Toolbox.ScriptableObjects
 {
-    [Serializable]
     public class ReferencedCallbacks<T> : ReferencedCallbacksBase<UnityEvent<T>>
     {
         [Space] [NonSerialized] [ShowInInspector] [InlineProperty] [HideReferenceObjectPicker] [ListDrawerSettings(IsReadOnly = true, DefaultExpandedState = true)]
@@ -138,7 +137,6 @@ namespace AS.Toolbox.ScriptableObjects
         }
     }
 
-    [Serializable]
     public class ReferencedCallbacks : ReferencedCallbacksBase<UnityEvent>
     {
         internal override void Invoke(ScriptableObject caller, bool logListeners, bool? onEnter = null)
@@ -178,7 +176,6 @@ namespace AS.Toolbox.ScriptableObjects
         internal void Remove(UnityEvent uEvent, Object listener) => Remove(new ReferencedEvent<UnityEvent>(uEvent, listener));
     }
 
-    [Serializable]
     public class ReferencedCallbacksBase<T> where T : UnityEventBase
     {
         int dispatchDepth;
