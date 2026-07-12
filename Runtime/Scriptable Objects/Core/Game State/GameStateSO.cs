@@ -42,6 +42,8 @@ namespace AS.Toolbox.ScriptableObjects
 
         public void AddOnEnter(Action callback) => OnEnter?.Add(callback);
         public void AddOnExit(Action callback) => OnExit?.Add(callback);
+        public void AddOnEnter(Action callback, Object owner) => OnEnter?.Add(callback, owner);
+        public void AddOnExit(Action callback, Object owner) => OnExit?.Add(callback, owner);
         public void AddOnEnter(UnityEvent uEvent, Object listener) => OnEnter?.Add(uEvent, listener);
         public void AddOnExit(UnityEvent uEvent, Object listener) => OnExit?.Add(uEvent, listener);
         public void RemoveOnEnter(Action callback) => OnEnter?.Remove(callback);

@@ -25,6 +25,7 @@ namespace AS.Toolbox.ScriptableObjects
 
         void RemoveNullElements() => listeners.RemoveAll(l => l.reference == null);
         public void Add(Action<T> action, bool dontAddDuplicate = false) => listeners.Add(action, dontAddDuplicate);
+        public void Add(Action<T> action, UnityEngine.Object owner, bool dontAddDuplicate = false) => listeners.Add(action, owner, dontAddDuplicate);
         public void Remove(Action<T> action) => listeners.Remove(action);
 
         public void Raise(T value)

@@ -54,6 +54,7 @@ namespace AS.Toolbox.Singletons
                     if (s_instance == null)
                     {
                         Debug.LogWarning($"SingletonMB \"{typeof(T).Name}\" instance not found. Creating one.");
+                        Debug.LogError($"[SingletonMono] {typeof(T).Name} was auto-created empty — its serialized fields are unset. If it was destroyed mid-session or missing from the scene, this is a bug.");
                         Type t = typeof(T);
                         s_instance = new GameObject(t.Name, t).GetComponent<T>();
                     }

@@ -16,12 +16,13 @@ namespace AS.Toolbox.ScriptableObjects
 
         void RemoveNullLoadedRuntime() => runtimeLoadedListeners?.RemoveAll(l => l.reference == null && !l.isStatic);
 
-        internal void Add(Action<T> callback, bool dontAddDuplicate = false)
+        internal void Add(Action<T> callback, bool dontAddDuplicate = false) => Add(callback, null, dontAddDuplicate);
+
+        internal void Add(Action<T> callback, Object owner, bool dontAddDuplicate = false)
         {
-            if (IsDispatching) { DeferMutation(() => Add(callback, dontAddDuplicate)); return; }
-            // Handle static methods differently
-            Object listener = null;
-            if (callback.Target is Object target) listener = target;
+            if (IsDispatching) { DeferMutation(() => Add(callback, owner, dontAddDuplicate)); return; }
+            // Handle static methods differently; an explicit owner routes a closure/lambda under that owner so it becomes prunable
+            Object listener = owner != null ? owner : callback.Target as Object;
             bool isStatic = listener == null;
 
             // Look for existing listener based on reference or static status
@@ -56,12 +57,26 @@ namespace AS.Toolbox.ScriptableObjects
         internal void Remove(Action<T> callback)
         {
             if (IsDispatching) { DeferMutation(() => Remove(callback)); return; }
-            Object listener = null;
-            if (callback.Target is Object target) listener = target;
-            bool isStatic = listener == null;
+            // Search by containment rather than reconstructing an owner from callback.Target —
+            // owner-routed groups (Add(callback, owner)) can't be found from the callback alone otherwise.
+            ReferencedAction<T> existingListener = runtimeLoadedListeners.Find(l => l.callbacks != null && l.callbacks.Contains(callback));
+
+            existingListener?.callbacks?.Remove(callback);
+
+            // Clean up empty listeners
+            if (existingListener?.callbacks?.Count == 0)
+            {
+                runtimeLoadedListeners.Remove(existingListener);
+            }
+        }
+
+        internal void Remove(Action<T> callback, Object owner)
+        {
+            if (IsDispatching) { DeferMutation(() => Remove(callback, owner)); return; }
+            bool isStatic = owner == null;
 
             ReferencedAction<T> existingListener = runtimeLoadedListeners.Find(l =>
-                isStatic && l.isStatic || !isStatic && l.reference == listener);
+                isStatic && l.isStatic || !isStatic && l.reference == owner);
 
             existingListener?.callbacks?.Remove(callback);
 
@@ -80,6 +95,12 @@ namespace AS.Toolbox.ScriptableObjects
                 for (int i = 0; i < persistentListeners.Count; i++)
                 {
                     ReferencedEvent<UnityEvent<T>> referencedEvent = persistentListeners[i];
+                    if (referencedEvent.reference == null)
+                    {
+                        ReferencedEvent<UnityEvent<T>> toPrune = referencedEvent;
+                        DeferMutation(() => persistentListeners.Remove(toPrune));
+                        continue;
+                    }
                     if (logListeners)
                         referencedEvent.LogCallback(caller, param);
 
@@ -92,6 +113,12 @@ namespace AS.Toolbox.ScriptableObjects
                     if (referencedAction?.callbacks == null)
                     {
                         Debug.LogError($"[Callbacks] null runtime listener on '{caller?.name}' — skipped. Likely stale serialized data; report this asset.");
+                        continue;
+                    }
+                    if (!referencedAction.isStatic && referencedAction.reference == null)
+                    {
+                        ReferencedAction<T> toPrune = referencedAction;
+                        DeferMutation(() => runtimeLoadedListeners.Remove(toPrune));
                         continue;
                     }
                     if (logListeners)
@@ -125,6 +152,12 @@ namespace AS.Toolbox.ScriptableObjects
                     if (referencedEvent?.callbacks == null)
                     {
                         Debug.LogError($"[Callbacks] null persistent listener on '{caller?.name}' (owner: {(referencedEvent?.reference ? referencedEvent.reference.name : "null")}) — skipped. Likely stale serialized data; report this asset.");
+                        continue;
+                    }
+                    if (referencedEvent.reference == null)
+                    {
+                        ReferencedEvent<UnityEvent> toPrune = referencedEvent;
+                        DeferMutation(() => persistentListeners.Remove(toPrune));
                         continue;
                     }
                     if (logListeners)
@@ -283,6 +316,12 @@ namespace AS.Toolbox.ScriptableObjects
                     if (referencedAction?.callbacks == null)
                     {
                         Debug.LogError($"[Callbacks] null runtime listener on '{caller?.name}' — skipped. Likely stale serialized data; report this asset.");
+                        continue;
+                    }
+                    if (!referencedAction.isStatic && referencedAction.reference == null)
+                    {
+                        ReferencedAction toPrune = referencedAction;
+                        DeferMutation(() => runtimeListeners.Remove(toPrune));
                         continue;
                     }
                     if (logListeners)

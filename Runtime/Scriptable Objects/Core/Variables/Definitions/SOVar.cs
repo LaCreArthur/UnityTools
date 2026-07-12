@@ -24,6 +24,7 @@ namespace AS.Toolbox.ScriptableObjects
         void OnValidate() => OnEnable();
 
         public void AddOnChange(Action callback) => onChange.Add(callback);
+        public void AddOnChange(Action callback, UnityEngine.Object owner) => onChange.Add(callback, owner);
         public void RemoveOnChange(Action callback) => onChange.Remove(callback);
 
         public override string ToString() => value.ToString().Replace($"({value.GetType()})", "");
@@ -37,6 +38,7 @@ namespace AS.Toolbox.ScriptableObjects
             return t;
         }
         public void AddOnChange(Action<T> callback) => onChange.Add(callback);
+        public void AddOnChange(Action<T> callback, UnityEngine.Object owner) => onChange.Add(callback, owner);
         public void AddOnChange(ReferencedEvent<UnityEvent<T>> callback) => onChange.Add(callback);
         public void RemoveOnChange(Action<T> callback) => onChange.Remove(callback);
         public void RemoveOnChange(ReferencedEvent<UnityEvent<T>> callback) => onChange.Remove(callback);
