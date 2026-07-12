@@ -49,12 +49,6 @@ namespace AS.Toolbox.ScriptableObjects
         public void RemoveOnEnter(Action callback) => OnEnter?.Remove(callback);
         public void RemoveOnExit(Action callback) => OnExit?.Remove(callback);
 
-        public void RemoveAllCallbacks()
-        {
-            OnEnter?.RemoveAll();
-            OnExit?.RemoveAll();
-        }
-
         internal void RaiseOnEnter() => OnEnter?.Invoke(this, logOnEnterCallbacks, true);
         internal void RaiseOnExit() => OnExit?.Invoke(this, logOnExitCallbacks, false);
     }
