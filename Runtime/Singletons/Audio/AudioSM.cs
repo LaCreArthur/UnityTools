@@ -119,7 +119,10 @@ namespace AS.Toolbox.Singletons.Audio
         static void InitAudioSource(SoundSO s, bool isMusic = false)
         {
             s.source = Instance.gameObject.AddComponent<AudioSource>();
-            s.source.clip = s.clips.Length > 0 ? s.clips.GetRandom() : s.clips[0];
+            if (s.clips == null || s.clips.Length == 0)
+                Debug.LogWarning($"[Audio] InitAudioSource: {s.name} has no clips!");
+            else
+                s.source.clip = s.clips.GetRandom();
             s.source.loop = s.loop;
             s.source.outputAudioMixerGroup = isMusic ? Instance.musicMixerGroup : Instance.sfxMixerGroup;
         }
@@ -137,8 +140,14 @@ namespace AS.Toolbox.Singletons.Audio
             if (s.source == null)
                 InitAudioSource(s);
 
+            if (s.clips == null || s.clips.Length == 0)
+            {
+                Debug.LogWarning($"[Audio] Play sound: {s.name} has no clips!");
+                return;
+            }
+
             if (IsLog) Debug.Log($"[Audio] Play sound: {s.source.clip.name}");
-            s.source.clip = s.clips.Length > 0 ? s.clips.GetRandom() : s.clips[0];
+            s.source.clip = s.clips.GetRandom();
             s.source.volume = s.volume * (1f + Random.Range(-s.volumeVariance / 2f, s.volumeVariance / 2f)) * s_soundVolume;
             s.source.pitch = s.pitch * (1f + Random.Range(-s.pitchVariance / 2f, s.pitchVariance / 2f));
             if (s.loop)
