@@ -1,19 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AS.Toolbox.Singletons
 {
     static class SingletonResetRegistry
     {
-        static readonly System.Collections.Generic.List<Action> Resetters = new System.Collections.Generic.List<Action>();
+        static readonly List<Action> s_resetters = new List<Action>();
 
-        internal static void Register(Action reset) => Resetters.Add(reset);
+        internal static void Register(Action reset) => s_resetters.Add(reset);
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void ResetAll()
         {
-            for (int i = 0; i < Resetters.Count; i++)
-                Resetters[i].Invoke();
+            for (int i = 0; i < s_resetters.Count; i++)
+                s_resetters[i].Invoke();
         }
     }
 

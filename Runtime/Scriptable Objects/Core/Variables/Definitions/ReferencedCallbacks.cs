@@ -18,7 +18,7 @@ namespace AS.Toolbox.ScriptableObjects
 
         internal void Add(Action<T> callback, bool dontAddDuplicate = false)
         {
-            if (DeferMutation(() => Add(callback, dontAddDuplicate))) return;
+            if (IsDispatching) { DeferMutation(() => Add(callback, dontAddDuplicate)); return; }
             // Handle static methods differently
             Object listener = null;
             if (callback.Target is Object target) listener = target;
@@ -48,14 +48,14 @@ namespace AS.Toolbox.ScriptableObjects
 
         internal void RemoveRuntimeEvents()
         {
-            if (DeferMutation(RemoveRuntimeEvents)) return;
+            if (IsDispatching) { DeferMutation(RemoveRuntimeEvents); return; }
             runtimeLoadedListeners.Clear();
             runtimeListeners.Clear();
         }
 
         internal void Remove(Action<T> callback)
         {
-            if (DeferMutation(() => Remove(callback))) return;
+            if (IsDispatching) { DeferMutation(() => Remove(callback)); return; }
             Object listener = null;
             if (callback.Target is Object target) listener = target;
             bool isStatic = listener == null;
@@ -141,6 +141,8 @@ namespace AS.Toolbox.ScriptableObjects
         int dispatchDepth;
         readonly List<Action> deferredMutations = new List<Action>();
 
+        protected bool IsDispatching => dispatchDepth != 0;
+
         protected bool DeferMutation(Action mutation)
         {
             if (dispatchDepth == 0) return false;
@@ -177,14 +179,14 @@ namespace AS.Toolbox.ScriptableObjects
 
         public void RemoveAll()
         {
-            if (DeferMutation(RemoveAll)) return;
+            if (IsDispatching) { DeferMutation(RemoveAll); return; }
             persistentListeners.Clear();
             runtimeListeners.Clear();
         }
 
         internal void Add(Action callback, Object listener = null, bool dontAddDuplicate = false)
         {
-            if (DeferMutation(() => Add(callback, listener, dontAddDuplicate))) return;
+            if (IsDispatching) { DeferMutation(() => Add(callback, listener, dontAddDuplicate)); return; }
             if (listener == null && callback.Target is Object target)
                 listener = target;
             bool isStatic = listener == null;
@@ -213,7 +215,7 @@ namespace AS.Toolbox.ScriptableObjects
 
         internal void Remove(Action callback)
         {
-            if (DeferMutation(() => Remove(callback))) return;
+            if (IsDispatching) { DeferMutation(() => Remove(callback)); return; }
             Object listener = null;
             if (callback.Target is Object target) listener = target;
             bool isStatic = listener == null;
@@ -232,7 +234,7 @@ namespace AS.Toolbox.ScriptableObjects
 
         internal void RemoveAll(Func<ReferencedEvent<T>, bool> match)
         {
-            if (DeferMutation(() => RemoveAll(match))) return;
+            if (IsDispatching) { DeferMutation(() => RemoveAll(match)); return; }
             if (persistentListeners == null)
                 return;
 
@@ -245,14 +247,14 @@ namespace AS.Toolbox.ScriptableObjects
 
         internal void Add(ReferencedEvent<T> refAction)
         {
-            if (DeferMutation(() => Add(refAction))) return;
+            if (IsDispatching) { DeferMutation(() => Add(refAction)); return; }
             persistentListeners ??= new List<ReferencedEvent<T>>();
             persistentListeners.Add(refAction);
         }
 
         internal void Remove(ReferencedEvent<T> refAction)
         {
-            if (DeferMutation(() => Remove(refAction))) return;
+            if (IsDispatching) { DeferMutation(() => Remove(refAction)); return; }
             if (persistentListeners == null)
                 return;
 
