@@ -40,6 +40,9 @@ namespace AS.Toolbox.Singletons.Audio
 
         protected override void OnAwake()
         {
+            // The app's only listener, owned by the persistent audio manager so it survives scene
+            // transitions (all game audio is 2D, so its position is irrelevant). Scene cameras carry none.
+            gameObject.AddComponent<AudioListener>();
             if (musics != null)
                 GetOrCreateAudioSource(musics, true);
         }

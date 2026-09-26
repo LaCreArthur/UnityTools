@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 
@@ -8,9 +9,9 @@ namespace AS.Toolbox.ScriptableObjects
         [TitleGroup("Values")]
         public bool clearOnEnable;
 
-        [FoldoutGroup("On Added"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullAdded")]
+        [FoldoutGroup("On Added"), NonSerialized, ShowInInspector, HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullAdded")]
         public ReferencedCallbacks<T> onAdded = new ReferencedCallbacks<T>();
-        [FoldoutGroup("On Removed"), HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullRemoved")]
+        [FoldoutGroup("On Removed"), NonSerialized, ShowInInspector, HideLabel, InlineProperty, HideReferenceObjectPicker, OnInspectorGUI("RemoveNullRemoved")]
         public ReferencedCallbacks<T> onRemoved = new ReferencedCallbacks<T>();
 
         public T this[int i]

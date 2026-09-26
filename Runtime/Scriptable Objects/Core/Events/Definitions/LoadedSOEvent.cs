@@ -11,6 +11,7 @@ namespace AS.Toolbox.ScriptableObjects
         [TitleGroup("Debug")] [SerializeField] [InlineButton("RaiseWithTestValue")] T testValue;
 
         [TitleGroup("Listener")]
+        [NonSerialized] [ShowInInspector]
         [HideLabel]
         [InlineProperty]
         [HideReferenceObjectPicker]
@@ -30,7 +31,7 @@ namespace AS.Toolbox.ScriptableObjects
 
         public void Raise(T value)
         {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR || UNITY_INCLUDE_INSTRUMENTATION
             if (logRaise)
                 Debug.Log($"{this.TypeAndNameToString()} has been raise with <color=yellow>{value}</color>");
 #endif
