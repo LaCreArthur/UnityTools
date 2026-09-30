@@ -11,13 +11,17 @@ namespace AS.Toolbox.ScriptableObjects
     [AssetSelector]
     public class SOVar<T> : ScriptableObject, ISOVariable
     {
+        // Assigns the field, not v: the setter ignores constants outside the editor, and value is not serialized
         protected virtual void OnEnable()
         {
 #if UNITY_EDITOR // dont load if not on playmode
             if (!EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                value = initialValue;
                 return;
+            }
 #endif
-            v = isStored ? Load() : initialValue;
+            value = isStored ? Load() : initialValue;
         }
         void OnDisable() => onChange.RemoveRuntimeEvents();
 
@@ -45,9 +49,10 @@ namespace AS.Toolbox.ScriptableObjects
 
         #region Value
 
-        [TitleGroup("Values")] [SerializeField] [ReadOnly] [PropertyOrder(0)] protected T value;
+        // Runtime state stays out of the asset file
+        [TitleGroup("Values")] [NonSerialized] [ShowInInspector] [ReadOnly] [PropertyOrder(0)] protected T value;
 
-        [TitleGroup("Values")] [SerializeField] [ReadOnly] [PropertyOrder(0)] protected T previousValue;
+        [TitleGroup("Values")] [NonSerialized] [ShowInInspector] [ReadOnly] [PropertyOrder(0)] protected T previousValue;
 
         [TitleGroup("Values")] [SerializeField] [PropertyOrder(0)] protected T initialValue;
 
